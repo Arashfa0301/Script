@@ -8,3 +8,7 @@ tasks:
 ports:
   # used by virtual desktop and vnc, supports JavaFX
   - port: 6080
+
+vscode:
+  extensions:
+    - vscjava.vscode-java-pack
