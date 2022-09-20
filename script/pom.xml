@@ -76,7 +76,7 @@
     </build>
 
     <modules>
-        <module>core</module>
+        <module>core/main</module>
         <module>ui</module>
     </modules>
 </project>
