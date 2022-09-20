@@ -13,7 +13,7 @@
 
         <dependency>
             <groupId>it1901</groupId>
-            <artifactId>script</artifactId>
+            <artifactId>script-core.main</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
