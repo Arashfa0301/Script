@@ -5,3 +5,6 @@ target/
 .project
 .classpath
 org.eclipse.*.prefs
+
+#mac-specific file
+.DS_Store
