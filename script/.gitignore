@@ -8,3 +8,6 @@ org.eclipse.*.prefs
 
 #mac-specific file
 .DS_Store
+
+#vscode settings
+../.vscode/
