@@ -10,4 +10,4 @@ org.eclipse.*.prefs
 .DS_Store
 
 #vscode settings
-../.vscode/
+.vscode
