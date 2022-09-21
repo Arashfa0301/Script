@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class User {
 
     String username;
-    List<Note> notes =  new ArrayList<>();
+    List<Board> boards =  new ArrayList<>();
 
 
 
@@ -16,8 +16,8 @@ public class User {
         this.username =  username;
     }
 
-    public void addNote(Note note){
-        notes.add(note);
+    public void addNote(Board board){
+        boards.add(board);
     }
 
 

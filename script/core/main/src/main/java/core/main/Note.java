@@ -2,8 +2,8 @@ package core.main;
 
 public class Note {
     
-    String title;
-    String text;
+    private String title;
+    private String text;
 
     /// Create note with already existing title and text (When loading in already existing notes maybe?)
     public Note(String title, String text) {
