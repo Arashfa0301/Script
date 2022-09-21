@@ -1,7 +1,7 @@
 package core.main;
 
 public class Note {
-    
+
     private String title;
     private String text;
 
@@ -13,7 +13,7 @@ public class Note {
 
     /// Create empty note
     public Note() {
-        
+
     }
 
     public String getTitle() {
@@ -33,4 +33,3 @@ public class Note {
     }
 
 }
-
