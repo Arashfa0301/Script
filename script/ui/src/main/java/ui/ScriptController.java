@@ -1,6 +1,7 @@
 package ui;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -50,9 +51,6 @@ public class ScriptController {
 
     private User user;
 
-    // private List<Board> testBoards = Arrays.asList(new Board("1", "a"),new Board("2", "b"),new Board("3", "c"),new Board("4", "d"));
-    // private List<Note> testNotes = Arrays.asList(new Note("title","Lorem ipsum dolor sit amet. Sit reprehenderit veritatis quo placeat quis ea voluptatibus sequi. In ducimus exercitationem non voluptatem molestias et cumque sunt aut sequi similique! Est voluptas aliquam et mollitia quia est voluptatum dolorem id nobis Quis qui distinctio veritatis. Qui velit nihil et animi veritatis qui neque quidem et perferendis velit."));
-
     @FXML
     private void initialize() {
         scriptModule = new ScriptModule();
@@ -83,7 +81,8 @@ public class ScriptController {
 
     @FXML 
     private void editBoardTitle(KeyEvent event) throws IOException {
-        Button button = (Button)boardGrid.getChildren().get(boards.indexOf(currentBoard));
+        GridPane pane = (GridPane)boardGrid.getChildren().get(boards.indexOf(currentBoard));
+        Button button = (Button)pane.getChildren().get(0);
         TextField field = (TextField)event.getSource();
         button.setText(field.getText());
         currentBoard.setBoardName(field.getText());
@@ -130,6 +129,7 @@ public class ScriptController {
         Board newBoard = new Board(boardName.getText());
         boards.add(newBoard);
         createBoardButton(newBoard, boards.size()-1);
+        boardName.clear();
     }
 
     @FXML
@@ -143,8 +143,20 @@ public class ScriptController {
     private void newBoardNameEdit() {
         checkNewBoardName();
     }
+
+    @FXML
+    private void deleteNote(ActionEvent ae) {
+        Button button = (Button)ae.getSource();
+        GridPane pane = (GridPane)button.getParent().getParent();
+        int row = GridPane.getRowIndex(pane);
+        int column = GridPane.getColumnIndex(pane);
+        currentBoard.getNotes().remove(2*row+column);
+        loadNotes(currentBoard);
+        update();
+    }
     
     private void loadBoardButtons(List<Board> boards) throws IOException {
+        boardGrid.getChildren().clear();
         IntStream.range(0, boards.size()).forEach(i -> {
             createBoardButton(boards.get(i), i);
         });
@@ -167,8 +179,30 @@ public class ScriptController {
             }
         });
         button.setMaxWidth(BUTTON_WIDTH);
-        boardGrid.add(button, 0, index);
+        Button deleteButton = new Button("X");
+        deleteButton.setOnAction((event) -> {
+            try {
+                deleteBoard(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        GridPane altPane = new GridPane();
+        altPane.addColumn(0, button);
+        altPane.addColumn(1, deleteButton);
+        boardGrid.addRow(index, altPane);
     }
+
+    @FXML
+    private void deleteBoard(ActionEvent ae) throws IOException {
+        Button button = (Button)ae.getSource();
+        GridPane pane = (GridPane)button.getParent();
+        int index = GridPane.getRowIndex(pane);
+        boards.remove(index);
+        loadBoardButtons(boards);
+        update();
+    } 
+
 
     private void setTitleAndDescription(Board board) {
         boardTitle.setText(board.getBoardName());
@@ -201,15 +235,24 @@ public class ScriptController {
             text.setPromptText("Notes");
             text.setWrapText(true);
             text.setPrefSize(NOTE_SIZE, NOTE_SIZE);
-            notePane.addRow(0, title);
+            GridPane topPane = new GridPane();
+            notePane.addRow(0, topPane);
+            topPane.addColumn(0, title);
+            Button deleteButton = new Button("Delete note");
+            deleteButton.setOnAction((event) -> deleteNote(event));
+            topPane.addColumn(1, deleteButton);
             notePane.addRow(1, text);
             noteGrid.add(notePane, i%2, Math.floorDiv(i, 2));
         });
     }
 
     private void update() {
-        if (currentBoard.getNotes().size() == 6) newNoteButton.setDisable(true);
-        else newNoteButton.setDisable(false);
+        if (!(currentBoard == null)) {
+            if (currentBoard.getNotes().size() == 6) newNoteButton.setDisable(true);
+            else newNoteButton.setDisable(false);
+            if (!boards.contains(currentBoard)) noteScreen.setVisible(false);
+            else noteScreen.setVisible(true);
+        }
     }
 
     private void checkNewBoardName() {
