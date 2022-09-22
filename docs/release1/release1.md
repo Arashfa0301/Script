@@ -9,4 +9,5 @@ Brukerhistorier for innlevering 1 [ligger her](docs/release1/userStories.md).
 For en student er det nyttig å enkelt kunne se notatene man har skrevet og at de er sortert etter fagemne. Derfor er det nyttig at alle fagemnene(oppslagstavlene) er synlig i en liste og notatene som tilhører hvert fagemne blir synlig dersom man trykker på det. For studenten er det også nyttig å kunne redigere notatene sine, noe man kan gjøre ved å trykke på tekstfeltet og skrive inn det man ønsker. Hvis studenten ikke trenger notatet lenger kan man enkelt slette notatet.
 
 ## Designskisse
-TODO
+Før vi begynte å implementere brukergrensesnitt lagde vi en skisse av UI/UX i figma. Skissen inkluderer en sidebar for enkel navigasjon mellom boards samtidig som den gir oversikt over brukerinfo. All funksjonalitet har ikke blitt implementert enda, men dette er hvordan vi kan se for oss appen i fremtidige iterasjoner.
+![Designskisse](./img/design.png)
