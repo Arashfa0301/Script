@@ -155,14 +155,14 @@
       </AnchorPane>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="375.0">
          <children>
-            <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox fx:id="noteScreen" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TextField promptText="Title" style="-fx-border-width: 0;" text="Title">
+                  <TextField fx:id="boardTitle" promptText="Title" style="-fx-border-width: 0;">
                      <font>
                         <Font name="Poppins Medium" size="20.0" />
                      </font>
                   </TextField>
-                  <TextField promptText="A simple description" style="-fx-text-fill: rgba(0,0,0,1);" text="An example of a description">
+                  <TextField fx:id="boardDescription" promptText="A simple description" style="-fx-text-fill: rgba(0,0,0,1);">
                      <font>
                         <Font name="Poppins Regular" size="13.0" />
                      </font>
