@@ -17,6 +17,7 @@ public class NoteSerializer extends JsonSerializer<Note> {
         jGen.writeStringField("title", note.getTitle());
         jGen.writeStringField("text", note.getText());
         jGen.writeEndObject();
+
     }
 
 }

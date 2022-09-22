@@ -44,6 +44,14 @@ public class Board {
             notes.add(note);
     }
 
+    public Note getNote(String noteTitle) {
+        return notes.stream().filter(note -> note.getTitle().equals(noteTitle)).findAny().get();
+    }
+
+    public void removeBoard(String noteTitle) {
+        notes.remove(getNote(noteTitle));
+    }
+
     @Override
     public String toString() {
         return notes.stream().map(i -> i.toString()).reduce("", (i, j) -> {
