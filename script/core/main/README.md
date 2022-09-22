@@ -1,5 +1,4 @@
 # core-module
-
 _The core-module includes main classes and the core logic of the script application_
 
 ## Struktur
