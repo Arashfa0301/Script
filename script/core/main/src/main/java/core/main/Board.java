@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Board {
 
-    private List<Note> notes =  new ArrayList<>();
     private String boardName;
     private String description;
+    private List<Note> notes = new ArrayList<>();
 
     public Board(String boardName, String description) {
         this.boardName = boardName;
@@ -22,7 +22,7 @@ public class Board {
         return description;
     }
 
-    public List<Note> getNotes(){
+    public List<Note> getNotes() {
         return notes;
     }
 

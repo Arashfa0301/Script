@@ -1,6 +1,10 @@
 module script.data {
-    requires java.sql;  
-    requires java.net.http;
+    requires transitive script.core.main;
 
-    opens data to javafx.graphics, javafx.fxml;
-  }
+    requires com.fasterxml.jackson.core;
+    requires transitive com.fasterxml.jackson.databind;
+
+    exports data;
+
+    opens data;
+}
