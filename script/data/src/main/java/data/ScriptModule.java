@@ -17,6 +17,9 @@ public class ScriptModule extends SimpleModule {
         super(NAME, VERSION_UTIL.version());
         addSerializer(Board.class, new BoardSerializer());
         addSerializer(Note.class, new NoteSerializer());
+        addDeserializer(Board.class, new BoardDeserializer());
+        addDeserializer(Note.class, new NoteDeserializer());
+
     }
 
     public static void main(String[] args) {
@@ -35,6 +38,10 @@ public class ScriptModule extends SimpleModule {
         board.addNote(note5);
         try {
             System.out.println(mapper.writeValueAsString(board));
+            String json = mapper.writeValueAsString(board);
+            Board board2 = mapper.readValue(json, Board.class);
+            System.out.println(board2.toString());
+
         } catch (JsonProcessingException e) {
             System.out.println("Virket ikke");
             e.printStackTrace();

@@ -14,6 +14,11 @@ public class Board {
         this.description = description;
     }
 
+    public Board() {
+        this.boardName = "";
+        this.description = "";
+    }
+
     public String getBoardName() {
         return boardName;
     }
@@ -35,7 +40,15 @@ public class Board {
     }
 
     public void addNote(Note note) {
-        notes.add(note);
+        if (note != null)
+            notes.add(note);
+    }
+
+    @Override
+    public String toString() {
+        return notes.stream().map(i -> i.toString()).reduce("", (i, j) -> {
+            return i + j + "\n";
+        });
     }
 
 }
