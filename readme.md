@@ -2,26 +2,28 @@
 
 # IT1901 Prosjekt - Script
 
-_Script lets you add notes and reminders to keep your day organized_
+_Script lets you organize notes and reminders to assist in day to day activities_
 
-Dokumentasjonen til prosjektet ligger i [docs](link) og er sortert inn undermapper etter utgivelser av appen.
-Script består av en server i script-mappen, og en har der også en frontend i JavaFX.
-En alternativ frontend (webklient) ligger i webapp-mappen.
+Alt av dokumentasjon ligger under [docs](link) og er sortert etter utgivelser av prosjektet.
 
-## Java-klient
+## Struktur
+Prosjektet er bygd med maven og består av tre delmoduler: core, data og ui. Core-modulen inneholder hovedklassene og data-modulen inneholder både data og klasser for filbehandling. Ui-modulen inneholder kontroller samt fxml-filer og alt annet av ressurser som trengs til brukergrensesnittet.
 
-Java-programmet vårt lar brukeren opprette notater(scripts) og legge inn påminnelser for å hjelpe brukeren holde styr i hverdagen.
-Dersom man logger inn vil man kunne redigere påminnelsene.
-
-## Nett-klient
-
-Nettsiden vår lar deg opprette og redigere scripts og påminnelser (på en tjener), og krever alltid at man logger inn (med en eksisterende bruker). Vi har tenkt at nettsiden skal være tilgjengelig fra hvor som helst i verden, og at det derfor gir mening å kreve autentisering for å kunne redigere sine egne scripts.
-Når man er logget inn, lar nettsiden deg se, redigere og slette scripts og påminnelser.
+## Roadmap
+- [x] Modular structure
+- [ ] User interface
+    - [x] Design and fxml (UI/UX)
+    - [ ] Controller
+- [ ] Unit tests and CD/CI pipeline
+- [ ] Search functionality
+- [ ] Custom JSON serializer
 
 ## Running the FXUI Client
-
 The javafx local client has only been configured to boot with maven from the `script/ui` folder, so to run the FXUI, run
 
 ```sh
 cd script && mvn clean compile install && cd ui && mvn javafx:run
 ```
+
+## License
+Distributed under the MIT License.
