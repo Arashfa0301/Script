@@ -1,6 +1,9 @@
 package data;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Paths;
 
 import com.fasterxml.jackson.core.util.VersionUtil;
@@ -12,6 +15,8 @@ import core.main.Note;
 import core.main.User;
 
 public class ScriptModule extends SimpleModule {
+    private static final String FILE_NAME = "boards.json";
+    private static final String FILE_PATH = System.getProperty("user.home") + "/resources";
     private static final String NAME = "ScriptModule";
     private static final VersionUtil VERSION_UTIL = new VersionUtil() {
     };
@@ -29,7 +34,7 @@ public class ScriptModule extends SimpleModule {
 
     public void write(User user) {
 
-        try (FileWriter fw = new FileWriter("./script/data/src/main/resources/boards.json")) {
+        try (FileWriter fw = new FileWriter(FILE_PATH + "/" + FILE_NAME)) {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new ScriptModule());
             mapper.writeValue(fw, user);
@@ -43,12 +48,24 @@ public class ScriptModule extends SimpleModule {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new ScriptModule());
-            User user = mapper.readValue(Paths.get("./script/data/src/main/resources/boards.json").toFile(),
-                    User.class);
+            User user = mapper.readValue(Paths.get(FILE_PATH + "/" + FILE_NAME).toFile(), User.class);
             return user;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+        } catch (FileNotFoundException ex) {
+            boolean isFileCreated = false;
+            File file = new File(FILE_PATH + "/" + FILE_NAME);
+            try {
+                new File(FILE_PATH).mkdir();
+                isFileCreated = file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (isFileCreated) {
+                System.out.println("created new file: " + FILE_PATH + "/" + FILE_NAME);
+            }
+            return new User();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new User();
         }
     }
 
