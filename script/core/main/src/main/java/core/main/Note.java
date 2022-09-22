@@ -5,7 +5,8 @@ public class Note {
     private String title;
     private String text;
 
-    /// Create note with already existing title and text (When loading in already existing notes maybe?)
+    /// Create note with already existing title and text (When loading in already
+    /// existing notes maybe?)
     public Note(String title, String text) {
         this.title = title;
         this.text = text;
@@ -32,4 +33,8 @@ public class Note {
         this.text = text;
     }
 
+    @Override
+    public String toString() {
+        return "title:" + title + ", text: " + text;
+    }
 }
