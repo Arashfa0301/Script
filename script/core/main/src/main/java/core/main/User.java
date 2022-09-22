@@ -28,6 +28,10 @@ public class User {
         return boards;
     }
 
+    public void setBoards(List<Board> boards) {
+        this.boards = boards;
+    }
+
     public void addBoard(Board board) {
         boards.add(board);
     }

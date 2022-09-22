@@ -1,14 +1,15 @@
 package ui;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import core.main.Board;
 import core.main.Note;
+import core.main.User;
+import data.ScriptModule;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -29,6 +30,8 @@ public class ScriptController {
     private Board currentBoard;
 
     private List<Board> boards;
+
+    private ScriptModule scriptModule;
     
     @FXML
     private GridPane boardGrid, noteGrid;
@@ -45,21 +48,17 @@ public class ScriptController {
     @FXML
     private VBox noteScreen;
 
-    private List<Board> testBoards = Arrays.asList(new Board("1", "a"),new Board("2", "b"),new Board("3", "c"),new Board("4", "d"));
-    private List<Note> testNotes = Arrays.asList(new Note("title","Lorem ipsum dolor sit amet. Sit reprehenderit veritatis quo placeat quis ea voluptatibus sequi. In ducimus exercitationem non voluptatem molestias et cumque sunt aut sequi similique! Est voluptas aliquam et mollitia quia est voluptatum dolorem id nobis Quis qui distinctio veritatis. Qui velit nihil et animi veritatis qui neque quidem et perferendis velit."));
+    private User user;
+
+    // private List<Board> testBoards = Arrays.asList(new Board("1", "a"),new Board("2", "b"),new Board("3", "c"),new Board("4", "d"));
+    // private List<Note> testNotes = Arrays.asList(new Note("title","Lorem ipsum dolor sit amet. Sit reprehenderit veritatis quo placeat quis ea voluptatibus sequi. In ducimus exercitationem non voluptatem molestias et cumque sunt aut sequi similique! Est voluptas aliquam et mollitia quia est voluptatum dolorem id nobis Quis qui distinctio veritatis. Qui velit nihil et animi veritatis qui neque quidem et perferendis velit."));
 
     @FXML
     private void initialize() {
-        // boards = getBoardsFromFile();
-        boards = new ArrayList<>(testBoards);
-        testBoards.get(0).addNote(testNotes.get(0));
-        testBoards.get(0).addNote(testNotes.get(0));
-        testBoards.get(0).addNote(testNotes.get(0));
-        testBoards.get(0).addNote(testNotes.get(0));
-        testBoards.get(0).addNote(testNotes.get(0));
-        testBoards.get(0).addNote(testNotes.get(0));
+        scriptModule = new ScriptModule();
+        user = scriptModule.read();
+        boards = user.getBoards();
         try {
-            // createBoardButtons(getBoardsFromFile());
             loadBoardButtons(boards);
         } catch (IOException e) {
             e.printStackTrace(); }
@@ -67,10 +66,7 @@ public class ScriptController {
 
     @FXML
     private void onBoardButtonClick(ActionEvent ae) throws IOException {
-        // noteGrid.getChildren().clear();
         Button clickedButton = (Button)ae.getSource();
-        // Board selectedBoard = getBoardsFromFile().stream().filter(board -> 
-        //     board.getBoardName().equals(clickedButton.getText())).findFirst().get();
         Board selectedBoard = boards.stream().filter(board -> 
             board.getBoardName().equals(clickedButton.getText())).findFirst().get();
         setTitleAndDescription(selectedBoard);
@@ -80,20 +76,36 @@ public class ScriptController {
         update();
     }
 
-    @FXML private void onNoteEdit(KeyEvent event) throws IOException {
+    @FXML 
+    private void onNoteEdit(KeyEvent event) throws IOException {
         editNote(event);
     }
 
-    @FXML private void editBoardTitle(KeyEvent event) throws IOException {
+    @FXML 
+    private void editBoardTitle(KeyEvent event) throws IOException {
         Button button = (Button)boardGrid.getChildren().get(boards.indexOf(currentBoard));
         TextField field = (TextField)event.getSource();
         button.setText(field.getText());
         currentBoard.setBoardName(field.getText());
     }
 
-    @FXML private void editBoardDescription(KeyEvent event) throws IOException {
+    @FXML 
+    private void editBoardDescription(KeyEvent event) throws IOException {
         TextField field = (TextField)event.getSource();
         currentBoard.setBoardDescription(field.getText());
+    }
+
+    @FXML
+    private void save(ActionEvent ae) {
+        user.setBoards(boards);
+        scriptModule.write(user);
+        Button button = (Button)ae.getSource();
+        TranslateTransition transition = new TranslateTransition();
+        transition.setNode(button);
+        transition.setAutoReverse(false);
+        button.setDisable(true);
+        transition.setOnFinished(evt -> button.setDisable(false));
+        transition.play();
     }
 
     private void editNote(KeyEvent event) {
@@ -158,10 +170,6 @@ public class ScriptController {
         boardGrid.add(button, 0, index);
     }
 
-    private List<Board> getBoardsFromFile() {
-        return Arrays.asList();
-    }
-
     private void setTitleAndDescription(Board board) {
         boardTitle.setText(board.getBoardName());
         boardDescription.setText(board.getBoardDescription());
@@ -176,7 +184,6 @@ public class ScriptController {
             title.setStyle("-fx-font-weight: bold");
             title.setOnKeyReleased((event) -> {
                 try {
-                    // onNoteTitleEdit(event);
                     onNoteEdit(event);
                 } catch (IOException e) {
                     e.printStackTrace();
