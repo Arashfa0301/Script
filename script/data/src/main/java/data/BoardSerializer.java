@@ -28,5 +28,4 @@ public class BoardSerializer extends JsonSerializer<Board> {
         jGen.writeEndObject();
 
     }
-
 }

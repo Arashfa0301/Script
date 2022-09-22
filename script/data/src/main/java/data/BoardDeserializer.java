@@ -19,11 +19,16 @@ public class BoardDeserializer extends JsonDeserializer<Board> {
     private NoteDeserializer noteDeserializer = new NoteDeserializer();
 
     @Override
-    public Board deserialize(JsonParser paser, DeserializationContext ctxt)
+    public Board deserialize(JsonParser parser, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
-        TreeNode treeNode = paser.getCodec().readTree(paser);
-        if (treeNode instanceof ObjectNode) {
-            ObjectNode objectNode = (ObjectNode) treeNode;
+
+        TreeNode treeNode = parser.getCodec().readTree(parser);
+        return deserialize((JsonNode) treeNode);
+    }
+
+    public Board deserialize(JsonNode jsonNode) {
+        if (jsonNode instanceof ObjectNode) {
+            ObjectNode objectNode = (ObjectNode) jsonNode;
             Board board = new Board();
 
             // gets the boardName's node and sets it as the board's boardName
@@ -50,5 +55,4 @@ public class BoardDeserializer extends JsonDeserializer<Board> {
         }
         return null;
     }
-
 }
