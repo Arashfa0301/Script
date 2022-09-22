@@ -173,14 +173,6 @@
                         <Insets />
                      </VBox.margin>
                   </TextField>
-                  <Text fill="#686868" strokeType="OUTSIDE" strokeWidth="0.0" text="Last edited: 3 days ago">
-                     <font>
-                        <Font name="Poppins Medium" size="9.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="3.0" left="3.0" top="5.0" />
-                     </VBox.margin>
-                  </Text>
                   <Button fx:id="newNoteButton" mnemonicParsing="false" onAction="#createNote" text="New Note" />
                   <GridPane fx:id="noteGrid" prefHeight="348.0" prefWidth="490.0">
                     <columnConstraints>
