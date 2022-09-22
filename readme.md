@@ -6,7 +6,7 @@ _Script lets you organize notes and reminders to assist in day to day activities
 
 Alt av dokumentasjon ligger under [docs](link) og er sortert etter utgivelser av prosjektet.
 
-## Prosjekt-stuktur
+## Prosjekt
 Prosjektet er bygd med maven og består av tre delmoduler: core, data og ui. Core-modulen inneholder hovedklassene og data-modulen inneholder både data og klasser for filbehandling. Ui-modulen inneholder kontroller samt fxml-filer og alt annet av ressurser som trengs til brukergrensesnittet.
 
 ## Roadmap
