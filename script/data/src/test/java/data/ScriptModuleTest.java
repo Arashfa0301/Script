@@ -37,7 +37,7 @@ public class ScriptModuleTest {
         board.addNote(note4);
         board.addNote(note5);
         try {
-           assertEquals("{\"boardName\":\"BappoIverri\",\"description\":\"Chadest group ever\",\"notes\":[{\"title\":\"Arash\",\"test\":\"the alpha\"},{\"title\":\"Iver\",\"test\":\"the leader\"},{\"title\":\"Jakob\",\"test\":\"the crackhead\"},{\"title\":\"Viljan\",\"test\":\"the genius\"},{\"title\":\"Andreas\",\"test\":\"the mob boss\"}]}", mapper.writeValueAsString(board));
+           assertEquals("{\"boardName\":\"BappoIverri\",\"description\":\"Chadest group ever\",\"notes\":[{\"title\":\"Arash\",\"text\":\"the alpha\"},{\"title\":\"Iver\",\"text\":\"the leader\"},{\"title\":\"Jakob\",\"text\":\"the crackhead\"},{\"title\":\"Viljan\",\"text\":\"the genius\"},{\"title\":\"Andreas\",\"text\":\"the mob boss\"}]}", mapper.writeValueAsString(board));
         } catch (JsonProcessingException e) {
             fail();
         }
