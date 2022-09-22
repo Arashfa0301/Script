@@ -8,10 +8,16 @@ public class Board {
     private String boardName;
     private String description;
     private List<Note> notes = new ArrayList<>();
+    private final int MAX_NOTES = 6;
 
     public Board(String boardName, String description) {
         this.boardName = boardName;
         this.description = description;
+    }
+
+    public Board(String boardName) {
+        this.boardName = boardName;
+        this.description = "";
     }
 
     public Board() {
@@ -40,7 +46,7 @@ public class Board {
     }
 
     public void addNote(Note note) {
-        if (note != null)
+        if (note != null && getNotes().size() < MAX_NOTES)
             notes.add(note);
     }
 
