@@ -33,6 +33,7 @@
 -->
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -151,18 +152,20 @@
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
             </GridPane>
+            <Button fx:id="newBoardButton" disable="true" layoutX="26.0" layoutY="444.0" mnemonicParsing="false" onAction="#createBoard" text="New Board" />
+            <TextField fx:id="boardName" layoutX="101.0" layoutY="444.0" onKeyReleased="#newBoardNameEdit" promptText="Board name" />
          </children>
       </AnchorPane>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="375.0">
          <children>
-            <VBox fx:id="noteScreen" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox fx:id="noteScreen" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TextField fx:id="boardTitle" promptText="Title" style="-fx-border-width: 0;">
+                  <TextField fx:id="boardTitle" onKeyReleased="#editBoardTitle" promptText="Title" style="-fx-border-width: 0;">
                      <font>
                         <Font name="Poppins Medium" size="20.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="boardDescription" promptText="A simple description" style="-fx-text-fill: rgba(0,0,0,1);">
+                  <TextField fx:id="boardDescription" onKeyReleased="#editBoardDescription" promptText="A simple description" style="-fx-text-fill: rgba(0,0,0,1);">
                      <font>
                         <Font name="Poppins Regular" size="13.0" />
                      </font>
@@ -178,6 +181,7 @@
                         <Insets bottom="3.0" left="3.0" top="5.0" />
                      </VBox.margin>
                   </Text>
+                  <Button fx:id="newNoteButton" mnemonicParsing="false" onAction="#createNote" text="New Note" />
                   <GridPane fx:id="noteGrid" prefHeight="348.0" prefWidth="490.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
