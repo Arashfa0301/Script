@@ -24,6 +24,3 @@ The javafx local client has only been configured to boot with maven from the `sc
 ```sh
 cd script && mvn clean compile install && cd ui && mvn javafx:run
 ```
-
-## License
-Distributed under the MIT License.
