@@ -2,4 +2,4 @@
 _The data-module stores data aswell as handle file write/read with a custom json-serializer_
 
 ## Serializers and de-serializers
-The classes that need to be saved and or written to have their own serializer and de-serializer classes under `/data/src/main/java/data/`. These classes parse data in json format to `/data/src/main/resources/` so they can be stored in memory for later retrieval.
+Klassene under `core` som må kunne skrives og leses til har sine egne serializers and de-serializers klasser under `/data/src/main/java/data/`. Disse klassene parser data i json format til `/data/src/main/resources/` så de kan bli lagret i minnet og hentet tilbake igjen i etterkant.
