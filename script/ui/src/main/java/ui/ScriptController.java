@@ -22,6 +22,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.geometry.*;
 
 public class ScriptController {
 
@@ -159,15 +160,14 @@ public class ScriptController {
         IntStream.range(0, boards.size()).forEach(i -> {
             createBoardButton(boards.get(i), i);
         });
-        ScrollPane scrollPane = new ScrollPane(boardGrid);
-        scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-        boardAnchor.getChildren().add(scrollPane);
+        boardGrid.setStyle("-fx-background-color: transparent");
     }
 
     private void createBoardButton(Board board, int index) {
         Button button = new Button(board.getBoardName());
         button.wrapTextProperty().setValue(true);
-        button.setStyle("-fx-text-alignment: center;");
+        button.setStyle("-fx-background-color: transparent; -fx-alignment: LEFT;");
+        button.setPadding(new Insets(0, 0, 0, 0));
         button.setCursor(Cursor.HAND);
         button.setOnAction((event) -> {
             try {
@@ -177,7 +177,9 @@ public class ScriptController {
             }
         });
         button.setMaxWidth(BUTTON_WIDTH);
-        Button deleteButton = new Button("X");
+        Button deleteButton = new Button("-");
+        deleteButton.setCursor(Cursor.HAND);
+        deleteButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-font-family: 'Poppins';");
         deleteButton.setOnAction((event) -> {
             try {
                 deleteBoard(event);
@@ -185,17 +187,14 @@ public class ScriptController {
                 e.printStackTrace();
             }
         });
-        GridPane altPane = new GridPane();
-        altPane.addColumn(0, button);
-        altPane.addColumn(1, deleteButton);
-        boardGrid.addRow(index, altPane);
+        boardGrid.addRow(index, button, deleteButton);
+
     }
 
     @FXML
     private void deleteBoard(ActionEvent ae) throws IOException {
         Button button = (Button) ae.getSource();
-        GridPane pane = (GridPane) button.getParent();
-        int index = GridPane.getRowIndex(pane);
+        int index = GridPane.getRowIndex(button);
         boards.remove(index);
         loadBoardButtons(boards);
         update();
@@ -233,6 +232,7 @@ public class ScriptController {
             text.setWrapText(true);
             text.setPrefSize(NOTE_SIZE, NOTE_SIZE);
             GridPane topPane = new GridPane();
+            topPane.setStyle("-fx-background-color: #ffffff");
             notePane.addRow(0, topPane);
             topPane.addColumn(0, title);
             Button deleteButton = new Button("Delete note");

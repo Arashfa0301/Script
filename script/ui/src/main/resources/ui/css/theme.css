@@ -1,0 +1,31 @@
+.split-pane-divider {
+    -fx-background-color: transparent;
+}
+.button {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+
+}
+.text-field {
+    -fx-background-color: transparent;
+}
+.grid-pane {
+    -fx-background-color: transparent;
+}
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+.text-area {
+    -fx-background-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+}
+.text-area .content {
+    -fx-background-color: white;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+ }
