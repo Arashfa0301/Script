@@ -14,14 +14,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.geometry.*;
 
 public class ScriptController {
@@ -166,7 +165,7 @@ public class ScriptController {
     private void createBoardButton(Board board, int index) {
         Button button = new Button(board.getBoardName());
         button.wrapTextProperty().setValue(true);
-        button.setStyle("-fx-background-color: transparent; -fx-alignment: LEFT;");
+        button.setStyle("-fx-background-color: transparent; -fx-alignment: center-left;");
         button.setPadding(new Insets(0, 0, 0, 0));
         button.setCursor(Cursor.HAND);
         button.setOnAction((event) -> {
@@ -177,9 +176,10 @@ public class ScriptController {
             }
         });
         button.setMaxWidth(BUTTON_WIDTH);
-        Button deleteButton = new Button("-");
+        Button deleteButton = new Button("X");
+        deleteButton.setShape(new Circle(1.5));
         deleteButton.setCursor(Cursor.HAND);
-        deleteButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-font-family: 'Poppins';");
+        deleteButton.setStyle("-fx-text-fill: black; -fx-font-family: 'Poppins';");
         deleteButton.setOnAction((event) -> {
             try {
                 deleteBoard(event);
