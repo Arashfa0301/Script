@@ -64,5 +64,4 @@ public class Board {
             return i + j + "\n";
         });
     }
-
 }
