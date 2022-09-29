@@ -9,13 +9,13 @@ import core.main.Board;
 import core.main.Note;
 import core.main.User;
 import data.ScriptModule;
-import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -64,14 +64,26 @@ public class ScriptController {
 
     @FXML
     private void onBoardButtonClick(ActionEvent ae) throws IOException {
-        Button clickedButton = (Button) ae.getSource();
-        Board selectedBoard = boards.stream().filter(board -> board.getBoardName().equals(clickedButton.getText()))
-                .findFirst().get();
+        // finds the first (and only) board with a name that equals the text on the
+        // clicked button
+        Board selectedBoard = boards.stream()
+                .filter(board -> board.getBoardName().equals(((Button) ae.getSource()).getText()))
+                .findFirst()
+                .get();
         setTitleAndDescription(selectedBoard);
         loadNotes(selectedBoard);
+        // sets the currentBoard variable to the currently selected board
         currentBoard = selectedBoard;
         noteScreen.setVisible(true);
         update();
+    }
+
+    @FXML
+    private void handleBoardNameEnter(KeyEvent ke) {
+        // checks if "ENTER" is clicked on the keyboard and if the name written is valid
+        if (ke.getCode().equals(KeyCode.ENTER) && checkNewBoardName()) {
+            createBoard();
+        }
     }
 
     @FXML
@@ -86,25 +98,19 @@ public class ScriptController {
         TextField field = (TextField) event.getSource();
         button.setText(field.getText());
         currentBoard.setBoardName(field.getText());
+        save();
     }
 
     @FXML
     private void editBoardDescription(KeyEvent event) throws IOException {
         TextField field = (TextField) event.getSource();
         currentBoard.setBoardDescription(field.getText());
+        save();
     }
 
-    @FXML
-    private void save(ActionEvent ae) {
+    private void save() {
         user.setBoards(boards);
         scriptModule.write(user);
-        Button button = (Button) ae.getSource();
-        TranslateTransition transition = new TranslateTransition();
-        transition.setNode(button);
-        transition.setAutoReverse(false);
-        button.setDisable(true);
-        transition.setOnFinished(evt -> button.setDisable(false));
-        transition.play();
     }
 
     private void editNote(KeyEvent event) {
@@ -121,6 +127,7 @@ public class ScriptController {
             int column = GridPane.getColumnIndex(pane);
             currentBoard.getNotes().get(2 * row + column).setTitle(field.getText());
         }
+        save();
     }
 
     @FXML
@@ -129,6 +136,8 @@ public class ScriptController {
         boards.add(newBoard);
         createBoardButton(newBoard, boards.size() - 1);
         boardName.clear();
+        newBoardButtonEnable();
+        save();
     }
 
     @FXML
@@ -136,11 +145,16 @@ public class ScriptController {
         currentBoard.addNote(new Note());
         loadNotes(currentBoard);
         update();
+        save();
     }
 
     @FXML
     private void newBoardNameEdit() {
-        checkNewBoardName();
+        newBoardButtonEnable();
+    }
+
+    private void newBoardButtonEnable() {
+        newBoardButton.setDisable(checkNewBoardName() ? false : true);
     }
 
     @FXML
@@ -152,6 +166,7 @@ public class ScriptController {
         currentBoard.getNotes().remove(2 * row + column);
         loadNotes(currentBoard);
         update();
+        save();
     }
 
     private void loadBoardButtons(List<Board> boards) throws IOException {
@@ -176,6 +191,7 @@ public class ScriptController {
             }
         });
         button.setMaxWidth(BUTTON_WIDTH);
+        // add button that is used to delete the board button that was just made
         Button deleteButton = new Button("X");
         deleteButton.setShape(new Circle(1.5));
         deleteButton.setCursor(Cursor.HAND);
@@ -188,7 +204,6 @@ public class ScriptController {
             }
         });
         boardGrid.addRow(index, button, deleteButton);
-
     }
 
     @FXML
@@ -198,6 +213,7 @@ public class ScriptController {
         boards.remove(index);
         loadBoardButtons(boards);
         update();
+        save();
     }
 
     private void setTitleAndDescription(Board board) {
@@ -245,22 +261,15 @@ public class ScriptController {
 
     private void update() {
         if (!(currentBoard == null)) {
-            if (currentBoard.getNotes().size() == 6)
-                newNoteButton.setDisable(true);
-            else
-                newNoteButton.setDisable(false);
-            if (!boards.contains(currentBoard))
-                noteScreen.setVisible(false);
-            else
-                noteScreen.setVisible(true);
+            newNoteButton.setDisable(currentBoard.getNotes().size() == 6 ? true : false);
+            noteScreen.setVisible(!boards.contains(currentBoard) ? false : true);
         }
     }
 
-    private void checkNewBoardName() {
+    private Boolean checkNewBoardName() {
         if (boardName.getText().isBlank() || boards.stream().map(board -> (board.getBoardName()))
                 .collect(Collectors.toList()).contains(boardName.getText()))
-            newBoardButton.setDisable(true);
-        else
-            newBoardButton.setDisable(false);
+            return false;
+        return true;
     }
 }
