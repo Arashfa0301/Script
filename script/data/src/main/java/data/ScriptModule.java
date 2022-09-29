@@ -6,7 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
+import java.lang.reflect.Type;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -23,28 +27,40 @@ public class ScriptModule {
 
     public ScriptModule() {
         gson = new GsonBuilder().setPrettyPrinting().create();
-
+        read();
     }
 
     public void write(User user) {
+        List<User> users = read();
+        if (users.stream().anyMatch(u -> u.getName().equals(user.getName()))) {
+            users.removeIf(u -> u.getName().equals(user.getName()));
+        }
+        users.add(user);
 
         try (PrintWriter out = new PrintWriter(getFilePath())) {
-            out.write(gson.toJson(user));
+            out.write(gson.toJson(users));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public User read() {
+    public List<User> read() {
         try (BufferedReader reader = new BufferedReader(new FileReader(getFilePath()))) {
-            User user = gson.fromJson(reader, User.class);
-            return user;
+
+            Type userListType = new TypeToken<ArrayList<User>>() {
+            }.getType();
+
+            List<User> users = gson.fromJson(reader, userListType);
+
+            if (users == null)
+                return new ArrayList<>();
+            return users;
         } catch (FileNotFoundException e) {
             new File(FILE_PATH).mkdir();
-            return new User();
+            return new ArrayList<>();
         } catch (IOException e) {
             e.printStackTrace();
-            return new User();
+            return new ArrayList<>();
         }
     }
 
@@ -53,4 +69,7 @@ public class ScriptModule {
 
     }
 
+    public User getUser(String user) {
+        return read().stream().filter(u -> u.getName().equals(user)).findAny().orElse(null);
+    }
 }
