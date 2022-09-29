@@ -53,7 +53,7 @@ public class ScriptController {
     @FXML
     private void initialize() {
         scriptModule = new ScriptModule();
-        user = scriptModule.getUser("Arash");
+        user = LoginController.chosenUser;
         boards = user.getBoards();
         try {
             loadBoardButtons(boards);
