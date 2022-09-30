@@ -59,14 +59,14 @@ public class LoginController {
         switchScreen(ae, "Script.fxml");
     }
 
-    @FXML
     private void switchScreen(ActionEvent ae, String file) throws IOException {
+        ((Node) (ae.getSource())).getScene().getWindow().hide();
         Parent root = FXMLLoader.load(getClass().getResource(file));
         Stage stage = (Stage) ((Node) ae.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setResizable(false);
         stage.show();
+        stage.setResizable(true);
     }
 
     @FXML

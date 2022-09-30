@@ -11,7 +11,10 @@ import core.main.User;
 import data.ScriptModule;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -21,6 +24,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
+import javafx.scene.Node;
+import javafx.stage.Stage;
 import javafx.geometry.*;
 
 public class ScriptController {
@@ -48,12 +54,17 @@ public class ScriptController {
     @FXML
     private VBox noteScreen;
 
+    @FXML
+    private Text username, exampleMail;
+
     private User user;
 
     @FXML
     private void initialize() {
         scriptModule = new ScriptModule();
         user = LoginController.chosenUser;
+        username.setText(user.getName());
+        exampleMail.setText(user.getName().toLowerCase() + "@example.com");
         boards = user.getBoards();
         try {
             loadBoardButtons(boards);
@@ -151,6 +162,21 @@ public class ScriptController {
     @FXML
     private void newBoardNameEdit() {
         newBoardButtonEnable();
+    }
+
+    @FXML
+    private void handleLogoutButton(ActionEvent ae) throws IOException {
+        switchScreen(ae, "Login.fxml");
+    }
+
+    private void switchScreen(ActionEvent ae, String file) throws IOException {
+        ((Node) (ae.getSource())).getScene().getWindow().hide();
+        Parent root = FXMLLoader.load(getClass().getResource(file));
+        Stage stage = (Stage) ((Node) ae.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+        stage.setResizable(false);
     }
 
     private void newBoardButtonEnable() {
