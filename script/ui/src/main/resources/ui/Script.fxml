@@ -68,12 +68,12 @@
                               <Insets bottom="5.0" left="8.0" right="5.0" top="5.0" />
                            </HBox.margin>
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+                              <Text fx:id="username" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
                                  <font>
                                     <Font name="Poppins Medium" size="13.0" />
                                  </font>
                               </Text>
-                              <Text fill="#626262" strokeType="OUTSIDE" strokeWidth="0.0" text="Email@example.com">
+                              <Text fx:id="exampleMail" fill="#626262" strokeType="OUTSIDE" strokeWidth="0.0" text="Email@example.com">
                                  <font>
                                     <Font name="Poppins Regular" size="12.0" />
                                  </font>
@@ -209,6 +209,7 @@
                   <Insets bottom="30.0" left="30.0" right="30.0" top="50.0" />
                </padding>
             </VBox>
+            <Button fx:id="logoutButton" layoutX="475.0" layoutY="466.0" mnemonicParsing="false" onAction="#handleLogoutButton" text="Log out" />
          </children>
       </AnchorPane>
    </items>

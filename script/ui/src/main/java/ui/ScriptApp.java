@@ -19,6 +19,7 @@ public class ScriptApp extends Application {
         Parent parent = fxmlLoader.load();
         stage.setScene(new Scene(parent));
         stage.show();
+        stage.setResizable(false);
     }
 
     public static void main(String[] args) {
