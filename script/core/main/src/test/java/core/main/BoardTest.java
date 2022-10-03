@@ -1,6 +1,5 @@
 package core.main;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,7 +9,7 @@ import org.junit.jupiter.api.Test;
 public class BoardTest {
 
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         Board newBoard = new Board("Name", "Description");
         assertEquals("Name", newBoard.getBoardName());
         assertEquals("Description", newBoard.getBoardDescription());
@@ -20,7 +19,7 @@ public class BoardTest {
     public void testAddNote() {
         Board board = new Board("Board", "Test");
         assertTrue(board.getNotes().isEmpty());
-        Note note = new Note();
+        Note note = new Note("", "");
         board.addNote(note);
         assertFalse(board.getNotes().isEmpty());
         assertEquals(note, board.getNotes().get(0));

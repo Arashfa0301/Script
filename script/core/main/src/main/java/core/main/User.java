@@ -8,10 +8,6 @@ public class User {
     private String name;
     private List<Board> boards = new ArrayList<>();
 
-    public User() {
-        name = "";
-    }
-
     public User(String name) {
         this.name = name;
     }

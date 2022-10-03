@@ -132,7 +132,7 @@ public class ScriptController {
 
     @FXML
     private void createBoard() {
-        Board newBoard = new Board(boardName.getText());
+        Board newBoard = new Board(boardName.getText(), "");
         boards.add(newBoard);
         createBoardButton(newBoard, boards.size() - 1);
         boardName.clear();
@@ -142,7 +142,7 @@ public class ScriptController {
 
     @FXML
     private void createNote() {
-        currentBoard.addNote(new Note());
+        currentBoard.addNote(new Note("", ""));
         loadNotes(currentBoard);
         update();
         save();
