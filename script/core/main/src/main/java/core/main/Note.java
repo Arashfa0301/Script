@@ -9,11 +9,10 @@ import java.util.AbstractMap;
 
 public class Note {
 
-    private String title;
-    private String text;
-    private boolean pinned = false;
+    private String title, text;
+    private boolean isPinned = false;
     private String color = "white";
-    private Map<String, List<Integer>> selectableColors = Stream.of(
+    private final Map<String, List<Integer>> selectableColors = Stream.of(
             new AbstractMap.SimpleImmutableEntry<>("red", Arrays.asList(120, 120, 120)),
             new AbstractMap.SimpleImmutableEntry<>("blue", Arrays.asList(100, 100, 100)))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -25,11 +24,6 @@ public class Note {
     public Note(String title, String text) {
         this.title = title;
         this.text = text;
-    }
-
-    /// Create empty note
-    public Note() {
-
     }
 
     public String getTitle() {
@@ -49,43 +43,36 @@ public class Note {
     }
 
     public void pin() {
-        this.pinned = true;
+        isPinned = true;
     }
 
     public void unPin() {
-        this.pinned = false;
+        isPinned = false;
     }
 
     public boolean isPinned() {
-        return this.pinned;
+        return isPinned;
     }
 
     public void setColor(String color) {
         if (isValidColor(color)) {
             this.color = color;
-        } else {
-            throw new IllegalArgumentException("This is not a valid color");
+            return;
         }
+        throw new IllegalArgumentException("This is not a valid color");
+
     }
 
     public String getColor() {
-        return this.color;
+        return color;
     }
 
     private boolean isValidColor(String color) {
-        if (selectableColors.containsKey(color)) {
-            return true;
-        } else {
-            return false;
-        }
+        return selectableColors.containsKey(color);
     }
 
     @Override
     public String toString() {
         return "title:" + title + ", text: " + text;
-    }
-
-    public static void main(String[] args) {
-
     }
 }

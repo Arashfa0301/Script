@@ -5,24 +5,13 @@ import java.util.List;
 
 public class Board {
 
-    private String boardName;
-    private String description;
+    private String boardName, description;
     private List<Note> notes = new ArrayList<>();
     private final int MAX_NOTES = 6;
 
     public Board(String boardName, String description) {
         this.boardName = boardName;
         this.description = description;
-    }
-
-    public Board(String boardName) {
-        this.boardName = boardName;
-        this.description = "";
-    }
-
-    public Board() {
-        this.boardName = "";
-        this.description = "";
     }
 
     public String getBoardName() {
