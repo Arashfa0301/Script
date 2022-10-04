@@ -21,7 +21,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -34,6 +37,8 @@ public class ScriptController {
     private final int BUTTON_WIDTH = 190, NOTE_SIZE = 200;
 
     private Board currentBoard;
+
+    private int columnsCount = 1;
 
     private List<Board> boards;
 
@@ -66,7 +71,15 @@ public class ScriptController {
         username.setText(user.getName());
         exampleMail.setText(user.getName().toLowerCase() + "@example.com");
         noteGrid.widthProperty().addListener((obs, oldVal, newVal) -> {
-            System.out.println((double) newVal);
+            int oldColumnsCount = columnsCount;
+            columnsCount = (int) (newVal.doubleValue() / NOTE_SIZE);
+            if (columnsCount == 0) {
+                columnsCount = 1;
+            }
+            if (oldColumnsCount != columnsCount) {
+                loadNotes(currentBoard);
+            }
+            System.out.println(columnsCount);
         });
         boards = user.getBoards();
         try {
@@ -252,9 +265,23 @@ public class ScriptController {
 
     private void loadNotes(Board board) {
         noteGrid.getChildren().clear();
+        // remove notegrid columns and rows
+        noteGrid.getColumnConstraints().clear();
+        noteGrid.getRowConstraints().clear();
+        // add columns and rows to notegrid
+        IntStream.range(0, columnsCount).forEach(i -> {
+            ColumnConstraints column = new ColumnConstraints();
+            column.setPrefWidth(200);
+            noteGrid.getColumnConstraints().add(column);
+        });
+        IntStream.range(0, (int) (Math.floor(board.getNotes().size() / columnsCount) + 1)).forEach(i -> {
+            RowConstraints row = new RowConstraints();
+            row.setPrefHeight(600);
+            noteGrid.getRowConstraints().add(row);
+        });
         IntStream.range(0, board.getNotes().size()).forEach(i -> {
             Note note = board.getNotes().get(i);
-            GridPane notePane = new GridPane();
+            VBox notePane = new VBox();
             TextField title = new TextField(note.getTitle());
             title.setStyle("-fx-font-weight: bold");
             title.setOnKeyReleased((event) -> {
@@ -276,15 +303,15 @@ public class ScriptController {
             text.setPromptText("Notes");
             text.setWrapText(true);
             text.setPrefSize(NOTE_SIZE, NOTE_SIZE);
-            GridPane topPane = new GridPane();
+            HBox topPane = new HBox();
             topPane.setStyle("-fx-background-color: #ffffff");
-            notePane.addRow(0, topPane);
-            topPane.addColumn(0, title);
+            notePane.getChildren().add(topPane);
+            topPane.getChildren().add(title);
             Button deleteButton = new Button("Delete note");
             deleteButton.setOnAction((event) -> deleteNote(event));
-            topPane.addColumn(1, deleteButton);
-            notePane.addRow(1, text);
-            noteGrid.add(notePane, i % 2, Math.floorDiv(i, 2));
+            topPane.getChildren().add(deleteButton);
+            notePane.getChildren().add(text);
+            noteGrid.add(notePane, i % columnsCount, Math.floorDiv(i, columnsCount));
         });
     }
 
