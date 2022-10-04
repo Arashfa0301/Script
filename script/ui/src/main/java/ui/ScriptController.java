@@ -65,6 +65,9 @@ public class ScriptController {
         user = LoginController.chosenUser;
         username.setText(user.getName());
         exampleMail.setText(user.getName().toLowerCase() + "@example.com");
+        noteGrid.widthProperty().addListener((obs, oldVal, newVal) -> {
+            System.out.println((double) newVal);
+        });
         boards = user.getBoards();
         try {
             loadBoardButtons(boards);
