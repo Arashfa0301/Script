@@ -12,15 +12,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.event.ActionEvent;
 
 public class LoginController {
 
-    public static User chosenUser;
-
     private ScriptModule scriptModule;
+
+    @FXML
+    private AnchorPane loginAnchor;
 
     @FXML
     private Button loginButton;
@@ -30,7 +32,10 @@ public class LoginController {
 
     @FXML
     private void initialize() {
+        if (!(Globals.windowHeight == 0))
+            loginAnchor.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         scriptModule = new ScriptModule();
+        createWindowSizeListener();
     }
 
     @FXML
@@ -38,7 +43,7 @@ public class LoginController {
         if (!loginField.getText().isBlank()) {
             User user = scriptModule.getUser(loginField.getText());
             if (!(user == null)) {
-                chosenUser = user;
+                Globals.user = user;
                 switchScreen(ae, "Script.fxml");
             } else
                 newUser(ae);
@@ -55,22 +60,29 @@ public class LoginController {
     private void newUser(ActionEvent ae) throws IOException {
         User user = new User(loginField.getText());
         scriptModule.write(user);
-        chosenUser = user;
+        Globals.user = user;
         switchScreen(ae, "Script.fxml");
     }
 
     private void switchScreen(ActionEvent ae, String file) throws IOException {
-        ((Node) (ae.getSource())).getScene().getWindow().hide();
         Parent root = FXMLLoader.load(getClass().getResource(file));
         Stage stage = (Stage) ((Node) ae.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-        stage.setResizable(true);
     }
 
     @FXML
     private void checkIfBlankUsername() {
         loginButton.setDisable(loginField.getText().isBlank() ? true : false);
+    }
+
+    private void createWindowSizeListener() {
+        loginAnchor.widthProperty().addListener((obs, oldVal, newVal) -> {
+            Globals.windowWidth = (double) newVal;
+        });
+        loginAnchor.heightProperty().addListener((obs, oldVal, newVal) -> {
+            Globals.windowHeight = (double) newVal;
+        });
     }
 }

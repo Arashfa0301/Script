@@ -16,6 +16,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -43,6 +44,9 @@ public class ScriptController {
     private GridPane boardGrid, noteGrid;
 
     @FXML
+    private SplitPane scriptSplitPane;
+
+    @FXML
     private Button newNoteButton, newBoardButton;
 
     @FXML
@@ -61,8 +65,9 @@ public class ScriptController {
 
     @FXML
     private void initialize() {
+        scriptSplitPane.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         scriptModule = new ScriptModule();
-        user = LoginController.chosenUser;
+        user = Globals.user;
         username.setText(user.getName());
         exampleMail.setText(user.getName().toLowerCase() + "@example.com");
         boards = user.getBoards();
@@ -71,6 +76,7 @@ public class ScriptController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        createWindowSizeListener();
     }
 
     @FXML
@@ -170,17 +176,24 @@ public class ScriptController {
     }
 
     private void switchScreen(ActionEvent ae, String file) throws IOException {
-        ((Node) (ae.getSource())).getScene().getWindow().hide();
         Parent root = FXMLLoader.load(getClass().getResource(file));
         Stage stage = (Stage) ((Node) ae.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-        stage.setResizable(false);
     }
 
     private void newBoardButtonEnable() {
         newBoardButton.setDisable(checkNewBoardName() ? false : true);
+    }
+
+    private void createWindowSizeListener() {
+        scriptSplitPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            Globals.windowWidth = (double) newVal;
+        });
+        scriptSplitPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            Globals.windowHeight = (double) newVal;
+        });
     }
 
     @FXML
@@ -293,9 +306,7 @@ public class ScriptController {
     }
 
     private Boolean checkNewBoardName() {
-        if (boardName.getText().isBlank() || boards.stream().map(board -> (board.getBoardName()))
-                .collect(Collectors.toList()).contains(boardName.getText()))
-            return false;
-        return true;
+        return !(boardName.getText().isBlank() || boards.stream().map(board -> (board.getBoardName()))
+                .collect(Collectors.toList()).contains(boardName.getText()));
     }
 }
