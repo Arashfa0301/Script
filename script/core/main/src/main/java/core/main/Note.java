@@ -1,18 +1,15 @@
 package core.main;
 
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.AbstractMap;
 
 public class Note {
 
-    private String title, text;
-    private boolean isPinned = false;
-    private String color = "white";
-    private final Map<String, List<Integer>> selectableColors = Stream.of(
+    private static final Map<String, List<Integer>> selectableColors = Stream.of(
             new AbstractMap.SimpleImmutableEntry<>("red", Arrays.asList(255, 0, 0)),
             new AbstractMap.SimpleImmutableEntry<>("blue", Arrays.asList(0, 0, 255)),
             new AbstractMap.SimpleImmutableEntry<>("coral", Arrays.asList(255, 99, 80)),
@@ -28,6 +25,9 @@ public class Note {
             new AbstractMap.SimpleImmutableEntry<>("misty rose", Arrays.asList(255, 228, 225)),
             new AbstractMap.SimpleImmutableEntry<>("alice blue", Arrays.asList(240, 248, 255)))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    private String title, text;
+    private boolean isPinned = false;
+    private String color = "white";
 
     // Maybe implement checkboxes
 
