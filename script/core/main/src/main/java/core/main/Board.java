@@ -44,7 +44,7 @@ public class Board {
         return notes.stream().filter(note -> note.getTitle().equals(noteTitle)).findAny().get();
     }
 
-    public void removeBoard(String noteTitle) {
+    public void removeNote(String noteTitle) {
         notes.remove(getNote(noteTitle));
     }
 
