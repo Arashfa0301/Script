@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Board {
 
+    private static final int MAX_NOTES = 6;
     private String boardName, description;
     private List<Note> notes = new ArrayList<>();
-    private final int MAX_NOTES = 6;
 
     public Board(String boardName, String description) {
         this.boardName = boardName;
@@ -35,8 +35,9 @@ public class Board {
     }
 
     public void addNote(Note note) {
-        if (note != null && getNotes().size() < MAX_NOTES)
+        if (note != null && getNotes().size() < MAX_NOTES) {
             notes.add(note);
+        }
     }
 
     public Note getNote(String noteTitle) {

@@ -1,20 +1,23 @@
 package data;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-
-import java.lang.reflect.Type;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
+import com.google.gson.reflect.TypeToken;
 import core.main.User;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.lang.reflect.Type;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScriptModule {
 
@@ -37,7 +40,8 @@ public class ScriptModule {
         }
         users.add(user);
 
-        try (PrintWriter out = new PrintWriter(getFilePath())) {
+        try (PrintWriter out = new PrintWriter(
+                new OutputStreamWriter(new FileOutputStream(getFilePath()), Charset.defaultCharset()))) {
             out.write(gson.toJson(users));
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -45,19 +49,24 @@ public class ScriptModule {
     }
 
     public List<User> read() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(getFilePath()))) {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(getFilePath()), Charset.defaultCharset()))) {
 
             Type userListType = new TypeToken<ArrayList<User>>() {
             }.getType();
 
             List<User> users = gson.fromJson(reader, userListType);
 
-            if (users == null)
+            if (users == null) {
                 return new ArrayList<>();
+            }
             return users;
         } catch (FileNotFoundException e) {
-            new File(FILE_PATH).mkdir();
-            return new ArrayList<>();
+            if (new File(FILE_PATH).mkdir()) {
+                return new ArrayList<>();
+            } else {
+                throw new Error();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return new ArrayList<>();
