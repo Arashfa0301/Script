@@ -23,7 +23,8 @@ public class Note {
             new AbstractMap.SimpleImmutableEntry<>("violet red", Arrays.asList(199, 21, 133)),
             new AbstractMap.SimpleImmutableEntry<>("lemon chiffon", Arrays.asList(255, 250, 205)),
             new AbstractMap.SimpleImmutableEntry<>("misty rose", Arrays.asList(255, 228, 225)),
-            new AbstractMap.SimpleImmutableEntry<>("alice blue", Arrays.asList(240, 248, 255)))
+            new AbstractMap.SimpleImmutableEntry<>("alice blue", Arrays.asList(240, 248, 255)),
+            new AbstractMap.SimpleImmutableEntry<>("white", Arrays.asList(255, 255, 255)))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     private String title, text;
     private boolean isPinned = false;
@@ -83,7 +84,7 @@ public class Note {
     }
 
     public String getColor() {
-        return color;
+        return this.color;
     }
 
     private boolean isValidColor(String color) {
