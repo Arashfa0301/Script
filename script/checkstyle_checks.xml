@@ -276,7 +276,7 @@
             <property name="forbiddenSummaryFragments" value="^@return the *|^This method returns |^A [{]@code [a-zA-Z0-9]+[}]( is a )" />
         </module>
         <module name="JavadocParagraph" />
-        <module name="LambdaBodyLength" />
+        <!-- <module name="LambdaBodyLength" /> -->
         <module name="MethodLength" />
         <module name="RequireEmptyLineBeforeBlockTagGroup" />
         <module name="AtclauseOrder">

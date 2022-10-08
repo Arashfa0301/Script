@@ -1,11 +1,11 @@
 package ui;
 
-import java.io.IOException;
-
 import core.main.User;
 import data.ScriptModule;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,8 +14,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.scene.Node;
-import javafx.event.ActionEvent;
+
+import java.io.IOException;
 
 public class LoginController {
 
@@ -32,8 +32,9 @@ public class LoginController {
 
     @FXML
     private void initialize() {
-        if (!(Globals.windowHeight == 0))
+        if (!(Globals.windowHeight == 0)) {
             loginAnchor.setPrefSize(Globals.windowWidth, Globals.windowHeight);
+        }
         scriptModule = new ScriptModule();
         createWindowSizeListener();
     }
@@ -45,8 +46,9 @@ public class LoginController {
             if (!(user == null)) {
                 Globals.user = user;
                 switchScreen(ae, "Script.fxml");
-            } else
+            } else {
                 newUser(ae);
+            }
         }
     }
 

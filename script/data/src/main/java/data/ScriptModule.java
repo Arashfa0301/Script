@@ -65,7 +65,7 @@ public class ScriptModule {
             if (new File(FILE_PATH).mkdir()) {
                 return new ArrayList<>();
             } else {
-                throw new Error();
+                return new ArrayList<>();
             }
         } catch (IOException e) {
             e.printStackTrace();
