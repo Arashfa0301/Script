@@ -47,11 +47,4 @@ public class Board {
     public void removeNote(String noteTitle) {
         notes.remove(getNote(noteTitle));
     }
-
-    @Override
-    public String toString() {
-        return notes.stream().map(i -> i.toString()).reduce("", (i, j) -> {
-            return i + j + "\n";
-        });
-    }
 }
