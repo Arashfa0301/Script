@@ -37,6 +37,8 @@ public class Board {
     public void addNote(Note note) {
         if (note != null && getNotes().size() < MAX_NOTES) {
             notes.add(note);
+        } else {
+            throw new IllegalArgumentException();
         }
     }
 
