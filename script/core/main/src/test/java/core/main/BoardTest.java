@@ -40,4 +40,34 @@ public class BoardTest {
         board.setBoardDescription("New Description");
         assertEquals("New Description", board.getBoardDescription());
     }
+
+    @Test
+    public void testGetNote() {
+        Board board = new Board("Board", "Test");
+        Note note1 = new Note("Title1", "");
+        Note note2 = new Note("Title2", "");
+        board.addNote(note1);
+        board.addNote(note2);
+        assertEquals(note1, board.getNote("Title1"));
+        assertEquals(note2, board.getNote("Title2"));
+    }
+
+    @Test
+    public void testRemoveNote() {
+        Board board = new Board("Board", "Test");
+        Note note1 = new Note("Title1", "");
+        Note note2 = new Note("Title2", "");
+        board.addNote(note1);
+        board.addNote(note2);
+
+        // Tests that the board contains both notes
+        assertTrue(board.getNotes().contains(note1) && board.getNotes().contains(note2));
+
+        // Tests that removeNote() removed the intended note
+        board.removeNote("Title2");
+        assertFalse(board.getNotes().contains(note2));
+
+        // Tests that the other note is unaffected by removeNote()
+        assertTrue(board.getNotes().contains(note1));
+    }
 }
