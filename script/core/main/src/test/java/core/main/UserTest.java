@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.junit.jupiter.api.Test;
 
 public class UserTest {
 
@@ -15,6 +15,8 @@ public class UserTest {
     public void testConstructor() {
         User user = new User("user");
         assertEquals("user", user.getName());
+        user.setName("testname");
+        assertEquals("testname", user.getName());
     }
 
     @Test
@@ -44,8 +46,8 @@ public class UserTest {
         // Tests that the correct board is removed with removeBoard()
         Board testBoard = user.getBoard("board2");
         user.removeBoard("board2");
+        assertFalse(user.getBoards().contains(testBoard));
         assertTrue(user.getBoards().size() == 1);
         assertEquals("board1", user.getBoards().get(0).getBoardName());
-        assertFalse(user.getBoards().contains(testBoard));
     }
 }

@@ -1,10 +1,5 @@
 package ui;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import core.main.Board;
 import core.main.Note;
 import core.main.User;
@@ -12,7 +7,9 @@ import data.ScriptModule;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -34,13 +31,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.scene.Node;
 import javafx.stage.Stage;
-import javafx.geometry.*;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ScriptController {
 
-    private final int BUTTON_WIDTH = 190, NOTE_SIZE = 200;
+    private static final int BUTTON_WIDTH = 190, NOTE_SIZE = 200;
 
     private final int H_GAP = 10;
 
@@ -96,7 +96,6 @@ public class ScriptController {
                     loadNotes(currentBoard);
                 }
             }
-            System.out.println(columnsCount);
         });
         boards = user.getBoards();
         try {
@@ -300,14 +299,13 @@ public class ScriptController {
             column.setPrefWidth(200);
             noteGrid.getColumnConstraints().add(column);
         });
-        IntStream.range(0, (int) (Math.floor(board.getNotes().size() / columnsCount) + 1)).forEach(i -> {
+        IntStream.range(0, (int) (Math.floorDiv(board.getNotes().size(), columnsCount) + 1)).forEach(i -> {
             RowConstraints row = new RowConstraints();
             row.setPrefHeight(250);
             noteGrid.getRowConstraints().add(row);
         });
         IntStream.range(0, board.getNotes().size()).forEach(i -> {
             Note note = board.getNotes().get(i);
-            VBox notePane = new VBox();
             TextField title = new TextField(note.getTitle());
             title.setStyle("-fx-font-weight: bold");
             title.setOnKeyReleased((event) -> {

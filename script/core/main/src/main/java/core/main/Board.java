@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Board {
 
+    private static final int MAX_NOTES = 6;
     private String boardName, description;
     private List<Note> notes = new ArrayList<>();
     private final int MAX_NOTES = 256;
@@ -35,8 +36,11 @@ public class Board {
     }
 
     public void addNote(Note note) {
-        if (note != null && getNotes().size() < MAX_NOTES)
+        if (note != null && getNotes().size() < MAX_NOTES) {
             notes.add(note);
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     public Note getNote(String noteTitle) {
@@ -45,12 +49,5 @@ public class Board {
 
     public void removeNote(String noteTitle) {
         notes.remove(getNote(noteTitle));
-    }
-
-    @Override
-    public String toString() {
-        return notes.stream().map(i -> i.toString()).reduce("", (i, j) -> {
-            return i + j + "\n";
-        });
     }
 }

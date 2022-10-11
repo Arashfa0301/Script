@@ -2,9 +2,13 @@ package core.main;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class BoardTest {
 
@@ -17,12 +21,28 @@ public class BoardTest {
 
     @Test
     public void testAddNote() {
+        // Tests that board is empty by default
         Board board = new Board("Board", "Test");
         assertTrue(board.getNotes().isEmpty());
+
+        // Tests that addNote works as intended for a valid note
         Note note = new Note("", "");
         board.addNote(note);
         assertFalse(board.getNotes().isEmpty());
         assertEquals(note, board.getNotes().get(0));
+
+        // Tests for exception case: note == null
+        assertThrows(IllegalArgumentException.class, () -> {
+            board.addNote(null);
+        });
+
+        // Tests for exception case: Exceeded MAX_NOTES
+        List<Note> notes = Arrays.asList(new Note("Note2", "note2"), new Note("Note3", "note3"),
+                new Note("Note4", "note4"), new Note("Note5", "note5"), new Note("Note6", "note6"));
+        notes.stream().forEach(n -> board.addNote(n));
+        assertThrows(IllegalArgumentException.class, () -> {
+            board.addNote(new Note("Note7", "Note7"));
+        });
     }
 
     @Test
