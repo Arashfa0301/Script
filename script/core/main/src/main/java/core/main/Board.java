@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
+    public static final int MAX_NOTES = 256;
     private String boardName, description;
     private List<Note> notes = new ArrayList<>();
-    public static final int MAX_NOTES = 256;
 
     public Board(String boardName, String description) {
         this.boardName = boardName;
