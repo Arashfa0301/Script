@@ -81,8 +81,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <argLine>
-                    --add-opens script.ui/ui=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
-</argLine>
+                    @{jaCoCoArgLine} --add-opens script.ui/ui=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+                    </argLine>
                 </configuration>
             </plugin>
 
@@ -114,7 +114,7 @@
                 <configuration>
                     <propertyName>
                         jaCoCoArgLine
-</propertyName>
+                    </propertyName>
                 </configuration>
             </plugin>
         </plugins>
