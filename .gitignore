@@ -1,0 +1,13 @@
+# ignore maven build folder
+target/
+
+# pom-derived eclipse jdt files
+.project
+.classpath
+org.eclipse.*.prefs
+
+#mac-specific file
+.DS_Store
+
+#vscode settings
+.vscode
