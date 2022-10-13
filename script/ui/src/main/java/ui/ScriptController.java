@@ -111,6 +111,7 @@ public class ScriptController {
                 .filter(board -> board.getBoardName().equals(((Button) ae.getSource()).getText()))
                 .findFirst()
                 .get();
+        noteScreen.setVisible(true);
         setTitleAndDescription(selectedBoard);
         loadNotes(selectedBoard);
         // sets the currentBoard variable to the currently selected board
@@ -134,8 +135,7 @@ public class ScriptController {
 
     @FXML
     private void editBoardTitle(KeyEvent event) throws IOException {
-        VBox pane = (VBox) boardGrid.getChildren().get(boards.indexOf(currentBoard));
-        Button button = (Button) pane.getChildren().get(0);
+        Button button = (Button) boardGrid.getChildren().get(boards.indexOf(currentBoard) * 2);
         TextField field = (TextField) event.getSource();
         button.setText(field.getText());
         currentBoard.setBoardName(field.getText());
@@ -158,15 +158,23 @@ public class ScriptController {
         if (event.getSource().getClass() == TextArea.class) {
             TextArea area = (TextArea) event.getSource();
             VBox pane = (VBox) area.getParent();
-            int row = GridPane.getRowIndex(pane);
-            int column = GridPane.getColumnIndex(pane);
-            currentBoard.getNotes().get(2 * row + column).setText(area.getText());
+            int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
+            int column = GridPane.getColumnIndex(pane.getParent());
+            if (columnsCount == 1) {
+                currentBoard.getNotes().get(row).setText(area.getText());
+            } else {
+                currentBoard.getNotes().get(2 * row + column).setText(area.getText());
+            }
         } else if (event.getSource().getClass() == TextField.class) {
             TextField field = (TextField) event.getSource();
-            HBox pane = (HBox) field.getParent();
-            int row = GridPane.getRowIndex(pane.getParent());
+            VBox pane = (VBox) field.getParent().getParent();
+            int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
             int column = GridPane.getColumnIndex(pane.getParent());
-            currentBoard.getNotes().get(2 * row + column).setTitle(field.getText());
+            if (columnsCount == 1) {
+                currentBoard.getNotes().get(row).setTitle(field.getText());
+            } else {
+                currentBoard.getNotes().get(2 * row + column).setTitle(field.getText());
+            }
         }
         save();
     }
@@ -224,9 +232,13 @@ public class ScriptController {
     private void deleteNote(ActionEvent ae) {
         Button button = (Button) ae.getSource();
         VBox pane = (VBox) button.getParent().getParent();
-        int row = GridPane.getRowIndex(pane);
-        int column = GridPane.getColumnIndex(pane);
-        currentBoard.getNotes().remove(2 * row + column);
+        int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
+        if (columnsCount == 1) {
+            currentBoard.getNotes().remove(row);
+        } else {
+            int column = GridPane.getColumnIndex(pane.getParent());
+            currentBoard.getNotes().remove(2 * row + column);
+        }
         loadNotes(currentBoard);
         update();
         save();
@@ -257,9 +269,8 @@ public class ScriptController {
         button.setMaxWidth(BUTTON_WIDTH);
         // add button that is used to delete the board button that was just made
         Button deleteButton = new Button("X");
-        deleteButton.setShape(new Circle(1.5));
+        deleteButton.setShape(new Circle(10));
         deleteButton.setCursor(Cursor.HAND);
-        deleteButton.setStyle("-fx-text-fill: black; -fx-font-family: 'Poppins';");
         deleteButton.setOnAction((event) -> {
             try {
                 deleteBoard(event);
@@ -329,23 +340,21 @@ public class ScriptController {
             notePane.getChildren().add(topPane);
             notePane.setPrefSize(NOTE_SIZE, 230);
             notePane.setMaxSize(NOTE_SIZE, 230);
+            notePane.getChildren().add(text);
             topPane.getChildren().add(title);
             Button deleteButton = new Button("X");
             deleteButton.setOnAction((event) -> deleteNote(event));
-            topPane.getChildren().add(deleteButton);
-            notePane.getChildren().add(text);
-            deleteButton
-                    .setStyle("-fx-text-fill: #ffffff; -fx-background-color: #000000;");
             // on notePane hover
             // set width and height of deleteButton to 20
             // set opacity of deleteButton to 1
             // make deleteButton a circle
             deleteButton.setShape(new Circle(10));
-            deleteButton.setMaxSize(20, 20);
-            deleteButton.setMinSize(20, 20);
             deleteButton.setTranslateX(25);
             deleteButton.setTranslateY(-7);
+            deleteButton.setStyle("-fx-text-fill: white; -fx-background-color: black;");
+            deleteButton.setCursor(Cursor.HAND);
             deleteButton.setVisible(false);
+            topPane.getChildren().add(deleteButton);
             notePane.setOnMouseEntered((event) -> {
                 // add dropshadow
                 deleteButton.setVisible(true);
