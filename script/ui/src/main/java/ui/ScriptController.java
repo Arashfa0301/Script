@@ -13,9 +13,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -24,6 +28,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -37,7 +42,9 @@ public class ScriptController {
 
     private static final int BUTTON_WIDTH = 190, NOTE_SIZE = 200;
 
-    private Board currentBoard;
+    private final int H_GAP = 10;
+
+    private Board currentBoard = null;
 
     private int columnsCount = 1;
 
@@ -64,6 +71,9 @@ public class ScriptController {
     private VBox noteScreen;
 
     @FXML
+    private ScrollPane noteScrollPane;
+
+    @FXML
     private Text username, exampleMail;
 
     private User user;
@@ -75,14 +85,16 @@ public class ScriptController {
         user = Globals.user;
         username.setText(user.getName());
         exampleMail.setText(user.getName().toLowerCase() + "@example.com");
-        noteGrid.widthProperty().addListener((obs, oldVal, newVal) -> {
+        noteScrollPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             int oldColumnsCount = columnsCount;
-            columnsCount = (int) (newVal.doubleValue() / NOTE_SIZE);
+            columnsCount = (int) ((newVal.doubleValue() - 60) / (NOTE_SIZE + H_GAP));
             if (columnsCount == 0) {
                 columnsCount = 1;
             }
             if (oldColumnsCount != columnsCount) {
-                loadNotes(currentBoard);
+                if (currentBoard != null) {
+                    loadNotes(currentBoard);
+                }
             }
         });
         boards = user.getBoards();
@@ -125,7 +137,7 @@ public class ScriptController {
 
     @FXML
     private void editBoardTitle(KeyEvent event) throws IOException {
-        GridPane pane = (GridPane) boardGrid.getChildren().get(boards.indexOf(currentBoard));
+        VBox pane = (VBox) boardGrid.getChildren().get(boards.indexOf(currentBoard));
         Button button = (Button) pane.getChildren().get(0);
         TextField field = (TextField) event.getSource();
         button.setText(field.getText());
@@ -148,15 +160,15 @@ public class ScriptController {
     private void editNote(KeyEvent event) {
         if (event.getSource().getClass() == TextArea.class) {
             TextArea area = (TextArea) event.getSource();
-            GridPane pane = (GridPane) area.getParent();
+            VBox pane = (VBox) area.getParent();
             int row = GridPane.getRowIndex(pane);
             int column = GridPane.getColumnIndex(pane);
             currentBoard.getNotes().get(2 * row + column).setText(area.getText());
         } else if (event.getSource().getClass() == TextField.class) {
             TextField field = (TextField) event.getSource();
-            GridPane pane = (GridPane) field.getParent();
-            int row = GridPane.getRowIndex(pane);
-            int column = GridPane.getColumnIndex(pane);
+            HBox pane = (HBox) field.getParent();
+            int row = GridPane.getRowIndex(pane.getParent());
+            int column = GridPane.getColumnIndex(pane.getParent());
             currentBoard.getNotes().get(2 * row + column).setTitle(field.getText());
         }
         save();
@@ -214,7 +226,7 @@ public class ScriptController {
     @FXML
     private void deleteNote(ActionEvent ae) {
         Button button = (Button) ae.getSource();
-        GridPane pane = (GridPane) button.getParent().getParent();
+        VBox pane = (VBox) button.getParent().getParent();
         int row = GridPane.getRowIndex(pane);
         int column = GridPane.getColumnIndex(pane);
         currentBoard.getNotes().remove(2 * row + column);
@@ -280,16 +292,12 @@ public class ScriptController {
         // remove notegrid columns and rows
         noteGrid.getColumnConstraints().clear();
         noteGrid.getRowConstraints().clear();
+        noteGrid.setHgap(10);
         // add columns and rows to notegrid
         IntStream.range(0, columnsCount).forEach(i -> {
             ColumnConstraints column = new ColumnConstraints();
-            column.setPrefWidth(200);
             noteGrid.getColumnConstraints().add(column);
-        });
-        IntStream.range(0, (int) (Math.floorDiv(board.getNotes().size(), columnsCount) + 1)).forEach(i -> {
-            RowConstraints row = new RowConstraints();
-            row.setPrefHeight(600);
-            noteGrid.getRowConstraints().add(row);
+            noteGrid.add(new VBox(), i, 0);
         });
         IntStream.range(0, board.getNotes().size()).forEach(i -> {
             Note note = board.getNotes().get(i);
@@ -315,21 +323,46 @@ public class ScriptController {
             text.setWrapText(true);
             text.setPrefSize(NOTE_SIZE, NOTE_SIZE);
             HBox topPane = new HBox();
-            topPane.setStyle("-fx-background-color: #ffffff");
-            VBox notePane = new VBox();
+            notePane.setStyle("-fx-background-color: white; -fx-background-radius: 5px;");
             notePane.getChildren().add(topPane);
+            notePane.setPrefSize(NOTE_SIZE, 230);
+            notePane.setMaxSize(NOTE_SIZE, 230);
             topPane.getChildren().add(title);
-            Button deleteButton = new Button("Delete note");
+            Button deleteButton = new Button("X");
             deleteButton.setOnAction((event) -> deleteNote(event));
             topPane.getChildren().add(deleteButton);
             notePane.getChildren().add(text);
-            noteGrid.add(notePane, i % columnsCount, Math.floorDiv(i, columnsCount));
+            deleteButton
+                    .setStyle("-fx-text-fill: #ffffff; -fx-background-color: #000000;");
+            // on notePane hover
+            // set width and height of deleteButton to 20
+            // set opacity of deleteButton to 1
+            // make deleteButton a circle
+            deleteButton.setShape(new Circle(10));
+            deleteButton.setMaxSize(20, 20);
+            deleteButton.setMinSize(20, 20);
+            deleteButton.setTranslateX(25);
+            deleteButton.setTranslateY(-7);
+            deleteButton.setVisible(false);
+            notePane.setOnMouseEntered((event) -> {
+                // add dropshadow
+                deleteButton.setVisible(true);
+                notePane.setEffect(new DropShadow(12, new Color(0, 0, 0, 0.15)));
+            });
+            notePane.setOnMouseExited((event) -> {
+                // remove dropshadow
+                deleteButton.setVisible(false);
+                notePane.setEffect(null);
+            });
+
+            VBox columnVBox = (VBox) noteGrid.getChildren().get(i % columnsCount);
+            columnVBox.getChildren().add(notePane);
         });
     }
 
     private void update() {
         if (!(currentBoard == null)) {
-            newNoteButton.setDisable(currentBoard.getNotes().size() == 6 ? true : false);
+            newNoteButton.setDisable(currentBoard.getNotes().size() == Board.MAX_NOTES ? true : false);
             noteScreen.setVisible(!boards.contains(currentBoard) ? false : true);
         }
     }
