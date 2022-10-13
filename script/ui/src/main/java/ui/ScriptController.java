@@ -372,4 +372,8 @@ public class ScriptController {
         return !(boardName.getText().isBlank() || boards.stream().map(board -> (board.getBoardName()))
                 .collect(Collectors.toList()).contains(boardName.getText()));
     }
+
+    public Board[] getBoards() {
+        return boards.toArray(new Board[boards.size()]);
+    }
 }
