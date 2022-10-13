@@ -17,7 +17,7 @@ Under er det et skjermbilde av appen som er befolket med noen enkle notater.
 
 ## Brukerhistorier
 Vi har laget noen brukerhistorier som skal hjelpe oss med å kartlegge bruksområdene til appen, og gi oss en bedre idé om hvilke funksjonaliteter appen skal ha.
-Brukerhistorien til release 1 ligger [her](/docs/release1/userStories.md). 
+Brukerhistorie #1 til release 1 ligger [her](/docs/release1/userStories.md). Brukerhistorie #2 og #3 til release 2 ligger [her](/docs/release2/userStories.md).
 
 
 ## Kjøre JavaFX-brukergrensesnittet
