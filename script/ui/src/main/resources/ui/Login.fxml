@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -10,7 +11,10 @@
       <VBox alignment="CENTER" layoutX="200.0" layoutY="213.0" prefHeight="99.0" prefWidth="150.0" spacing="10.0" AnchorPane.bottomAnchor="88.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.66666666666666" AnchorPane.topAnchor="213.0">
          <children>
             <TextField fx:id="loginField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleEnter" onKeyReleased="#checkIfBlankUsername" prefHeight="25.0" prefWidth="189.0" promptText="Enter username" />
-            <Button fx:id="loginButton" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleLoginButton" text="Log in" />
+            <Button fx:id="loginButton" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleLoginButton" text="Log in">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
          </children>
       </VBox>
    </children>

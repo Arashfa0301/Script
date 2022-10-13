@@ -33,6 +33,7 @@
 -->
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
@@ -161,7 +162,10 @@
                   </ScrollPane>
                   <HBox prefHeight="30.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="newBoardButton" disable="true" mnemonicParsing="false" onAction="#createBoard" text="New Board" />
+                        <Button fx:id="newBoardButton" disable="true" mnemonicParsing="false" onAction="#createBoard" text="New Board">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
                         <TextField fx:id="boardName" onKeyPressed="#handleBoardNameEnter" onKeyReleased="#newBoardNameEdit" promptText="Board name" />
                      </children>
                      <VBox.margin>
@@ -179,14 +183,14 @@
          <children>
             <ScrollPane fx:id="noteScrollPane" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <content>
-                  <VBox fx:id="noteScreen" fillWidth="false" maxHeight="10000.0" maxWidth="10000.0">
+                  <VBox fx:id="noteScreen" fillWidth="false" maxHeight="10000.0" maxWidth="10000.0" visible="false">
                      <children>
-                        <TextField fx:id="boardTitle" onKeyReleased="#editBoardTitle" promptText="Title" style="-fx-border-width: 0;" text="asdfsadf">
+                        <TextField fx:id="boardTitle" onKeyReleased="#editBoardTitle" promptText="Title" style="-fx-border-width: 0;">
                            <font>
                               <Font name="Poppins Medium" size="20.0" />
                            </font>
                         </TextField>
-                        <TextField fx:id="boardDescription" onKeyReleased="#editBoardDescription" promptText="A simple description" style="-fx-text-fill: rgba(0,0,0,1);" text="asdfsa">
+                        <TextField fx:id="boardDescription" onKeyReleased="#editBoardDescription" promptText="A simple description" style="-fx-text-fill: rgba(0,0,0,1);">
                            <font>
                               <Font name="Poppins Regular" size="13.0" />
                            </font>
@@ -194,7 +198,10 @@
                               <Insets />
                            </VBox.margin>
                         </TextField>
-                        <Button fx:id="newNoteButton" mnemonicParsing="false" onAction="#createNote" text="New Note" />
+                        <Button fx:id="newNoteButton" mnemonicParsing="false" onAction="#createNote" text="New Note">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
                         <GridPane fx:id="noteGrid" maxHeight="10000.0" maxWidth="10000.0" VBox.vgrow="NEVER">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -210,7 +217,10 @@
                   </VBox>
                </content>
             </ScrollPane>
-            <Button fx:id="logoutButton" layoutX="475.0" layoutY="466.0" mnemonicParsing="false" onAction="#handleLogoutButton" text="Log out" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0" />
+            <Button fx:id="logoutButton" layoutX="475.0" layoutY="466.0" mnemonicParsing="false" onAction="#handleLogoutButton" text="Log out" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
          </children>
       </AnchorPane>
    </items>
