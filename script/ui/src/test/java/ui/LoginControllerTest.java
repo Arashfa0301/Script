@@ -1,13 +1,14 @@
 package ui;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import core.main.User;
 import data.ScriptModule;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,17 +38,22 @@ public class LoginControllerTest extends ApplicationTest {
     @Test
     @DisplayName("Test login")
     void testLogin() {
+        ScriptModule scriptModule = new ScriptModule();
+        scriptModule.removeUser("test_user");
+        assertNull(scriptModule.getUser("test_user"), "User should not exist yet in json file");
         clickOn("#loginField");
         write("test_user");
         clickOn("#loginButton");
-        ScriptModule scriptModule = new ScriptModule();
-        User user = scriptModule.getUser("test_user");
-        assertNotNull(user);
+        assertNotNull(scriptModule.getUser("test_user"), "User should exist in json file");
     }
 
     @Test
-    @DisplayName("Test empty username")
+    @DisplayName("Test disabled when no username")
     void testEmpty() {
+        clickOn("#loginField");
+        write("a");
+        press(KeyCode.BACK_SPACE);
+        release(KeyCode.BACK_SPACE);
         assertTrue(controller.getLoginButton().isDisabled());
     }
 
