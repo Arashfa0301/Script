@@ -297,13 +297,8 @@ public class ScriptController {
         // add columns and rows to notegrid
         IntStream.range(0, columnsCount).forEach(i -> {
             ColumnConstraints column = new ColumnConstraints();
-            column.setPrefWidth(200);
             noteGrid.getColumnConstraints().add(column);
-        });
-        IntStream.range(0, (int) (Math.floor(board.getNotes().size() / columnsCount) + 1)).forEach(i -> {
-            RowConstraints row = new RowConstraints();
-            row.setPrefHeight(250);
-            noteGrid.getRowConstraints().add(row);
+            noteGrid.add(new VBox(), i, 0);
         });
         IntStream.range(0, board.getNotes().size()).forEach(i -> {
             Note note = board.getNotes().get(i);
@@ -361,12 +356,15 @@ public class ScriptController {
                 deleteButton.setVisible(false);
                 notePane.setEffect(null);
             });
-            noteGrid.add(notePane, i % columnsCount, Math.floorDiv(i, columnsCount));
+
+            VBox columnVBox = (VBox) noteGrid.getChildren().get(i % columnsCount);
+            columnVBox.getChildren().add(notePane);
         });
     }
 
     private void update() {
         if (!(currentBoard == null)) {
+            newNoteButton.setDisable(currentBoard.getNotes().size() == Board.MAX_NOTES ? true : false);
             noteScreen.setVisible(!boards.contains(currentBoard) ? false : true);
         }
     }
