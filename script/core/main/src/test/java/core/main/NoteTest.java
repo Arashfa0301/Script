@@ -1,12 +1,13 @@
 package core.main;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 public class NoteTest {
 
@@ -74,7 +75,7 @@ public class NoteTest {
     }
 
     @Test
-    void testGetColorValues() {
+    public void testGetColorValues() {
         Note note = new Note("", "");
 
         // Test RGB values for default color
@@ -89,5 +90,21 @@ public class NoteTest {
         assertEquals(colorValues.get(0), 255);
         assertEquals(colorValues.get(1), 0);
         assertEquals(colorValues.get(2), 0);
+    }
+
+    @Test
+    public void testPin() {
+        Note note = new Note("", "");
+
+        // Test that note is not pinned by default
+        assertFalse(note.isPinned());
+
+        // Tests that pin() works as intended
+        note.pin();
+        assertTrue(note.isPinned());
+
+        // Tests that unPin() works as intended
+        note.unPin();
+        assertFalse(note.isPinned());
     }
 }

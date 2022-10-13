@@ -40,11 +40,4 @@ public class User {
         boards.remove(getBoard(boardName));
     }
 
-    @Override
-    public String toString() {
-        return boards.stream().map(i -> i.toString()).reduce(name, (i, j) -> {
-            return i + j + "\n";
-        });
-    }
-
 }
