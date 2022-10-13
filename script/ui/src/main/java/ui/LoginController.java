@@ -87,4 +87,8 @@ public class LoginController {
             Globals.windowHeight = (double) newVal;
         });
     }
+
+    public Button getLoginButton() {
+        return loginButton;
+    }
 }
