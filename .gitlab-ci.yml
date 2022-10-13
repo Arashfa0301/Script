@@ -1,0 +1,44 @@
+stages:
+  - Java build
+  - Java test
+
+Build:
+  image: maven:3-openjdk-16
+  stage: Java build
+  script:
+    - cd script
+    - mvn compile
+  retry: 1
+
+Jacoco:
+  image: maven:3-openjdk-16
+  stage: Java test
+  needs: []
+  script:
+    - cd script
+    - mvn test -DfailIfNoTests=false
+    - mvn jacoco:report-aggregate
+    - cat $CI_BUILDS_DIR/$CI_PROJECT_PATH/script/report/target/site/jacoco-aggregate/index.html | grep -o '<tfoot>.*</tfoot>'
+  artifacts:
+    paths:
+      - $CI_BUILDS_DIR/$CI_PROJECT_PATH/script/report/target/site/jacoco-aggregate/*
+  retry: 2
+
+Spotbugs:
+  image: maven:3-openjdk-16
+  stage: Java test
+  needs: []
+  script:
+    - cd script
+    - mvn install -DskipTests -DskipUiTests -DfailIfNoTests=false
+    - mvn spotbugs:check -DskipUiTests
+  retry: 2
+
+Checkstyle:
+  image: maven:3-openjdk-16
+  stage: Java test
+  needs: []
+  script:
+    - cd script
+    - mvn checkstyle:check
+  retry: 2
