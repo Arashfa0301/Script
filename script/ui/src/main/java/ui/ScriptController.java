@@ -180,7 +180,7 @@ public class ScriptController {
     }
 
     @FXML
-    private void createBoard() {
+    public void createBoard() {
         Board newBoard = new Board(boardName.getText(), "");
         boards.add(newBoard);
         createBoardButton(newBoard, boards.size() - 1);
@@ -244,7 +244,7 @@ public class ScriptController {
         save();
     }
 
-    private void loadBoardButtons(List<Board> boards) throws IOException {
+    public void loadBoardButtons(List<Board> boards) throws IOException {
         boardGrid.getChildren().clear();
         IntStream.range(0, boards.size()).forEach(i -> {
             createBoardButton(boards.get(i), i);
@@ -265,6 +265,7 @@ public class ScriptController {
                 e.printStackTrace();
             }
         });
+        button.setId(board.getBoardName());
         button.setMaxWidth(BUTTON_WIDTH);
         // add button that is used to delete the board button that was just made
         Button deleteButton = new Button("X");
@@ -380,5 +381,17 @@ public class ScriptController {
     private Boolean checkNewBoardName() {
         return !(boardName.getText().isBlank() || boards.stream().map(board -> (board.getBoardName()))
                 .collect(Collectors.toList()).contains(boardName.getText()));
+    }
+
+    public List<Board> getBoards() {
+        return boards;
+    }
+
+    public Button getNewBoardButton() {
+        return newBoardButton;
+    }
+
+    public void setBoardName(String boardName) {
+        this.boardName.setText(boardName);
     }
 }

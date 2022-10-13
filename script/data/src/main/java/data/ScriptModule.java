@@ -85,4 +85,14 @@ public class ScriptModule {
         return read().stream().filter(u -> u.getName().equals(user)).findAny().orElse(null);
     }
 
+    public void removeUser(String user) {
+        List<User> users = read();
+        users.removeIf(u -> u.getName().equals(user));
+        try (PrintWriter out = new PrintWriter(
+                new OutputStreamWriter(new FileOutputStream(getFilePath()), Charset.defaultCharset()))) {
+            out.write(gson.toJson(users));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }
