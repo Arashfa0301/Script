@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import core.main.Board;
 import core.main.User;
 import data.ScriptModule;
 import javafx.fxml.FXMLLoader;
