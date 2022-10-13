@@ -297,7 +297,10 @@ public class ScriptController {
         IntStream.range(0, columnsCount).forEach(i -> {
             ColumnConstraints column = new ColumnConstraints();
             noteGrid.getColumnConstraints().add(column);
-            noteGrid.add(new VBox(), i, 0);
+            VBox columnVBox = new VBox();
+            columnVBox.setSpacing(10);
+            noteGrid.add(columnVBox, i, 0);
+
         });
         IntStream.range(0, board.getNotes().size()).forEach(i -> {
             Note note = board.getNotes().get(i);
@@ -323,6 +326,7 @@ public class ScriptController {
             text.setWrapText(true);
             text.setPrefSize(NOTE_SIZE, NOTE_SIZE);
             HBox topPane = new HBox();
+            VBox notePane = new VBox();
             notePane.setStyle("-fx-background-color: white; -fx-background-radius: 5px;");
             notePane.getChildren().add(topPane);
             notePane.setPrefSize(NOTE_SIZE, 230);
