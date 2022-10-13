@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class BoardTest {
 
@@ -37,11 +38,12 @@ public class BoardTest {
         });
 
         // Tests for exception case: Exceeded MAX_NOTES
-        List<Note> notes = Arrays.asList(new Note("Note2", "note2"), new Note("Note3", "note3"),
-                new Note("Note4", "note4"), new Note("Note5", "note5"), new Note("Note6", "note6"));
+        // stream with 256
+        List<Note> notes = Arrays.asList(
+                IntStream.range(1, 256).mapToObj(i -> new Note(String.format("Note %d", i), "")).toArray(Note[]::new));
         notes.stream().forEach(n -> board.addNote(n));
         assertThrows(IllegalArgumentException.class, () -> {
-            board.addNote(new Note("Note7", "Note7"));
+            board.addNote(new Note("", ""));
         });
     }
 
