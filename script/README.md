@@ -24,7 +24,7 @@ Brukerhistorie #1 til release 1 ligger [her](/docs/release1/userStories.md). Bru
 - Gå inn i `script` mappen.
 - Kjør `mvn clean install`
 - Gå inn i `ui`
--Kjør `mvn javafx:run`
+- Kjør `mvn javafx:run`
 
 
 
