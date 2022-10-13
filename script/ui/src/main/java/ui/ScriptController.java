@@ -285,11 +285,10 @@ public class ScriptController {
             ColumnConstraints column = new ColumnConstraints();
             column.setPrefWidth(200);
             noteGrid.getColumnConstraints().add(column);
-        });
-        IntStream.range(0, (int) (Math.floorDiv(board.getNotes().size(), columnsCount) + 1)).forEach(i -> {
-            RowConstraints row = new RowConstraints();
-            row.setPrefHeight(600);
-            noteGrid.getRowConstraints().add(row);
+            VBox columnVBox = new VBox();
+            columnVBox.setSpacing(10);
+            noteGrid.add(columnVBox, i, 0);
+
         });
         IntStream.range(0, board.getNotes().size()).forEach(i -> {
             Note note = board.getNotes().get(i);
@@ -315,8 +314,8 @@ public class ScriptController {
             text.setWrapText(true);
             text.setPrefSize(NOTE_SIZE, NOTE_SIZE);
             HBox topPane = new HBox();
-            topPane.setStyle("-fx-background-color: #ffffff");
             VBox notePane = new VBox();
+            notePane.setStyle("-fx-background-color: white; -fx-background-radius: 5px;");
             notePane.getChildren().add(topPane);
             topPane.getChildren().add(title);
             Button deleteButton = new Button("Delete note");
