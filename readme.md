@@ -2,25 +2,27 @@
 
 # IT1901 Prosjekt - Script
 
-_Script lets you organize notes and reminders to assist in day to day activities_
+_Script lar deg organisere notater og påminnelser for å hjelpe deg med ulike aktiviteter_
 
-Alt av dokumentasjon ligger under [docs](link) og er sortert etter utgivelser av prosjektet.
+Alt av dokumentasjon ligger under [docs](/docs) og er sortert etter utgivelser av prosjektet.
 
 ## Struktur
-Prosjektet er bygd med maven og består av tre delmoduler: `core`, `data` og `ui`. Core-modulen inneholder hovedklassene og data-modulen inneholder både data og klasser for filbehandling. Ui-modulen inneholder kontroller samt fxml-filer og alt annet av ressurser som trengs til brukergrensesnittet.
+Mappen `script` utgjør kodingsprosjektet. Prosjektet er bygd med maven og består av tre delmoduler: `core`, `data` og `ui`. Core-modulen inneholder hovedklassene og data-modulen inneholder både data og klasser for filbehandling. Ui-modulen inneholder kontroller samt fxml-filer og alt annet av ressurser som trengs til brukergrensesnittet.
 
 ## Roadmap
 - [x] Modular structure
-- [ ] User interface
+- [x] User interface
     - [x] Design and fxml (UI/UX)
-    - [ ] Controller
-- [ ] Unit tests and CD/CI pipeline
+    - [x] Controller
+- [x] Unit tests and CD/CI pipeline
 - [ ] Search functionality
-- [ ] Custom JSON serializer
+- [ ] List functionality with checkboxes in notes
+- [x] Custom JSON serializer
 
-## Running the FXUI Client
-The javafx local client has only been configured to boot with maven from the `script/ui` folder, so to run the FXUI, run
+## Kjøring av FXUI-klienten
+
+Den lokale javafx-klienten er bare konfigurert til å starte opp med maven fra mappen `script/ui`, så for å kjøre FXUI, kjør
 
 ```sh
-cd script && mvn clean compile install && cd ui && mvn javafx:run
+cd script && mvn clean install && cd ui && mvn javafx:run
 ```

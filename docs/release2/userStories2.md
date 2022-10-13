@@ -1,8 +1,8 @@
-# Brukerhistorier
+# Brukerhistorier - release 2
 
 Brukerhistoriene i release 2 bygger videre på brukerhistorien fra release 1, og tillegg til å dele den opp og gjøre brukerhistoriene mer presise.
 
-## Student
+## Student (2)
 For en student vil det være viktig å ha et sted man kan ta smånotater for å holde styr på innleveringer og forelesninger i studiehverdagen. Som student har man ofte verv og da trenger man også å holde styr på eventuelle møtetider med vervet. Med script vil det være enkelt å holde styr på hvilke notater som hører til hva med oppslagstavle-systemet.
 
 Viktig å kunne se:
@@ -16,7 +16,7 @@ Viktig å kunne gjøre:
 - Slette notater og oppslagstavler etter behov
 
 
-## Kunde i matvarebutikk
+## Kunde i matvarebutikk (3)
 Når man drar på butikken er det lurt å ha oversikt over hva man trenger å handle. I Script er det lett å opprette og redigere handlelister etter behov. 
 
 Viktig å kunne se:
