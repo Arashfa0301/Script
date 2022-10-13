@@ -2,7 +2,7 @@ package ui;
 
 import core.main.User;
 
-public abstract class Globals {
+abstract class Globals {
 
     protected static double windowHeight, windowWidth;
 

@@ -103,10 +103,10 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
             </plugin>
             <!-- Run the spotbugs code quality tool -->
-            <!-- <plugin>
+            <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-            </plugin> -->
+            </plugin>
             <!-- Configure jacoco code coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -114,7 +114,7 @@
                 <configuration>
                     <propertyName>
                         jaCoCoArgLine
-                    </propertyName>
+</propertyName>
                 </configuration>
             </plugin>
         </plugins>
