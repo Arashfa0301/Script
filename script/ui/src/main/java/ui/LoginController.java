@@ -27,7 +27,7 @@ public class LoginController {
     private AnchorPane loginAnchor;
 
     @FXML
-    private Button loginButton;
+    private Button loginButton, createNewUserButton;
 
     @FXML
     private TextField loginField;
@@ -43,25 +43,13 @@ public class LoginController {
 
     @FXML
     private void handleLoginButton(ActionEvent ae) throws IOException {
-        if (!loginField.getText().isBlank()) {
-            User user = scriptModule.getUser(loginField.getText());
-            if (!(user == null)) {
-                Globals.user = user;
-                switchScreen(ae, "Script.fxml");
-            } else {
-                newUser(ae);
-            }
-        }
+        User user = scriptModule.getUser(loginField.getText());
+        Globals.user = user;
+        switchScreen(ae, "Script.fxml");
     }
 
     @FXML
-    private void handleEnter(KeyEvent ke) {
-        if (ke.getCode().equals(KeyCode.ENTER)) {
-            loginButton.fire();
-        }
-    }
-
-    private void newUser(ActionEvent ae) throws IOException {
+    private void handleCreateNewUserButton(ActionEvent ae) throws IOException {
         try {
             User user = new User(loginField.getText());
             scriptModule.write(user);
@@ -75,6 +63,18 @@ public class LoginController {
         }
     }
 
+    @FXML
+    private void handleEnter(KeyEvent ke) {
+        if (ke.getCode().equals(KeyCode.ENTER)) {
+            if (!loginButton.isDisabled()) {
+                loginButton.fire();
+            }
+            if (!createNewUserButton.isDisabled()) {
+                createNewUserButton.fire();
+            }
+        }
+    }
+
     private void switchScreen(ActionEvent ae, String file) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(file));
         Stage stage = (Stage) ((Node) ae.getSource()).getScene().getWindow();
@@ -83,9 +83,16 @@ public class LoginController {
         stage.show();
     }
 
+    private Boolean checkIfBlankUsername() {
+        return loginField.getText().isBlank();
+    }
+
     @FXML
-    private void checkIfBlankUsername() {
-        loginButton.setDisable(loginField.getText().isBlank() ? true : false);
+    private void checkUsername() {
+        createNewUserButton.setDisable(
+                (!(!checkIfBlankUsername() && scriptModule.getUser(loginField.getText()) == null)));
+        loginButton.setDisable(
+                (!(!checkIfBlankUsername() && scriptModule.getUser(loginField.getText()) != null)));
     }
 
     private void createWindowSizeListener() {

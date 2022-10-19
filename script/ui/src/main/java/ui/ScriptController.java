@@ -160,21 +160,13 @@ public class ScriptController {
             VBox pane = (VBox) area.getParent();
             int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
             int column = GridPane.getColumnIndex(pane.getParent());
-            if (columnsCount == 1) {
-                currentBoard.getNotes().get(row).setText(area.getText());
-            } else {
-                currentBoard.getNotes().get(2 * row + column).setText(area.getText());
-            }
+            currentBoard.getNotes().get(columnsCount * row + column).setText(area.getText());
         } else if (event.getSource().getClass() == TextField.class) {
             TextField field = (TextField) event.getSource();
             VBox pane = (VBox) field.getParent().getParent();
             int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
             int column = GridPane.getColumnIndex(pane.getParent());
-            if (columnsCount == 1) {
-                currentBoard.getNotes().get(row).setTitle(field.getText());
-            } else {
-                currentBoard.getNotes().get(2 * row + column).setTitle(field.getText());
-            }
+            currentBoard.getNotes().get(columnsCount * row + column).setTitle(field.getText());
         }
         save();
     }
@@ -233,12 +225,8 @@ public class ScriptController {
         Button button = (Button) ae.getSource();
         VBox pane = (VBox) button.getParent().getParent();
         int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
-        if (columnsCount == 1) {
-            currentBoard.getNotes().remove(row);
-        } else {
-            int column = GridPane.getColumnIndex(pane.getParent());
-            currentBoard.getNotes().remove(2 * row + column);
-        }
+        int column = GridPane.getColumnIndex(pane.getParent());
+        currentBoard.getNotes().remove(columnsCount * row + column);
         loadNotes(currentBoard);
         update();
         save();
