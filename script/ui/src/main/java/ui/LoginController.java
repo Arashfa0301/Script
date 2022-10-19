@@ -8,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -60,10 +62,17 @@ public class LoginController {
     }
 
     private void newUser(ActionEvent ae) throws IOException {
-        User user = new User(loginField.getText());
-        scriptModule.write(user);
-        Globals.user = user;
-        switchScreen(ae, "Script.fxml");
+        try {
+            User user = new User(loginField.getText());
+            scriptModule.write(user);
+            Globals.user = user;
+            switchScreen(ae, "Script.fxml");
+        } catch (IllegalArgumentException e) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Invalid username");
+            alert.setHeaderText("Username can only contain characters A-Z, a-z, 0-9, _ and .");
+            alert.show();
+        }
     }
 
     private void switchScreen(ActionEvent ae, String file) throws IOException {
