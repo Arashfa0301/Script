@@ -2,6 +2,7 @@ package core.main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class User {
 
@@ -9,7 +10,11 @@ public class User {
     private List<Board> boards = new ArrayList<>();
 
     public User(String name) {
-        this.name = name;
+        if (Pattern.matches("^[A-Za-z0-9_.]+$", name)) {
+            this.name = name;
+        } else {
+            throw new IllegalArgumentException("Invalid username");
+        }
     }
 
     public String getName() {
