@@ -1,7 +1,7 @@
 package ui;
 
 import core.main.User;
-import data.ScriptModule;
+import data.DataHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +19,7 @@ import java.io.IOException;
 
 public class LoginController {
 
-    private ScriptModule scriptModule;
+    private DataHandler datahandler;
 
     @FXML
     private AnchorPane loginAnchor;
@@ -35,14 +35,14 @@ public class LoginController {
         if (!(Globals.windowHeight == 0)) {
             loginAnchor.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         }
-        scriptModule = new ScriptModule();
+        datahandler = new DataHandler();
         createWindowSizeListener();
     }
 
     @FXML
     private void handleLoginButton(ActionEvent ae) throws IOException {
         if (!loginField.getText().isBlank()) {
-            User user = scriptModule.getUser(loginField.getText());
+            User user = datahandler.getUser(loginField.getText());
             if (!(user == null)) {
                 Globals.user = user;
                 switchScreen(ae, "Script.fxml");
@@ -61,7 +61,7 @@ public class LoginController {
 
     private void newUser(ActionEvent ae) throws IOException {
         User user = new User(loginField.getText());
-        scriptModule.write(user);
+        datahandler.write(user);
         Globals.user = user;
         switchScreen(ae, "Script.fxml");
     }
