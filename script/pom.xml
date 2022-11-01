@@ -166,6 +166,7 @@
         <module>core/main</module>
         <module>ui</module>
         <module>data</module>
+        <module>springboot/server</module>
         <module>report</module>
     </modules>
 </project>
