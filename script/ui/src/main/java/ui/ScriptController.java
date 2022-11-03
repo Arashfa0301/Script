@@ -3,7 +3,7 @@ package ui;
 import core.main.Board;
 import core.main.Note;
 import core.main.User;
-import data.DataHandler;
+import data.ScriptModule;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,7 +47,7 @@ public class ScriptController {
 
     private List<Board> boards;
 
-    private DataHandler datahandler;
+    private ScriptModule scriptModule;
 
     @FXML
     private GridPane boardGrid, noteGrid;
@@ -78,7 +78,7 @@ public class ScriptController {
     @FXML
     private void initialize() {
         scriptSplitPane.setPrefSize(Globals.windowWidth, Globals.windowHeight);
-        datahandler = new DataHandler();
+        scriptModule = new ScriptModule();
         user = Globals.user;
         username.setText(user.getName());
         exampleMail.setText(user.getName().toLowerCase() + "@example.com");
@@ -151,7 +151,7 @@ public class ScriptController {
 
     private void save() {
         user.setBoards(boards);
-        datahandler.write(user);
+        scriptModule.write(user);
     }
 
     private void editNote(KeyEvent event) {

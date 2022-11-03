@@ -19,13 +19,13 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataHandler {
+public class ScriptModule {
 
     private static final String FILE_NAME = "users";
     private static final String FILE_PATH = System.getProperty("user.home") + "/resources";
     private Gson gson;
 
-    public DataHandler() {
+    public ScriptModule() {
         gson = new GsonBuilder().setPrettyPrinting().create();
         read();
     }
