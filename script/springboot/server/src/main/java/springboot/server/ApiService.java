@@ -1,13 +1,13 @@
-package com.script.server;
+package springboot.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ServerApplication {
+public class ApiService {
 
     public static void main(String[] args) {
-        SpringApplication.run(ServerApplication.class, args);
+        SpringApplication.run(ApiService.class, args);
     }
 
 }
