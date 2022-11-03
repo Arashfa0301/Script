@@ -1,7 +1,7 @@
 package ui;
 
 import core.main.User;
-import data.ScriptModule;
+import data.DataHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +21,7 @@ import java.io.IOException;
 
 public class LoginController {
 
-    private ScriptModule scriptModule;
+    private DataHandler datahandler;
 
     @FXML
     private AnchorPane loginAnchor;
@@ -37,13 +37,13 @@ public class LoginController {
         if (!(Globals.windowHeight == 0)) {
             loginAnchor.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         }
-        scriptModule = new ScriptModule();
+        datahandler = new DataHandler();
         createWindowSizeListener();
     }
 
     @FXML
     private void handleLoginButton(ActionEvent ae) throws IOException {
-        User user = scriptModule.getUser(loginField.getText());
+        User user = datahandler.getUser(loginField.getText());
         Globals.user = user;
         switchScreen(ae, "Script.fxml");
     }
@@ -52,7 +52,7 @@ public class LoginController {
     private void handleCreateNewUserButton(ActionEvent ae) throws IOException {
         try {
             User user = new User(loginField.getText());
-            scriptModule.write(user);
+            datahandler.write(user);
             Globals.user = user;
             switchScreen(ae, "Script.fxml");
         } catch (IllegalArgumentException e) {
@@ -90,9 +90,9 @@ public class LoginController {
     @FXML
     private void checkUsername() {
         createNewUserButton.setDisable(
-                (!(!checkIfBlankUsername() && scriptModule.getUser(loginField.getText()) == null)));
+                (!(!checkIfBlankUsername() && datahandler.getUser(loginField.getText()) == null)));
         loginButton.setDisable(
-                (!(!checkIfBlankUsername() && scriptModule.getUser(loginField.getText()) != null)));
+                (!(!checkIfBlankUsername() && datahandler.getUser(loginField.getText()) != null)));
     }
 
     private void createWindowSizeListener() {
