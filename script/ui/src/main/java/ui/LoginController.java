@@ -1,7 +1,7 @@
 package ui;
 
 import core.main.User;
-import data.DataHandler;
+import data.ScriptModule;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +21,7 @@ import java.io.IOException;
 
 public class LoginController {
 
-    private DataHandler datahandler;
+    private ScriptModule scriptModule;
 
     @FXML
     private AnchorPane loginAnchor;
@@ -37,13 +37,13 @@ public class LoginController {
         if (!(Globals.windowHeight == 0)) {
             loginAnchor.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         }
-        datahandler = new DataHandler();
+        scriptModule = new ScriptModule();
         createWindowSizeListener();
     }
 
     @FXML
     private void handleLoginButton(ActionEvent ae) throws IOException {
-        User user = datahandler.getUser(loginField.getText());
+        User user = scriptModule.getUser(loginField.getText());
         Globals.user = user;
         switchScreen(ae, "Script.fxml");
     }
@@ -52,7 +52,7 @@ public class LoginController {
     private void handleCreateNewUserButton(ActionEvent ae) throws IOException {
         try {
             User user = new User(loginField.getText());
-            datahandler.write(user);
+            scriptModule.write(user);
             Globals.user = user;
             switchScreen(ae, "Script.fxml");
         } catch (IllegalArgumentException e) {
@@ -60,15 +60,6 @@ public class LoginController {
             alert.setTitle("Invalid username");
             alert.setHeaderText("Username can only contain characters A-Z, a-z, 0-9, _ and .");
             alert.show();
-            if (!loginField.getText().isBlank()) {
-                User user = datahandler.getUser(loginField.getText());
-                if (!(user == null)) {
-                    Globals.user = user;
-                    switchScreen(ae, "Script.fxml");
-                } else {
-                    newUser(ae);
-                }
-            }
         }
     }
 
@@ -82,13 +73,6 @@ public class LoginController {
                 createNewUserButton.fire();
             }
         }
-    }
-
-    private void newUser(ActionEvent ae) throws IOException {
-        User user = new User(loginField.getText());
-        datahandler.write(user);
-        Globals.user = user;
-        switchScreen(ae, "Script.fxml");
     }
 
     private void switchScreen(ActionEvent ae, String file) throws IOException {
@@ -106,9 +90,9 @@ public class LoginController {
     @FXML
     private void checkUsername() {
         createNewUserButton.setDisable(
-                (!(!checkIfBlankUsername() && datahandler.getUser(loginField.getText()) == null)));
+                (!(!checkIfBlankUsername() && scriptModule.getUser(loginField.getText()) == null)));
         loginButton.setDisable(
-                (!(!checkIfBlankUsername() && datahandler.getUser(loginField.getText()) != null)));
+                (!(!checkIfBlankUsername() && scriptModule.getUser(loginField.getText()) != null)));
     }
 
     private void createWindowSizeListener() {
