@@ -10,19 +10,14 @@ public class User {
     private List<Board> boards = new ArrayList<>();
 
     public User(String name) {
-        if (Pattern.matches("^[A-Za-z0-9_.]+$", name)) {
-            this.name = name;
-        } else {
+        if (!Pattern.matches("^[A-Za-z0-9_.]+$", name) || name.isBlank() || name.isEmpty()) {
             throw new IllegalArgumentException("Invalid username");
         }
+        this.name = name;
     }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public List<Board> getBoards() {
@@ -36,13 +31,4 @@ public class User {
     public void addBoard(Board board) {
         boards.add(board);
     }
-
-    public Board getBoard(String boardName) {
-        return boards.stream().filter(board -> board.getBoardName().equals(boardName)).findAny().get();
-    }
-
-    public void removeBoard(String boardName) {
-        boards.remove(getBoard(boardName));
-    }
-
 }

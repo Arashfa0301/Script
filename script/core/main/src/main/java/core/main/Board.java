@@ -9,6 +9,7 @@ public class Board {
     private List<Note> notes = new ArrayList<>();
 
     public Board(String boardName, String description) {
+        checkValidInputString(boardName);
         this.boardName = boardName;
         this.description = description;
     }
@@ -26,6 +27,7 @@ public class Board {
     }
 
     public void setBoardName(String boardName) {
+        checkValidInputString(boardName);
         this.boardName = boardName;
     }
 
@@ -34,18 +36,15 @@ public class Board {
     }
 
     public void addNote(Note note) {
-        if (note != null && getNotes().size() < MAX_NOTES) {
-            notes.add(note);
-        } else {
+        if (note == null || getNotes().size() == MAX_NOTES) {
             throw new IllegalArgumentException();
         }
+        notes.add(note);
     }
 
-    public Note getNote(String noteTitle) {
-        return notes.stream().filter(note -> note.getTitle().equals(noteTitle)).findAny().get();
-    }
-
-    public void removeNote(String noteTitle) {
-        notes.remove(getNote(noteTitle));
+    private void checkValidInputString(String inputString) {
+        if (inputString.isBlank() || inputString.isEmpty()) {
+            throw new IllegalArgumentException("The input string is innvalid");
+        }
     }
 }

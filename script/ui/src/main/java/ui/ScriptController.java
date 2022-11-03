@@ -183,7 +183,7 @@ public class ScriptController {
 
     @FXML
     private void createNote() {
-        currentBoard.addNote(new Note("", ""));
+        currentBoard.addNote(new Note());
         loadNotes(currentBoard);
         update();
         save();

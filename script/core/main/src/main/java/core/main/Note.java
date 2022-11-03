@@ -27,20 +27,19 @@ public class Note {
             new AbstractMap.SimpleImmutableEntry<>("white", Arrays.asList(255, 255, 255)))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     private String title, text;
-    private boolean isPinned = false;
-    private String color = "white";
+    private boolean isPinned;
+    private String color;
 
-    // Maybe implement checkboxes
+    public Note() {
+        title = "";
+        text = "";
+        isPinned = false;
+        color = "white";
 
-    /// Create note with already existing title and text (When loading in already
-    /// existing notes maybe?)
-    public Note(String title, String text) {
-        this.title = title;
-        this.text = text;
     }
 
     public String getTitle() {
-        return this.title;
+        return title;
     }
 
     public void setTitle(String title) {
@@ -48,7 +47,7 @@ public class Note {
     }
 
     public String getText() {
-        return this.text;
+        return text;
     }
 
     public void setText(String text) {
@@ -68,11 +67,10 @@ public class Note {
     }
 
     public void setColor(String color) {
-        if (isValidColor(color)) {
-            this.color = color;
-        } else {
+        if (!isValidColor(color)) {
             throw new IllegalArgumentException("This is not a valid color");
         }
+        this.color = color;
     }
 
     public Map<String, List<Integer>> getSelectableColors() {
