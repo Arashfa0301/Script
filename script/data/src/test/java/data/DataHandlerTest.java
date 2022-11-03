@@ -17,14 +17,14 @@ import org.springframework.util.FileSystemUtils;
 
 import java.io.File;
 
-public class ScriptModuleTest {
+public class DataHandlerTest {
 
-    private static ScriptModule scriptModule;
+    private static DataHandler datahandler;
 
     @BeforeAll
     public static void initialize() {
         // initialize sciptModule
-        scriptModule = new ScriptModule();
+        datahandler = new DataHandler();
     }
 
     @Test
@@ -35,7 +35,7 @@ public class ScriptModuleTest {
         FileSystemUtils.deleteRecursively(new File(System.getProperty("user.home")
                 + "/resources"));
         assertFalse(directory.exists(), "Tests that parentfolder got deleted.");
-        scriptModule.getUser("fakeUser");
+        datahandler.getUser("fakeUser");
         assertTrue(directory.exists(),
                 "Tests that getUser(String user) that runs the read() function creates the resources directory.");
 
@@ -49,10 +49,10 @@ public class ScriptModuleTest {
         FileSystemUtils.deleteRecursively(new File(System.getProperty("user.home")
                 + "/resources"));
         assertFalse(usersFile.exists(), "Tests that users.json doesnt exist.");
-        scriptModule.write(new User("arash"));
+        datahandler.write(new User("arash"));
         assertTrue(usersFile.exists(),
                 "Tests that getUser(String user) that runs the read() function creates the user.json file ");
-        assertEquals(scriptModule.getUser("arash").getName(), "arash");
+        assertEquals(datahandler.getUser("arash").getName(), "arash");
         Board testBoard = new Board("board1", "des");
         testBoard.addNote(new Note("note1", "des"));
         testBoard.addNote(new Note("note2", "des"));
@@ -60,18 +60,18 @@ public class ScriptModuleTest {
         User testUser = new User("testUser");
         testUser.addBoard(testBoard);
         testUser.addBoard(new Board("board2", null));
-        scriptModule.write(testUser);
-        assertEquals(scriptModule.getUser("testUser").getBoards().size(), 2);
-        assertEquals(scriptModule.getUser("testUser").getBoard("board1").getNotes().size(), 3);
+        datahandler.write(testUser);
+        assertEquals(datahandler.getUser("testUser").getBoards().size(), 2);
+        assertEquals(datahandler.getUser("testUser").getBoard("board1").getNotes().size(), 3);
 
         assertThrows(NullPointerException.class, () -> {
-            scriptModule.write(null);
+            datahandler.write(null);
         });
         assertThrows(NullPointerException.class, () -> {
-            scriptModule.write(new User(null));
+            datahandler.write(new User(null));
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            scriptModule.write(new User(""));
+            datahandler.write(new User(""));
         });
 
     }
@@ -81,13 +81,13 @@ public class ScriptModuleTest {
     public void testGetUser() {
         FileSystemUtils.deleteRecursively(new File(System.getProperty("user.home")
                 + "/resources"));
-        assertNull(scriptModule.getUser("user"),
+        assertNull(datahandler.getUser("user"),
                 "Tests that no user is returned when user.json file is either empty or not excistent");
-        scriptModule.write(new User("user"));
-        assertNotNull(scriptModule.getUser("user"),
+        datahandler.write(new User("user"));
+        assertNotNull(datahandler.getUser("user"),
                 "Tests that a user is not exists when a user is written into the json file");
         assertThrows(IllegalArgumentException.class, () -> {
-            scriptModule.getUser("");
+            datahandler.getUser("");
         });
     }
 
