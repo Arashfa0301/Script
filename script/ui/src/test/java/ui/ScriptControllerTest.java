@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import core.main.User;
-import data.ScriptModule;
+import data.DataHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,15 +20,15 @@ import java.io.IOException;
 public class ScriptControllerTest extends ApplicationTest {
 
     ScriptController controller;
-    ScriptModule dataHandler;
+    DataHandler datahandler;
     User user;
 
     @Override
     public void start(Stage stage) throws IOException {
-        dataHandler = new ScriptModule();
+        datahandler = new DataHandler();
         user = new User("test_user");
-        dataHandler.removeUser("test_user");
-        dataHandler.write(user);
+        datahandler.removeUser("test_user");
+        datahandler.write(user);
         Globals.user = user;
         Globals.windowHeight = 720;
         Globals.windowWidth = 1280;
