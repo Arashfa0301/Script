@@ -85,6 +85,10 @@ public class DataHandler {
         return read().stream().filter(u -> u.getName().equals(user)).findAny().orElse(null);
     }
 
+    public void printHelloWord() {
+        System.out.println("hello");
+    }
+
     public void removeUser(String user) {
         List<User> users = read();
         users.removeIf(u -> u.getName().equals(user));
