@@ -1,6 +1,8 @@
 package ui;
 
 import core.main.Board;
+import core.main.BoardElement;
+import core.main.Checklist;
 import core.main.Note;
 import core.main.User;
 import data.DataHandler;
@@ -31,6 +33,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -56,7 +59,7 @@ public class ScriptController {
     private SplitPane scriptSplitPane;
 
     @FXML
-    private Button newNoteButton, newBoardButton;
+    private Button newNoteButton, newBoardButton, newChecklistButton;
 
     @FXML
     private AnchorPane boardAnchor;
@@ -74,6 +77,8 @@ public class ScriptController {
     private Text username, exampleMail;
 
     private User user;
+
+    private List<BoardElement> currentBoardElements = new ArrayList<>();
 
     @FXML
     private void initialize() {
@@ -113,9 +118,12 @@ public class ScriptController {
                 .get();
         noteScreen.setVisible(true);
         setTitleAndDescription(selectedBoard);
+        currentBoard = selectedBoard;
+        currentBoardElements.clear();
+        currentBoard.getChecklists().stream().forEach(c -> currentBoardElements.add(c));
+        currentBoard.getNotes().stream().forEach(n -> currentBoardElements.add(n));
         loadNotes(selectedBoard);
         // sets the currentBoard variable to the currently selected board
-        currentBoard = selectedBoard;
         noteScreen.setVisible(true);
         update();
     }
@@ -130,7 +138,42 @@ public class ScriptController {
 
     @FXML
     private void onNoteEdit(KeyEvent event) throws IOException {
-        editNote(event);
+        if (event.getSource().getClass() == TextArea.class) {
+            TextArea area = (TextArea) event.getSource();
+            VBox pane = (VBox) area.getParent();
+            int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
+            int column = GridPane.getColumnIndex(pane.getParent());
+            ((Note) (currentBoardElements.get(columnsCount * row + column))).setText(area.getText());
+        } else if (event.getSource().getClass() == TextField.class) {
+            TextField field = (TextField) event.getSource();
+            VBox pane = (VBox) field.getParent().getParent();
+            int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
+            int column = GridPane.getColumnIndex(pane.getParent());
+            currentBoardElements.get(columnsCount * row + column).setTitle(field.getText());
+        }
+        save();
+    }
+
+    @FXML
+    private void onChecklistTitleEdit(KeyEvent event) throws IOException {
+        TextField field = (TextField) event.getSource();
+        VBox pane = (VBox) field.getParent().getParent();
+        int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
+        int column = GridPane.getColumnIndex(pane.getParent());
+        currentBoardElements.get(columnsCount * row + column).setTitle(field.getText());
+        save();
+    }
+
+    @FXML
+    private void onChecklistElementEdit(KeyEvent event) throws IOException {
+        TextField field = (TextField) event.getSource();
+        HBox hbox = (HBox) field.getParent();
+        VBox pane = (VBox) field.getParent().getParent();
+        int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
+        int column = GridPane.getColumnIndex(pane.getParent());
+        Checklist c = (Checklist) currentBoardElements.get(columnsCount * row + column);
+        c.getList().set(pane.getChildren().indexOf(hbox) - 1, field.getText());
+        save();
     }
 
     @FXML
@@ -150,25 +193,21 @@ public class ScriptController {
     }
 
     private void save() {
+        if (!(currentBoard == null)) {
+            currentBoard.getChecklists().clear();
+            currentBoard.getNotes().clear();
+            currentBoardElements.stream().forEach(element -> {
+                if (element instanceof Note) {
+                    Note note = (Note) element;
+                    currentBoard.addNote(note);
+                } else if (element instanceof Checklist) {
+                    Checklist checklist = (Checklist) element;
+                    currentBoard.addchecklist(checklist);
+                }
+            });
+        }
         user.setBoards(boards);
         datahandler.write(user);
-    }
-
-    private void editNote(KeyEvent event) {
-        if (event.getSource().getClass() == TextArea.class) {
-            TextArea area = (TextArea) event.getSource();
-            VBox pane = (VBox) area.getParent();
-            int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
-            int column = GridPane.getColumnIndex(pane.getParent());
-            currentBoard.getNotes().get(columnsCount * row + column).setText(area.getText());
-        } else if (event.getSource().getClass() == TextField.class) {
-            TextField field = (TextField) event.getSource();
-            VBox pane = (VBox) field.getParent().getParent();
-            int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
-            int column = GridPane.getColumnIndex(pane.getParent());
-            currentBoard.getNotes().get(columnsCount * row + column).setTitle(field.getText());
-        }
-        save();
     }
 
     @FXML
@@ -183,7 +222,19 @@ public class ScriptController {
 
     @FXML
     private void createNote() {
-        currentBoard.addNote(new Note("", ""));
+        Note note = new Note("", "");
+        currentBoard.addNote(note);
+        currentBoardElements.add(note);
+        loadNotes(currentBoard);
+        update();
+        save();
+    }
+
+    @FXML
+    private void createChecklist() {
+        Checklist checklist = new Checklist("", new ArrayList<String>());
+        currentBoard.addchecklist(checklist);
+        currentBoardElements.add(checklist);
         loadNotes(currentBoard);
         update();
         save();
@@ -221,12 +272,41 @@ public class ScriptController {
     }
 
     @FXML
+    private void handleChecklistEnter(KeyEvent ke) {
+        if (ke.getCode().equals(KeyCode.ENTER)) {
+            TextField textField = (TextField) ke.getSource();
+            VBox vbox = (VBox) textField.getParent().getParent();
+            HBox hbox = new HBox();
+            Button checkbutton = new Button();
+            hbox.getChildren().add(checkbutton);
+            TextField newTextField = new TextField();
+            hbox.getChildren().add(newTextField);
+            vbox.getChildren().add(hbox);
+            newTextField.setOnKeyPressed(event -> {
+                handleChecklistEnter(event);
+            });
+            newTextField.setOnKeyReleased((event) -> {
+                try {
+                    onChecklistElementEdit(event);
+                } catch (IOException ie) {
+                    ie.printStackTrace();
+                }
+            });
+            newTextField.setPromptText("Add a list element");
+            int row = vbox.getParent().getChildrenUnmodifiable().indexOf(vbox);
+            int column = GridPane.getColumnIndex(vbox.getParent());
+            Checklist checklist = (Checklist) currentBoardElements.get(columnsCount * row + column);
+            checklist.addListElement("");
+        }
+    }
+
+    @FXML
     private void deleteNote(ActionEvent ae) {
         Button button = (Button) ae.getSource();
         VBox pane = (VBox) button.getParent().getParent();
         int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
         int column = GridPane.getColumnIndex(pane.getParent());
-        currentBoard.getNotes().remove(columnsCount * row + column);
+        currentBoardElements.remove(columnsCount * row + column);
         loadNotes(currentBoard);
         update();
         save();
@@ -284,6 +364,145 @@ public class ScriptController {
         boardDescription.setText(board.getBoardDescription());
     }
 
+    private void loadNote(Board board, BoardElement element) {
+        Note note = (Note) element;
+        TextField title = new TextField(note.getTitle());
+        title.setStyle("-fx-font-weight: bold");
+        title.setOnKeyReleased((event) -> {
+            try {
+                onNoteEdit(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        title.setPromptText("Title");
+        TextArea text = new TextArea(note.getText());
+        text.setOnKeyReleased((event) -> {
+            try {
+                onNoteEdit(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        text.setPromptText("Notes");
+        text.setWrapText(true);
+        text.setPrefSize(NOTE_SIZE, NOTE_SIZE);
+        HBox topPane = new HBox();
+        VBox notePane = new VBox();
+        notePane.setStyle("-fx-background-color: white; -fx-background-radius: 5px;");
+        notePane.getChildren().add(topPane);
+        notePane.setPrefSize(NOTE_SIZE, 230);
+        notePane.setMaxSize(NOTE_SIZE, 230);
+        notePane.getChildren().add(text);
+        topPane.getChildren().add(title);
+        Button deleteButton = new Button("X");
+        deleteButton.setOnAction((event) -> deleteNote(event));
+        // on notePane hover
+        // set width and height of deleteButton to 20
+        // set opacity of deleteButton to 1
+        // make deleteButton a circle
+        deleteButton.setShape(new Circle(10));
+        deleteButton.setTranslateX(25);
+        deleteButton.setTranslateY(-7);
+        deleteButton.setStyle("-fx-text-fill: white; -fx-background-color: black;");
+        deleteButton.setCursor(Cursor.HAND);
+        deleteButton.setVisible(false);
+        topPane.getChildren().add(deleteButton);
+        notePane.setOnMouseEntered((event) -> {
+            // add dropshadow
+            deleteButton.setVisible(true);
+            notePane.setEffect(new DropShadow(12, new Color(0, 0, 0, 0.15)));
+        });
+        notePane.setOnMouseExited((event) -> {
+            // remove dropshadow
+            deleteButton.setVisible(false);
+            notePane.setEffect(null);
+        });
+        VBox columnVBox = (VBox) noteGrid.getChildren().get(currentBoardElements.indexOf(element) % columnsCount);
+        columnVBox.getChildren().add(notePane);
+    }
+
+    private void loadChecklist(Board board, BoardElement element) {
+        Checklist checklist = (Checklist) element;
+        TextField title = new TextField(checklist.getTitle());
+        title.setStyle("-fx-font-weight: bold");
+        title.setOnKeyReleased((event) -> {
+            try {
+                onChecklistTitleEdit(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        title.setPromptText("Title");
+        List<TextField> listElements = new ArrayList<>();
+        checklist.getList().stream().forEach(e -> {
+            TextField t = new TextField(e);
+            listElements.add(t);
+            t.setOnKeyPressed(event -> {
+                handleChecklistEnter(event);
+            });
+            t.setOnKeyReleased((event) -> {
+                try {
+                    onChecklistElementEdit(event);
+                } catch (IOException ie) {
+                    ie.printStackTrace();
+                }
+            });
+            t.setPromptText("Add a list element");
+        });
+        if (checklist.isEmpty()) {
+            TextField t = new TextField();
+            listElements.add(t);
+            t.setOnKeyPressed(event -> {
+                handleChecklistEnter(event);
+            });
+            checklist.addListElement("");
+            t.setOnKeyReleased((event) -> {
+                try {
+                    onChecklistElementEdit(event);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            t.setPromptText("Add a list element");
+        }
+        HBox topPane = new HBox();
+        VBox notePane = new VBox();
+        notePane.setStyle("-fx-background-color: white; -fx-background-radius: 5px;");
+        notePane.getChildren().add(topPane);
+        notePane.setPrefSize(NOTE_SIZE, 230);
+        notePane.setMaxSize(NOTE_SIZE, 230);
+        topPane.getChildren().add(title);
+        Button deleteButton = new Button("X");
+        deleteButton.setOnAction((event) -> deleteNote(event));
+        deleteButton.setShape(new Circle(10));
+        deleteButton.setTranslateX(25);
+        deleteButton.setTranslateY(-7);
+        deleteButton.setStyle("-fx-text-fill: white; -fx-background-color: black;");
+        deleteButton.setCursor(Cursor.HAND);
+        deleteButton.setVisible(false);
+        topPane.getChildren().add(deleteButton);
+        notePane.setOnMouseEntered((event) -> {
+            // add dropshadow
+            deleteButton.setVisible(true);
+            notePane.setEffect(new DropShadow(12, new Color(0, 0, 0, 0.15)));
+        });
+        notePane.setOnMouseExited((event) -> {
+            // remove dropshadow
+            deleteButton.setVisible(false);
+            notePane.setEffect(null);
+        });
+        listElements.forEach(e -> {
+            HBox hbox = new HBox();
+            Button checkbutton = new Button();
+            hbox.getChildren().add(checkbutton);
+            hbox.getChildren().add(e);
+            notePane.getChildren().add(hbox);
+        });
+        VBox columnVBox = (VBox) noteGrid.getChildren().get(currentBoardElements.indexOf(element) % columnsCount);
+        columnVBox.getChildren().add(notePane);
+    }
+
     private void loadNotes(Board board) {
         noteGrid.getChildren().clear();
         // remove notegrid columns and rows
@@ -297,71 +516,20 @@ public class ScriptController {
             VBox columnVBox = new VBox();
             columnVBox.setSpacing(10);
             noteGrid.add(columnVBox, i, 0);
-
         });
-        IntStream.range(0, board.getNotes().size()).forEach(i -> {
-            Note note = board.getNotes().get(i);
-            TextField title = new TextField(note.getTitle());
-            title.setStyle("-fx-font-weight: bold");
-            title.setOnKeyReleased((event) -> {
-                try {
-                    onNoteEdit(event);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-            title.setPromptText("Title");
-            TextArea text = new TextArea(note.getText());
-            text.setOnKeyReleased((event) -> {
-                try {
-                    onNoteEdit(event);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-            text.setPromptText("Notes");
-            text.setWrapText(true);
-            text.setPrefSize(NOTE_SIZE, NOTE_SIZE);
-            HBox topPane = new HBox();
-            VBox notePane = new VBox();
-            notePane.setStyle("-fx-background-color: white; -fx-background-radius: 5px;");
-            notePane.getChildren().add(topPane);
-            notePane.setPrefSize(NOTE_SIZE, 230);
-            notePane.setMaxSize(NOTE_SIZE, 230);
-            notePane.getChildren().add(text);
-            topPane.getChildren().add(title);
-            Button deleteButton = new Button("X");
-            deleteButton.setOnAction((event) -> deleteNote(event));
-            // on notePane hover
-            // set width and height of deleteButton to 20
-            // set opacity of deleteButton to 1
-            // make deleteButton a circle
-            deleteButton.setShape(new Circle(10));
-            deleteButton.setTranslateX(25);
-            deleteButton.setTranslateY(-7);
-            deleteButton.setStyle("-fx-text-fill: white; -fx-background-color: black;");
-            deleteButton.setCursor(Cursor.HAND);
-            deleteButton.setVisible(false);
-            topPane.getChildren().add(deleteButton);
-            notePane.setOnMouseEntered((event) -> {
-                // add dropshadow
-                deleteButton.setVisible(true);
-                notePane.setEffect(new DropShadow(12, new Color(0, 0, 0, 0.15)));
-            });
-            notePane.setOnMouseExited((event) -> {
-                // remove dropshadow
-                deleteButton.setVisible(false);
-                notePane.setEffect(null);
-            });
-
-            VBox columnVBox = (VBox) noteGrid.getChildren().get(i % columnsCount);
-            columnVBox.getChildren().add(notePane);
+        currentBoardElements.stream().forEach(element -> {
+            if (element instanceof Note) {
+                loadNote(board, element);
+            } else if (element instanceof Checklist) {
+                loadChecklist(board, element);
+            }
         });
     }
 
     private void update() {
         if (!(currentBoard == null)) {
-            newNoteButton.setDisable(currentBoard.getNotes().size() == Board.MAX_NOTES ? true : false);
+            newNoteButton.setDisable(currentBoardElements.size() == Board.MAX_ELEMENTS ? true : false);
+            newChecklistButton.setDisable(currentBoardElements.size() == Board.MAX_ELEMENTS ? true : false);
             noteScreen.setVisible(!boards.contains(currentBoard) ? false : true);
         }
     }
@@ -382,4 +550,5 @@ public class ScriptController {
     public void setBoardName(String boardName) {
         this.boardName.setText(boardName);
     }
+
 }

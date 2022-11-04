@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Note {
+public class Note extends BoardElement {
 
     private static final Map<String, List<Integer>> selectableColors = Stream.of(
             new AbstractMap.SimpleImmutableEntry<>("red", Arrays.asList(255, 0, 0)),
@@ -26,8 +26,7 @@ public class Note {
             new AbstractMap.SimpleImmutableEntry<>("alice blue", Arrays.asList(240, 248, 255)),
             new AbstractMap.SimpleImmutableEntry<>("white", Arrays.asList(255, 255, 255)))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    private String title, text;
-    private boolean isPinned = false;
+    private String text;
     private String color = "white";
 
     // Maybe implement checkboxes
@@ -35,16 +34,8 @@ public class Note {
     /// Create note with already existing title and text (When loading in already
     /// existing notes maybe?)
     public Note(String title, String text) {
-        this.title = title;
+        setTitle(title);
         this.text = text;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getText() {
@@ -53,18 +44,6 @@ public class Note {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public void pin() {
-        isPinned = true;
-    }
-
-    public void unPin() {
-        isPinned = false;
-    }
-
-    public boolean isPinned() {
-        return isPinned;
     }
 
     public void setColor(String color) {
