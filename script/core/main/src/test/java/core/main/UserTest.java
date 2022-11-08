@@ -1,6 +1,7 @@
 package core.main;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -23,11 +24,9 @@ public class UserTest {
                 new Board("board1", "desc1"),
                 new Board("board2", "desc2")).collect(Collectors.toList()));
 
-        // Adds a board to the user and tests that addBoard() works as intended
         Board board3 = new Board("board3", "desc3");
-        user.addBoard(board3);
-        assertEquals(user.getBoards().size(), 3);
-        assertTrue(user.getBoards().contains(board3));
+        assertEquals(user.getBoards().size(), 2);
+        assertFalse(user.getBoards().contains(board3));
     }
 
     @Test

@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
-    public static final int MAX_NOTES = 256;
+    public static final int MAX_ELEMENTS = 256;
     private String boardName, description;
     private List<Note> notes = new ArrayList<>();
+    private List<Checklist> checklists = new ArrayList<>();
 
     public Board(String boardName, String description) {
         checkValidInputString(boardName);
@@ -26,6 +27,10 @@ public class Board {
         return notes;
     }
 
+    public List<Checklist> getChecklists() {
+        return checklists;
+    }
+
     public void setBoardName(String boardName) {
         checkValidInputString(boardName);
         this.boardName = boardName;
@@ -36,15 +41,23 @@ public class Board {
     }
 
     public void addNote(Note note) {
-        if (note == null || getNotes().size() == MAX_NOTES) {
+        if (note == null && getNotes().size() + getChecklists().size() >= MAX_ELEMENTS) {
             throw new IllegalArgumentException();
         }
         notes.add(note);
     }
 
-    private void checkValidInputString(String inputString) {
-        if (inputString.isBlank() || inputString.isEmpty()) {
-            throw new IllegalArgumentException("The input string is innvalid");
+    public void addchecklist(Checklist checklist) {
+        if (checklist == null && getChecklists().size() + getNotes().size() >= MAX_ELEMENTS) {
+            throw new IllegalArgumentException();
+        }
+        checklists.add(checklist);
+    }
+
+    private void checkValidInputString(String input) {
+        if (input.isEmpty()) {
+            throw new IllegalArgumentException("Innvalid argument");
         }
     }
+
 }

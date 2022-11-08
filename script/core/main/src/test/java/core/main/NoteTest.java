@@ -53,17 +53,11 @@ public class NoteTest {
     public void testSetColor() {
         Note note = new Note();
 
-        // Test for default color
-        assertTrue(note.getColor().equals("white"));
-
         // Test for an illegal color choice
         assertThrows(IllegalArgumentException.class, () -> {
             note.setColor("no color");
         });
 
-        // Test for legal color choice
-        note.setColor("red");
-        assertTrue(note.getColor().equals("red"));
     }
 
     @Test

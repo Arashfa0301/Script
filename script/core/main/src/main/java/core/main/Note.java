@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Note {
+public class Note extends BoardElement {
 
     private static final Map<String, List<Integer>> selectableColors = Stream.of(
             new AbstractMap.SimpleImmutableEntry<>("red", Arrays.asList(255, 0, 0)),
@@ -26,24 +26,11 @@ public class Note {
             new AbstractMap.SimpleImmutableEntry<>("alice blue", Arrays.asList(240, 248, 255)),
             new AbstractMap.SimpleImmutableEntry<>("white", Arrays.asList(255, 255, 255)))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    private String title, text;
-    private boolean isPinned;
-    private String color;
+    private String text = "";
+    private String color = "white";
 
     public Note() {
-        title = "";
-        text = "";
-        isPinned = false;
-        color = "white";
-
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+        super();
     }
 
     public String getText() {
@@ -52,18 +39,6 @@ public class Note {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public void pin() {
-        isPinned = true;
-    }
-
-    public void unPin() {
-        isPinned = false;
-    }
-
-    public boolean isPinned() {
-        return isPinned;
     }
 
     public void setColor(String color) {
@@ -78,11 +53,7 @@ public class Note {
     }
 
     public List<Integer> getColorValues() {
-        return getSelectableColors().get(getColor());
-    }
-
-    public String getColor() {
-        return this.color;
+        return getSelectableColors().get(color);
     }
 
     private boolean isValidColor(String color) {

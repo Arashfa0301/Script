@@ -28,7 +28,4 @@ public class User {
         this.boards = boards;
     }
 
-    public void addBoard(Board board) {
-        boards.add(board);
-    }
 }
