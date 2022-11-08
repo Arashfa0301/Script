@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
@@ -140,40 +141,53 @@ public class ScriptController {
     private void onNoteEdit(KeyEvent event) throws IOException {
         if (event.getSource().getClass() == TextArea.class) {
             TextArea area = (TextArea) event.getSource();
-            VBox pane = (VBox) area.getParent();
-            int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
-            int column = GridPane.getColumnIndex(pane.getParent());
-            ((Note) (currentBoardElements.get(columnsCount * row + column))).setText(area.getText());
+            ((Note) (currentBoardElements.get(getElementIndex(area)))).setText(area.getText());
         } else if (event.getSource().getClass() == TextField.class) {
             TextField field = (TextField) event.getSource();
-            VBox pane = (VBox) field.getParent().getParent();
-            int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
-            int column = GridPane.getColumnIndex(pane.getParent());
-            currentBoardElements.get(columnsCount * row + column).setTitle(field.getText());
+            currentBoardElements.get(getElementIndex(field)).setTitle(field.getText());
         }
         save();
     }
 
     @FXML
     private void onChecklistTitleEdit(KeyEvent event) throws IOException {
-        TextField field = (TextField) event.getSource();
-        VBox pane = (VBox) field.getParent().getParent();
-        int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
-        int column = GridPane.getColumnIndex(pane.getParent());
-        currentBoardElements.get(columnsCount * row + column).setTitle(field.getText());
+        TextField textField = (TextField) event.getSource();
+        currentBoardElements.get(getElementIndex(textField)).setTitle(textField.getText());
         save();
     }
 
     @FXML
     private void onChecklistElementEdit(KeyEvent event) throws IOException {
-        TextField field = (TextField) event.getSource();
-        HBox hbox = (HBox) field.getParent();
-        VBox pane = (VBox) field.getParent().getParent();
-        int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
-        int column = GridPane.getColumnIndex(pane.getParent());
-        Checklist c = (Checklist) currentBoardElements.get(columnsCount * row + column);
-        c.getList().set(pane.getChildren().indexOf(hbox) - 1, field.getText());
+        TextField textField = (TextField) event.getSource();
+        int i = getElementIndex(textField);
+        Checklist c = (Checklist) currentBoardElements.get(i);
+        c.getList().set(textField.getParent().getParent().getChildrenUnmodifiable().indexOf(textField.getParent()) - 1,
+                textField.getText());
         save();
+        // System.out.println(c.hashCode()); use hashcodes in a hashmap to allocate each
+        // textfield, button and textarea to their respective checklist or note. Use the
+        // hashmap to decide which note or checklist should be changed or deleted on
+        // action
+    }
+
+    private int getElementIndex(Object object) {
+        VBox vBox = new VBox();
+        if (object instanceof TextField) {
+            TextField textField = (TextField) object;
+            vBox = (VBox) textField.getParent().getParent();
+        } else if (object instanceof TextArea) {
+            TextArea textArea = (TextArea) object;
+            vBox = (VBox) textArea.getParent();
+        } else if (object instanceof Button) {
+            Button button = (Button) object;
+            vBox = (VBox) button.getParent().getParent();
+        } else if (object instanceof CheckBox) {
+            CheckBox checkBox = (CheckBox) object;
+            vBox = (VBox) checkBox.getParent().getParent();
+        }
+        int row = vBox.getParent().getChildrenUnmodifiable().indexOf(vBox);
+        int column = GridPane.getColumnIndex(vBox.getParent());
+        return columnsCount * row + column;
     }
 
     @FXML
@@ -271,16 +285,31 @@ public class ScriptController {
         });
     }
 
+    private void handleCheckbox(ActionEvent ae) {
+        CheckBox checkBox = (CheckBox) ae.getSource();
+        int i = getElementIndex(checkBox);
+        Checklist checklist = (Checklist) currentBoardElements.get(i);
+        if (checkBox.isSelected()) {
+            checklist.check(
+                    checkBox.getParent().getParent().getChildrenUnmodifiable().indexOf(checkBox.getParent()) - 1);
+        } else {
+            checklist.uncheck(
+                    checkBox.getParent().getParent().getChildrenUnmodifiable().indexOf(checkBox.getParent()) - 1);
+        }
+        save();
+    }
+
     @FXML
     private void handleChecklistEnter(KeyEvent ke) {
         if (ke.getCode().equals(KeyCode.ENTER)) {
-            TextField textField = (TextField) ke.getSource();
-            VBox vbox = (VBox) textField.getParent().getParent();
+            CheckBox checkBox = new CheckBox();
+            checkBox.setOnAction(event -> handleCheckbox(event));
             HBox hbox = new HBox();
-            Button checkbutton = new Button();
-            hbox.getChildren().add(checkbutton);
+            hbox.getChildren().add(checkBox);
             TextField newTextField = new TextField();
             hbox.getChildren().add(newTextField);
+            TextField textField = (TextField) ke.getSource();
+            VBox vbox = (VBox) textField.getParent().getParent();
             vbox.getChildren().add(hbox);
             newTextField.setOnKeyPressed(event -> {
                 handleChecklistEnter(event);
@@ -293,20 +322,14 @@ public class ScriptController {
                 }
             });
             newTextField.setPromptText("Add a list element");
-            int row = vbox.getParent().getChildrenUnmodifiable().indexOf(vbox);
-            int column = GridPane.getColumnIndex(vbox.getParent());
-            Checklist checklist = (Checklist) currentBoardElements.get(columnsCount * row + column);
+            Checklist checklist = (Checklist) currentBoardElements.get(getElementIndex(checkBox));
             checklist.addListElement("");
         }
     }
 
     @FXML
     private void deleteNote(ActionEvent ae) {
-        Button button = (Button) ae.getSource();
-        VBox pane = (VBox) button.getParent().getParent();
-        int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
-        int column = GridPane.getColumnIndex(pane.getParent());
-        currentBoardElements.remove(columnsCount * row + column);
+        currentBoardElements.remove(getElementIndex(ae.getSource()));
         loadNotes(currentBoard);
         update();
         save();
@@ -494,8 +517,10 @@ public class ScriptController {
         });
         listElements.forEach(e -> {
             HBox hbox = new HBox();
-            Button checkbutton = new Button();
-            hbox.getChildren().add(checkbutton);
+            CheckBox checkBox = new CheckBox();
+            checkBox.setSelected(checklist.isChecked(listElements.indexOf(e)));
+            checkBox.setOnAction(event -> handleCheckbox(event));
+            hbox.getChildren().add(checkBox);
             hbox.getChildren().add(e);
             notePane.getChildren().add(hbox);
         });
