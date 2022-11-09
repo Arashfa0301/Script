@@ -10,6 +10,7 @@ public class Board {
     private List<Checklist> checklists = new ArrayList<>();
 
     public Board(String boardName, String description) {
+        checkValidInputString(boardName);
         this.boardName = boardName;
         this.description = description;
     }
@@ -31,6 +32,7 @@ public class Board {
     }
 
     public void setBoardName(String boardName) {
+        checkValidInputString(boardName);
         this.boardName = boardName;
     }
 
@@ -39,35 +41,23 @@ public class Board {
     }
 
     public void addNote(Note note) {
-        if (note != null && getNotes().size() + getChecklists().size() < MAX_ELEMENTS) {
-            notes.add(note);
-        } else {
+        if (note == null && getNotes().size() + getChecklists().size() >= MAX_ELEMENTS) {
             throw new IllegalArgumentException();
         }
-    }
-
-    public BoardElement getNote(String title) {
-        return notes.stream().filter(note -> note.getTitle().equals(title)).findAny().get();
-    }
-
-    public void removeNote(String title) {
-        notes.remove(getNote(title));
+        notes.add(note);
     }
 
     public void addchecklist(Checklist checklist) {
-        if (checklist != null && getChecklists().size() + getNotes().size() < MAX_ELEMENTS) {
-            checklists.add(checklist);
-        } else {
+        if (checklist == null && getChecklists().size() + getNotes().size() >= MAX_ELEMENTS) {
             throw new IllegalArgumentException();
         }
+        checklists.add(checklist);
     }
 
-    public BoardElement getChecklist(String title) {
-        return checklists.stream().filter(checklist -> checklist.getTitle().equals(title)).findAny().get();
-    }
-
-    public void removechecklist(String title) {
-        checklists.remove(getChecklist(title));
+    private void checkValidInputString(String input) {
+        if (input.isEmpty()) {
+            throw new IllegalArgumentException("Innvalid argument");
+        }
     }
 
 }

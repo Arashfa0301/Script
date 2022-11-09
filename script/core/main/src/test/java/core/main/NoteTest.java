@@ -13,7 +13,7 @@ public class NoteTest {
 
     @Test
     public void testConstructors() {
-        Note emptyNote = new Note("", "");
+        Note emptyNote = new Note();
 
         // Tests if Title of the note is empty.
         assertEquals("", emptyNote.getTitle());
@@ -21,19 +21,11 @@ public class NoteTest {
         // Tests if Text of the note is empty.
         assertEquals("", emptyNote.getText());
 
-        // Creates a new Note with predetermined text
-        Note customNote = new Note("New Title", "This is a new note");
-
-        // Tests if Title of the same as expected.
-        assertEquals("New Title", customNote.getTitle());
-
-        // Tests if Text of the note is same as expected.
-        assertEquals("This is a new note", customNote.getText());
     }
 
     @Test
     public void testSetText() {
-        Note note = new Note("", "");
+        Note note = new Note();
 
         // Tests if setText() works from empty string
         note.setText("New text");
@@ -46,7 +38,7 @@ public class NoteTest {
 
     @Test
     public void testSetTitle() {
-        Note note = new Note("", "");
+        Note note = new Note();
 
         // Tests if setTitle() works from empty string
         note.setTitle("New Title");
@@ -59,24 +51,18 @@ public class NoteTest {
 
     @Test
     public void testSetColor() {
-        Note note = new Note("", "");
-
-        // Test for default color
-        assertTrue(note.getColor().equals("white"));
+        Note note = new Note();
 
         // Test for an illegal color choice
         assertThrows(IllegalArgumentException.class, () -> {
             note.setColor("no color");
         });
 
-        // Test for legal color choice
-        note.setColor("red");
-        assertTrue(note.getColor().equals("red"));
     }
 
     @Test
     public void testGetColorValues() {
-        Note note = new Note("", "");
+        Note note = new Note();
 
         // Test RGB values for default color
         List<Integer> colorValues = note.getColorValues();
@@ -94,7 +80,7 @@ public class NoteTest {
 
     @Test
     public void testPin() {
-        Note note = new Note("", "");
+        Note note = new Note();
 
         // Test that note is not pinned by default
         assertFalse(note.isPinned());

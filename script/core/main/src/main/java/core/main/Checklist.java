@@ -4,36 +4,23 @@ import java.util.List;
 
 public class Checklist extends BoardElement {
 
-    private Boolean isChecked = false;
-    private List<String> list;
+    private List<String> checkItems;
 
-    public Checklist(String title, List<String> list) {
+    public Checklist(String title, List<String> checkItems) {
         setTitle(title);
-        this.list = list;
+        this.checkItems = checkItems;
     }
 
     public void addListElement(String text) {
-        list.add(text);
+        checkItems.add(text);
     }
 
-    public List<String> getList() {
-        return list;
-    }
-
-    public void check() {
-        isChecked = true;
-    }
-
-    public void uncheck() {
-        isChecked = false;
-    }
-
-    public boolean isChecked() {
-        return isChecked;
+    public List<String> getCheckItems() {
+        return checkItems;
     }
 
     public boolean isEmpty() {
-        return (getTitle().isBlank() && getList().isEmpty());
+        return (getTitle().isBlank() && getCheckItems().isEmpty());
     }
 
 }

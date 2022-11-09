@@ -26,20 +26,15 @@ public class Note extends BoardElement {
             new AbstractMap.SimpleImmutableEntry<>("alice blue", Arrays.asList(240, 248, 255)),
             new AbstractMap.SimpleImmutableEntry<>("white", Arrays.asList(255, 255, 255)))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    private String text;
+    private String text = "";
     private String color = "white";
 
-    // Maybe implement checkboxes
-
-    /// Create note with already existing title and text (When loading in already
-    /// existing notes maybe?)
-    public Note(String title, String text) {
-        setTitle(title);
-        this.text = text;
+    public Note() {
+        super();
     }
 
     public String getText() {
-        return this.text;
+        return text;
     }
 
     public void setText(String text) {
@@ -47,11 +42,10 @@ public class Note extends BoardElement {
     }
 
     public void setColor(String color) {
-        if (isValidColor(color)) {
-            this.color = color;
-        } else {
+        if (!isValidColor(color)) {
             throw new IllegalArgumentException("This is not a valid color");
         }
+        this.color = color;
     }
 
     public Map<String, List<Integer>> getSelectableColors() {
@@ -59,11 +53,7 @@ public class Note extends BoardElement {
     }
 
     public List<Integer> getColorValues() {
-        return getSelectableColors().get(getColor());
-    }
-
-    public String getColor() {
-        return this.color;
+        return getSelectableColors().get(color);
     }
 
     private boolean isValidColor(String color) {

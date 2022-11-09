@@ -172,7 +172,7 @@ public class ScriptController {
         int row = pane.getParent().getChildrenUnmodifiable().indexOf(pane);
         int column = GridPane.getColumnIndex(pane.getParent());
         Checklist c = (Checklist) currentBoardElements.get(columnsCount * row + column);
-        c.getList().set(pane.getChildren().indexOf(hbox) - 1, field.getText());
+        c.getCheckItems().set(pane.getChildren().indexOf(hbox) - 1, field.getText());
         save();
     }
 
@@ -187,8 +187,7 @@ public class ScriptController {
 
     @FXML
     private void editBoardDescription(KeyEvent event) throws IOException {
-        TextField field = (TextField) event.getSource();
-        currentBoard.setBoardDescription(field.getText());
+        currentBoard.setBoardDescription(((TextField) event.getSource()).getText());
         save();
     }
 
@@ -222,7 +221,7 @@ public class ScriptController {
 
     @FXML
     private void createNote() {
-        Note note = new Note("", "");
+        Note note = new Note();
         currentBoard.addNote(note);
         currentBoardElements.add(note);
         loadNotes(currentBoard);
@@ -423,8 +422,8 @@ public class ScriptController {
     }
 
     private void loadChecklist(Board board, BoardElement element) {
-        Checklist checklist = (Checklist) element;
-        TextField title = new TextField(checklist.getTitle());
+
+        TextField title = new TextField(((Checklist) element).getTitle());
         title.setStyle("-fx-font-weight: bold");
         title.setOnKeyReleased((event) -> {
             try {
@@ -435,7 +434,7 @@ public class ScriptController {
         });
         title.setPromptText("Title");
         List<TextField> listElements = new ArrayList<>();
-        checklist.getList().stream().forEach(e -> {
+        ((Checklist) element).getCheckItems().stream().forEach(e -> {
             TextField t = new TextField(e);
             listElements.add(t);
             t.setOnKeyPressed(event -> {
@@ -450,13 +449,13 @@ public class ScriptController {
             });
             t.setPromptText("Add a list element");
         });
-        if (checklist.isEmpty()) {
+        if (((Checklist) element).isEmpty()) {
             TextField t = new TextField();
             listElements.add(t);
             t.setOnKeyPressed(event -> {
                 handleChecklistEnter(event);
             });
-            checklist.addListElement("");
+            ((Checklist) element).addListElement("");
             t.setOnKeyReleased((event) -> {
                 try {
                     onChecklistElementEdit(event);
@@ -526,6 +525,7 @@ public class ScriptController {
         });
     }
 
+    // TODO: maybe have a lower element limit
     private void update() {
         if (!(currentBoard == null)) {
             newNoteButton.setDisable(currentBoardElements.size() == Board.MAX_ELEMENTS ? true : false);
@@ -534,21 +534,16 @@ public class ScriptController {
         }
     }
 
+    /**
+     * a function.
+     * f
+     *
+     * @return a boolean describing wether or not the new board name is a valid
+     *         argument
+     */
     private Boolean checkNewBoardName() {
         return !(boardName.getText().isBlank() || boards.stream().map(board -> (board.getBoardName()))
                 .collect(Collectors.toList()).contains(boardName.getText()));
-    }
-
-    public List<Board> getBoards() {
-        return boards;
-    }
-
-    public Button getNewBoardButton() {
-        return newBoardButton;
-    }
-
-    public void setBoardName(String boardName) {
-        this.boardName.setText(boardName);
     }
 
 }
