@@ -13,13 +13,13 @@ public class UserTest {
 
     @Test
     public void testConstructor() {
-        User user = new User("user");
-        assertEquals("user", user.getName());
+        User user = new User("user", "password", "first", "last");
+        assertEquals("user", user.getUsername());
     }
 
     @Test
     public void testAddBoard() {
-        User user = new User("user");
+        User user = new User("user", "password", "first", "last");
         user.setBoards(Stream.of(
                 new Board("board1", "desc1"),
                 new Board("board2", "desc2")).collect(Collectors.toList()));
@@ -31,7 +31,7 @@ public class UserTest {
 
     @Test
     public void testRemoveBoard() {
-        User user = new User("user");
+        User user = new User("user", "password", "first", "last");
         user.setBoards(Stream.of(
                 new Board("board1", "desc1"),
                 new Board("board2", "desc2")).collect(Collectors.toList()));
