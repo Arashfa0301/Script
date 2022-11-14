@@ -36,7 +36,7 @@ public class LoginControllerTest extends ApplicationTest {
     @Test
     @DisplayName("Test disabled when no username")
     void testEmpty() {
-        clickOn("#loginField");
+        clickOn("#usernameField");
         write("a");
         press(KeyCode.BACK_SPACE);
         release(KeyCode.BACK_SPACE);

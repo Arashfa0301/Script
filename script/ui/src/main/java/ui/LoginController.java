@@ -30,7 +30,10 @@ public class LoginController {
     private Button loginButton, createNewUserButton;
 
     @FXML
-    private TextField loginField;
+    private TextField usernameField;
+
+    @FXML
+    private TextField passwordField;
 
     @FXML
     private void initialize() {
@@ -43,7 +46,7 @@ public class LoginController {
 
     @FXML
     private void handleLoginButton(ActionEvent ae) throws IOException {
-        User user = datahandler.getUser(loginField.getText());
+        User user = datahandler.getUser(usernameField.getText());
         Globals.user = user;
         switchScreen(ae, "Script.fxml");
     }
@@ -51,7 +54,7 @@ public class LoginController {
     @FXML
     private void handleCreateNewUserButton(ActionEvent ae) throws IOException {
         try {
-            User user = new User(loginField.getText());
+            User user = new User(usernameField.getText(), passwordField.getText(), "first", "last");
             datahandler.write(user);
             Globals.user = user;
             switchScreen(ae, "Script.fxml");
@@ -84,15 +87,15 @@ public class LoginController {
     }
 
     private Boolean checkIfBlankUsername() {
-        return loginField.getText().isBlank();
+        return usernameField.getText().isBlank();
     }
 
     @FXML
     private void checkUsername() {
         createNewUserButton.setDisable(
-                (!(!checkIfBlankUsername() && datahandler.getUser(loginField.getText()) == null)));
+                (!(!checkIfBlankUsername() && datahandler.getUser(usernameField.getText()) == null)));
         loginButton.setDisable(
-                (!(!checkIfBlankUsername() && datahandler.getUser(loginField.getText()) != null)));
+                (!(!checkIfBlankUsername() && datahandler.getUser(usernameField.getText()) != null)));
     }
 
     private void createWindowSizeListener() {
