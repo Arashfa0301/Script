@@ -11,3 +11,6 @@ org.eclipse.*.prefs
 
 #vscode settings
 .vscode
+
+#ignore user data files
+script/springboot/server/main/resources/users.json
