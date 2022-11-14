@@ -85,8 +85,8 @@ public class ScriptController {
         scriptSplitPane.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         datahandler = new DataHandler();
         user = Globals.user;
-        username.setText(user.getName());
-        exampleMail.setText(user.getName().toLowerCase() + "@example.com");
+        username.setText(user.getUsername());
+        exampleMail.setText(user.getUsername().toLowerCase() + "@example.com");
         noteScrollPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             int oldColumnsCount = columnsCount;
             columnsCount = (int) ((newVal.doubleValue() - 60) / (NOTE_SIZE + H_GAP));
