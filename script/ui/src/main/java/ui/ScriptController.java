@@ -152,7 +152,7 @@ public class ScriptController {
                     currentBoard.addNote(note);
                 } else if (element instanceof Checklist) {
                     Checklist checklist = (Checklist) element;
-                    currentBoard.addchecklist(checklist);
+                    currentBoard.addChecklist(checklist);
                 }
             });
         }
@@ -182,8 +182,8 @@ public class ScriptController {
 
     @FXML
     private void createChecklist() {
-        Checklist checklist = new Checklist("", new ArrayList<String>());
-        currentBoard.addchecklist(checklist);
+        Checklist checklist = new Checklist();
+        currentBoard.addChecklist(checklist);
         currentBoardElements.add(checklist);
         drawBoardElementControllers();
         update();
