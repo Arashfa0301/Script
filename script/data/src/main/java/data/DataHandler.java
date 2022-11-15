@@ -22,7 +22,7 @@ import java.util.List;
 public class DataHandler {
 
     private static final String FILE_NAME = "users";
-    private static final String FILE_PATH = "./src/main/resources/";
+    private static final String FILE_PATH = System.getProperty("user.home");
     private Gson gson;
 
     public DataHandler() {
