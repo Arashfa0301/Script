@@ -1,7 +1,6 @@
 package ui;
 
 import core.main.Board;
-import core.main.BoardElement;
 import core.main.Checklist;
 import core.main.Note;
 import core.main.User;
@@ -70,8 +69,6 @@ public class ScriptController {
 
     private User user = Globals.user;
 
-    private List<BoardElement> currentBoardElements = new ArrayList<>();
-
     private List<BoardElementController> boardElementControllers = new ArrayList<>();
 
     @FXML
@@ -114,9 +111,11 @@ public class ScriptController {
         boardTitle.setText(selectedBoard.getBoardName());
         boardDescription.setText(selectedBoard.getBoardDescription());
         currentBoard = selectedBoard;
-        currentBoardElements.clear();
-        currentBoard.getChecklists().stream().forEach(c -> currentBoardElements.add(c));
-        currentBoard.getNotes().stream().forEach(n -> currentBoardElements.add(n));
+        boardElementControllers.clear();
+        currentBoard.getChecklists().stream()
+                .forEach(boardElement -> boardElementControllers.add(new BoardElementController(boardElement, this)));
+        currentBoard.getNotes().stream()
+                .forEach(boardElement -> boardElementControllers.add(new BoardElementController(boardElement, this)));
 
         drawBoardElementControllers();
         update();
@@ -148,7 +147,7 @@ public class ScriptController {
         if (!(currentBoard == null)) {
             currentBoard.getChecklists().clear();
             currentBoard.getNotes().clear();
-            currentBoardElements.stream().forEach(element -> {
+            boardElementControllers.stream().map(c -> c.getBoardElement()).forEach(element -> {
                 if (element instanceof Note) {
                     Note note = (Note) element;
                     currentBoard.addNote(note);
@@ -176,7 +175,7 @@ public class ScriptController {
     private void createNote() {
         Note note = new Note();
         currentBoard.addNote(note);
-        currentBoardElements.add(note);
+        boardElementControllers.add(new BoardElementController(note, this));
         drawBoardElementControllers();
         update();
         save();
@@ -186,7 +185,7 @@ public class ScriptController {
     private void createChecklist() {
         Checklist checklist = new Checklist("", new ArrayList<String>());
         currentBoard.addchecklist(checklist);
-        currentBoardElements.add(checklist);
+        boardElementControllers.add(new BoardElementController(checklist, this));
         drawBoardElementControllers();
         update();
         save();
@@ -271,8 +270,8 @@ public class ScriptController {
 
     private void update() {
         if (!(currentBoard == null)) {
-            newNoteButton.setDisable(currentBoardElements.size() == Board.MAX_ELEMENTS ? true : false);
-            newChecklistButton.setDisable(currentBoardElements.size() == Board.MAX_ELEMENTS ? true : false);
+            newNoteButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS ? true : false);
+            newChecklistButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS ? true : false);
             noteScreen.setVisible(!boards.contains(currentBoard) ? false : true);
         }
     }
@@ -297,26 +296,20 @@ public class ScriptController {
             noteGrid.add(columnVBox, i, 0);
         });
 
-        boardElementControllers.clear();
-        currentBoardElements.stream().forEach(el -> {
-            boardElementControllers.add(new BoardElementController(el, this));
-        });
         boardElementControllers.stream().forEach(bec -> {
             VBox columnVBox = (VBox) noteGrid.getChildren()
-                    .get(currentBoardElements.indexOf(bec.getBoardElement()) % columnsCount);
+                    .get(boardElementControllers.stream().map(c -> c.getBoardElement()).toList()
+                            .indexOf(bec.getBoardElement()) % columnsCount);
             columnVBox.getChildren().add(bec.generateControl());
         });
     }
 
     public void updateCurrentBoardElements() {
-        currentBoardElements.clear();
-        boardElementControllers.stream().forEach(cntr -> currentBoardElements.add(cntr.getBoardElement()));
         save();
     }
 
     public void removeBoardElement(BoardElementController boardElementController) {
         boardElementControllers.remove(boardElementController);
-        currentBoardElements.remove(boardElementController.getBoardElement());
         drawBoardElementControllers();
         save();
     }
