@@ -47,7 +47,7 @@ public class Board {
         notes.add(note);
     }
 
-    public void addchecklist(Checklist checklist) {
+    public void addChecklist(Checklist checklist) {
         if (checklist == null && getChecklists().size() + getNotes().size() >= MAX_ELEMENTS) {
             throw new IllegalArgumentException();
         }

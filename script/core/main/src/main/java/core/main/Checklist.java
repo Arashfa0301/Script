@@ -1,26 +1,26 @@
 package core.main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Checklist extends BoardElement {
 
-    private List<String> checkItems;
+    private List<ChecklistLine> checklistLines = new ArrayList<>();
 
-    public Checklist(String title, List<String> checkItems) {
-        setTitle(title);
-        this.checkItems = checkItems;
+    public Checklist() {
+        setTitle("");
     }
 
-    public void addListElement(String text) {
-        checkItems.add(text);
-    }
-
-    public List<String> getCheckItems() {
-        return checkItems;
+    public void addChecklistLine() {
+        checklistLines.add(new ChecklistLine());
     }
 
     public boolean isEmpty() {
-        return (getTitle().isBlank() && getCheckItems().isEmpty());
+        return (getTitle().isBlank() && checklistLines.isEmpty());
+    }
+
+    public List<ChecklistLine> getChecklistLines() {
+        return checklistLines;
     }
 
 }
