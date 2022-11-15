@@ -22,7 +22,7 @@ import java.util.List;
 public class DataHandler {
 
     private static final String FILE_NAME = "users";
-    private static final String FILE_PATH = System.getProperty("user.home") + "/resources";
+    private static final String FILE_PATH = System.getProperty("user.home");
     private Gson gson;
 
     public DataHandler() {
@@ -31,14 +31,14 @@ public class DataHandler {
     }
 
     public void write(User user) {
-        if (user == null || user.getName() == null) {
+        if (user == null || user.getUsername() == null) {
             throw new NullPointerException("The input user is invalid");
         }
-        if (user.getName().isEmpty()) {
+        if (user.getUsername().isEmpty()) {
             throw new IllegalArgumentException("The input user is invalid");
         }
         List<User> users = read();
-        users.removeIf(u -> u.getName().equals(user.getName()));
+        users.removeIf(u -> u.getUsername().equals(user.getUsername()));
         users.add(user);
 
         try (PrintWriter out = new PrintWriter(
@@ -49,7 +49,7 @@ public class DataHandler {
         }
     }
 
-    private List<User> read() {
+    public List<User> read() {
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new FileInputStream(getFilePath()), Charset.defaultCharset()))) {
 
@@ -82,12 +82,16 @@ public class DataHandler {
         if (user.isEmpty()) {
             throw new IllegalArgumentException("Username is not valid (Either empty or null");
         }
-        return read().stream().filter(u -> u.getName().equals(user)).findAny().orElse(null);
+        return read().stream().filter(u -> u.getUsername().equals(user)).findAny().orElse(null);
+    }
+
+    public Boolean userExists(String username) {
+        return getUser(username) != null;
     }
 
     public void removeUser(String user) {
         List<User> users = read();
-        users.removeIf(u -> u.getName().equals(user));
+        users.removeIf(u -> u.getUsername().equals(user));
         try (PrintWriter out = new PrintWriter(
                 new OutputStreamWriter(new FileOutputStream(getFilePath()), Charset.defaultCharset()))) {
             out.write(gson.toJson(users));

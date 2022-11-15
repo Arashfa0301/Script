@@ -7,11 +7,12 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="loginAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.LoginController">
+<AnchorPane fx:id="loginAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.LoginController">
    <children>
-      <VBox alignment="CENTER" layoutX="200.0" layoutY="222.0" prefHeight="99.0" prefWidth="150.0" spacing="10.0" AnchorPane.bottomAnchor="79.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.66666666666663" AnchorPane.topAnchor="222.0">
+      <VBox alignment="CENTER" layoutX="200.0" layoutY="121.0" prefHeight="200.0" prefWidth="199.0" spacing="10.0" AnchorPane.bottomAnchor="79.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="201.0" AnchorPane.topAnchor="121.0">
          <children>
-            <TextField fx:id="loginField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleEnter" onKeyReleased="#checkUsername" prefHeight="25.0" prefWidth="189.0" promptText="Enter username" />
+            <TextField fx:id="usernameField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleEnter" onKeyReleased="#checkUsername" prefHeight="25.0" prefWidth="189.0" promptText="Enter username" />
+            <TextField fx:id="passwordField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleEnter" onKeyReleased="#checkUsername" prefHeight="25.0" prefWidth="189.0" promptText="Enter password" />
             <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="200.0">
                <children>
                   <Button fx:id="createNewUserButton" disable="true" layoutX="14.0" layoutY="2.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleCreateNewUserButton" text="Create new user">
