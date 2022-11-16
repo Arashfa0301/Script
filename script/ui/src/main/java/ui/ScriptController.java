@@ -34,9 +34,8 @@ import java.util.stream.IntStream;
 
 public class ScriptController {
 
-    private static final int BUTTON_WIDTH = 190, NOTE_SIZE = 200;
-
-    private static final int H_GAP = 10;
+    protected static final int BUTTON_WIDTH = 190,
+            NOTE_SIZE = 200, H_GAP = 10;
 
     private Board currentBoard = null;
 
@@ -144,8 +143,8 @@ public class ScriptController {
 
     private void save() {
         if (!(currentBoard == null)) {
-            currentBoard.getChecklists().clear();
-            currentBoard.getNotes().clear();
+            currentBoard.clearCheckLists();
+            currentBoard.clearNotes();
             boardElementControllers.stream().map(c -> c.getBoardElement()).forEach(element -> {
                 if (element instanceof Note) {
                     Note note = (Note) element;
@@ -313,6 +312,10 @@ public class ScriptController {
         boardElementControllers.remove(boardElementController);
         drawBoardElementControllers();
         save();
+    }
+
+    protected Button getNewBoardButton() {
+        return newBoardButton;
     }
 
 }

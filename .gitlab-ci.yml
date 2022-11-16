@@ -28,3 +28,16 @@ Checkstyle:
     - cd script
     - mvn checkstyle:check
   retry: 2
+
+Jacoco:
+  image: maven:3-openjdk-16
+  stage: Java test
+  needs: []
+  script:
+    - cd script
+    - mvn jacoco:report-aggregate
+    - cat $CI_BUILDS_DIR/$CI_PROJECT_PATH/script/report/target/site/jacoco-aggregate/index.html | grep -o '<tfoot>.*</tfoot>'
+  artifacts:
+    paths:
+      - $CI_BUILDS_DIR/$CI_PROJECT_PATH/script/report/target/site/jacoco-aggregate/*
+  retry: 2

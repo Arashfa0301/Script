@@ -20,7 +20,7 @@ import java.util.List;
 
 public class BoardElementController {
 
-    private static final int BOARD_ELEMENT_WIDTH = 200, BOARD_ELEMENT_HEIGHT = 230;
+    protected static final int BOARD_ELEMENT_WIDTH = 200, BOARD_ELEMENT_HEIGHT = 230;
 
     private BoardElement boardElement;
 
@@ -97,12 +97,12 @@ public class BoardElementController {
             t.setDisable(
                     ((Checklist) getBoardElement()).getChecklistLines().get(listElements.indexOf(t)).getChecked());
             t.setOnKeyReleased((event) -> {
-                ((Checklist) boardElement).getChecklistLines().get(listElements.indexOf(t)).setLine(t.getText());
+                ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
                 listener.updateCurrentBoardElements();
             });
             t.setOnKeyPressed(event -> {
                 if (event.getCode().equals(KeyCode.ENTER)) {
-                    ((Checklist) boardElement).getChecklistLines().get(listElements.indexOf(t)).setLine(t.getText());
+                    ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
                     ((Checklist) boardElement).addChecklistLine();
                     listener.updateCurrentBoardElements();
                     listener.drawBoardElementControllers();
@@ -115,12 +115,12 @@ public class BoardElementController {
             listElements.add(t);
             ((Checklist) boardElement).addChecklistLine();
             t.setOnKeyReleased((event) -> {
-                ((Checklist) boardElement).getChecklistLines().get(listElements.indexOf(t)).setLine(t.getText());
+                ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
                 listener.updateCurrentBoardElements();
             });
             t.setOnKeyPressed(event -> {
                 if (event.getCode().equals(KeyCode.ENTER)) {
-                    ((Checklist) boardElement).getChecklistLines().get(listElements.indexOf(t)).setLine(t.getText());
+                    ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
                     ((Checklist) boardElement).addChecklistLine();
                     listener.updateCurrentBoardElements();
                     listener.drawBoardElementControllers();
@@ -162,11 +162,9 @@ public class BoardElementController {
             checkBox.setSelected(checklist.getChecklistLines().get(listElements.indexOf(e)).getChecked());
             checkBox.setOnAction(event -> {
                 if (checkBox.isSelected()) {
-                    checklist.getChecklistLines().get(listElements.indexOf(e)).checked(true);
-                    e.setDisable(true);
+                    checklist.setChecklistChecked(listElements.indexOf(e), true);
                 } else {
-                    checklist.getChecklistLines().get(listElements.indexOf(e)).checked(false);
-                    e.setDisable(false);
+                    checklist.setChecklistChecked(listElements.indexOf(e), false);
                 }
                 listener.updateCurrentBoardElements();
                 listener.drawBoardElementControllers();
@@ -215,7 +213,7 @@ public class BoardElementController {
         return null;
     }
 
-    public BoardElement getBoardElement() {
+    protected BoardElement getBoardElement() {
         return boardElement;
     }
 }
