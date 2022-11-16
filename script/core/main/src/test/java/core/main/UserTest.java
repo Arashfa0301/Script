@@ -23,19 +23,19 @@ public class UserTest {
         assertEquals("last", user.getLastName());
 
         assertThrows(IllegalArgumentException.class, () -> {
-            User emptyUser = new User("", "", "", "");
+            new User("", "", "", "");
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            User blankUser = new User(" ", " ", " ", " ");
+            new User(" ", " ", " ", " ");
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            User mysteryUser = new User("\\\\/ ", "dnoijsd", "sdofh", "dailf");
+            new User("\\\\/ ", "dnoijsd", "sdofh", "dailf");
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            User emptyPassword = new User("null", "", "null", "null");
+            new User("null", "", "null", "null");
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            User blankPassword = new User("null", "   ", "null", "null");
+            new User("null", "   ", "null", "null");
         });
     }
 
