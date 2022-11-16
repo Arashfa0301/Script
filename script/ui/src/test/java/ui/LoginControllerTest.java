@@ -1,5 +1,6 @@
 package ui;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -29,18 +30,21 @@ public class LoginControllerTest extends ApplicationTest {
 
     @Test
     @DisplayName("Test controller")
-    void testController() {
+    public void testController() {
         assertNotNull(controller);
     }
 
     @Test
     @DisplayName("Test disabled when no username")
-    void testEmpty() {
+    public void testLoginButtons() {
         clickOn("#usernameField");
         write("a");
+        assertTrue(controller.getLoginButton().isDisabled());
+        assertFalse(controller.getCreateNewUserButton().isDisabled());
         press(KeyCode.BACK_SPACE);
         release(KeyCode.BACK_SPACE);
         assertTrue(controller.getLoginButton().isDisabled());
+        assertTrue(controller.getCreateNewUserButton().isDisabled());
     }
 
 }

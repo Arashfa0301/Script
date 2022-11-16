@@ -313,4 +313,8 @@ public class ScriptController {
         save();
     }
 
+    protected Button getNewBoardButton() {
+        return newBoardButton;
+    }
+
 }
