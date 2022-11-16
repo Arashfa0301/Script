@@ -14,8 +14,10 @@ import java.util.regex.Pattern;
 public class User {
 
     private String username;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password, firstName, lastName;
+    private String password;
+    private String firstName;
+    private String lastName;
+
     private List<Board> boards = new ArrayList<>();
 
     /**
@@ -114,13 +116,37 @@ public class User {
         return new ArrayList<Board>(boards);
     }
 
-    /**
-     * Sets the User's boards.
-     *
-     * @param boards a List of Board objects to assign to the User
-     */
+    private Board getBoard(String boardname) throws IllegalArgumentException {
+        for (Board board : boards) {
+            if (board.getBoardName().equals(boardname)) {
+                return board;
+            }
+        }
+        throw new IllegalArgumentException("Board not found");
+    }
+
     public void setBoards(List<Board> boards) {
         this.boards = new ArrayList<Board>(boards);
     }
 
+    public void addBoard(String boardname) {
+        for (Board board : boards) {
+            if (board.getBoardName().equals(boardname)) {
+                throw new IllegalArgumentException("Board already exists");
+            }
+        }
+        boards.add(new Board(boardname, ""));
+    }
+
+    public void removeBoard(String boardname) throws IllegalArgumentException {
+        boards.remove(getBoard(boardname));
+    }
+
+    public void addNote(String boardname, String listname) throws IllegalArgumentException {
+        getBoard(boardname).addNote(new Note());
+    }
+
+    public void removeNote(String boardname, String listname, int index) throws IllegalArgumentException {
+        getBoard(boardname).getNotes().remove(index);
+    }
 }

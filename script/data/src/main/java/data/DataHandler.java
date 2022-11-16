@@ -49,6 +49,24 @@ public class DataHandler {
         }
     }
 
+    public void createBoard(String boardname, String username) throws IllegalArgumentException {
+        if (boardname == null || username == null || boardname.isEmpty() || username.isEmpty()) {
+            throw new NullPointerException("The input boardname or username is invalid");
+        }
+        User user = getUser(username);
+        user.addBoard(boardname);
+        write(user);
+    }
+
+    public void removeBoard(String boardname, String username) {
+        if (boardname == null || username == null || boardname.isEmpty() || username.isEmpty()) {
+            throw new NullPointerException("The input boardname or username is invalid");
+        }
+        User user = getUser(username);
+        user.removeBoard(boardname);
+        write(user);
+    }
+
     public List<User> read() {
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new FileInputStream(getFilePath()), Charset.defaultCharset()))) {
@@ -78,11 +96,13 @@ public class DataHandler {
         return FILE_PATH + "/" + FILE_NAME + ".json";
     }
 
-    public User getUser(String user) {
-        if (user.isEmpty()) {
-            throw new IllegalArgumentException("Username is not valid (Either empty or null");
+    public User getUser(String username) throws IllegalArgumentException {
+        User user = read().stream().filter(u -> u.getUsername().equals(username)).findAny().orElse(null);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        } else {
+            return user;
         }
-        return read().stream().filter(u -> u.getUsername().equals(user)).findAny().orElse(null);
     }
 
     public Boolean userExists(String username) {

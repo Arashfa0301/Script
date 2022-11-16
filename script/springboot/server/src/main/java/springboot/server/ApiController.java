@@ -41,6 +41,20 @@ public class ApiController {
         }
     }
 
+    @PostMapping("/boards/create/{boardName}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createBoard(@PathVariable("boardName") String boardName) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        datahandler.createBoard(boardName, authentication.getName());
+    }
+
+    @PostMapping("/boards/remove/{boardName}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void removeBoard(@PathVariable("boardName") String boardName) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        datahandler.removeBoard(boardName, authentication.getName());
+    }
+
     @PostMapping("/auth/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void postBody(@RequestBody User user) {
