@@ -41,14 +41,14 @@ public class Board {
     }
 
     public void addNote(Note note) {
-        if (note == null && getNotes().size() + getChecklists().size() >= MAX_ELEMENTS) {
+        if (note == null || getNotes().size() + getChecklists().size() >= MAX_ELEMENTS) {
             throw new IllegalArgumentException("The number of notes exceed the maximum amount");
         }
         notes.add(note);
     }
 
     public void addChecklist(Checklist checklist) {
-        if (checklist == null && getChecklists().size() + getNotes().size() >= MAX_ELEMENTS) {
+        if (checklist == null || getChecklists().size() + getNotes().size() >= MAX_ELEMENTS) {
             throw new IllegalArgumentException("The number of checklits exceed the maximum amount");
         }
         checklists.add(checklist);
