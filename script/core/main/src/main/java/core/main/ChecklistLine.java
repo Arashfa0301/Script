@@ -29,10 +29,21 @@ public class ChecklistLine {
         return checked;
     }
 
+    /**
+     * Sets the text of a ChecklistLine.
+     *
+     * @param line a String to set as text
+     */
     protected void setLine(String line) {
         this.line = line;
     }
 
+    /**
+     * Sets the boolean value of checked.
+     *
+     * @param checked a boolean value to determine if a ChecklistItem is checked or
+     *                not
+     */
     protected void checked(Boolean checked) {
         this.checked = checked;
     }

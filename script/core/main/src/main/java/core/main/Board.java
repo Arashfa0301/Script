@@ -109,14 +109,27 @@ public class Board {
         checklists.add(checklist);
     }
 
+    /**
+     * Clears the list containing checklists.
+     */
     public void clearCheckLists() {
         checklists.clear();
     }
 
+    /**
+     * Clears the list containing checklists.
+     */
     public void clearNotes() {
         notes.clear();
     }
 
+    /**
+     * Checks if a String is valid.
+     *
+     * @param input a String to be checked
+     * @throws IllegalArgumentException if <code>isEmpty()</code> returns
+     *                                  <code>true</code> for <code>input</code>
+     */
     private void checkValidInputString(String input) {
         if (input.isEmpty()) {
             throw new IllegalArgumentException("Invalid argument");
