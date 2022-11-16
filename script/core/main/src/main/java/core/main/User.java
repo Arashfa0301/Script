@@ -142,6 +142,11 @@ public class User {
         boards.remove(getBoard(boardname));
     }
 
+    public void renameBoard(String oldBoardname, String newBoardname) throws IllegalArgumentException {
+        Board board = getBoard(oldBoardname);
+        board.setBoardName(newBoardname);
+    }
+
     public void addNote(String boardname, String listname) throws IllegalArgumentException {
         getBoard(boardname).addNote(new Note());
     }
