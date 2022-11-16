@@ -24,11 +24,11 @@ public class Board {
     }
 
     public List<Note> getNotes() {
-        return notes;
+        return new ArrayList<Note>(notes);
     }
 
     public List<Checklist> getChecklists() {
-        return checklists;
+        return new ArrayList<Checklist>(checklists);
     }
 
     public void setBoardName(String boardName) {
@@ -42,16 +42,24 @@ public class Board {
 
     public void addNote(Note note) {
         if (note == null && getNotes().size() + getChecklists().size() >= MAX_ELEMENTS) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The number of notes exceed the maximum amount");
         }
         notes.add(note);
     }
 
     public void addChecklist(Checklist checklist) {
         if (checklist == null && getChecklists().size() + getNotes().size() >= MAX_ELEMENTS) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The number of checklits exceed the maximum amount");
         }
         checklists.add(checklist);
+    }
+
+    public void clearCheckLists() {
+        checklists.clear();
+    }
+
+    public void clearNotes() {
+        notes.clear();
     }
 
     private void checkValidInputString(String input) {

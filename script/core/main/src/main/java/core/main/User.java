@@ -15,10 +15,7 @@ public class User {
 
     private String username;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
-    private String firstName;
-    private String lastName;
-
+    private String password, firstName, lastName;
     private List<Board> boards = new ArrayList<>();
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
@@ -64,11 +61,11 @@ public class User {
     }
 
     public List<Board> getBoards() {
-        return boards;
+        return new ArrayList<Board>(boards);
     }
 
     public void setBoards(List<Board> boards) {
-        this.boards = boards;
+        this.boards = new ArrayList<Board>(boards);
     }
 
 }

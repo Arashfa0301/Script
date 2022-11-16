@@ -1,6 +1,6 @@
 package core.main;
 
-public class BoardElement {
+public abstract class BoardElement {
 
     private String title;
     private boolean isPinned = false;
