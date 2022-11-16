@@ -66,8 +66,37 @@ public class User {
         return boards;
     }
 
+    private Board getBoard(String boardname) throws IllegalArgumentException {
+        for (Board board : boards) {
+            if (board.getBoardName().equals(boardname)) {
+                return board;
+            }
+        }
+        throw new IllegalArgumentException("Board not found");
+    }
+
     public void setBoards(List<Board> boards) {
         this.boards = boards;
     }
 
+    public void addBoard(String boardname) {
+        for (Board board : boards) {
+            if (board.getBoardName().equals(boardname)) {
+                throw new IllegalArgumentException("Board already exists");
+            }
+        }
+        boards.add(new Board(boardname, ""));
+    }
+
+    public void removeBoard(String boardname) throws IllegalArgumentException {
+        boards.remove(getBoard(boardname));
+    }
+
+    public void addNote(String boardname, String listname) throws IllegalArgumentException {
+        getBoard(boardname).addNote(new Note());
+    }
+
+    public void removeNote(String boardname, String listname, int index) throws IllegalArgumentException {
+        getBoard(boardname).getNotes().remove(index);
+    }
 }
