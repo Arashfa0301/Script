@@ -15,12 +15,12 @@ public class ChecklistLine {
         return checked;
     }
 
-    public void setLine(String line) {
+    protected void setLine(String line) {
         this.line = line;
     }
 
-    public void checked(Boolean b) {
-        checked = b;
+    protected void checked(Boolean checked) {
+        this.checked = checked;
     }
 
 }

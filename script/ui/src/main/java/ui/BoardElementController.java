@@ -20,7 +20,7 @@ import java.util.List;
 
 public class BoardElementController {
 
-    private static final int BOARD_ELEMENT_WIDTH = 200, BOARD_ELEMENT_HEIGHT = 230;
+    protected static final int BOARD_ELEMENT_WIDTH = 200, BOARD_ELEMENT_HEIGHT = 230;
 
     private BoardElement boardElement;
 
@@ -102,16 +102,12 @@ public class BoardElementController {
             TextField t = new TextField(element.getLine());
             listElements.add(t);
             t.setOnKeyReleased((event) -> {
-                ((Checklist) boardElement).getChecklistLines().get(listElements.indexOf(t)).setLine(t.getText());
-                // ((Checklist) boardElement).getCheckItems().set(listElements.indexOf(t),
-                // t.getText());
+                ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
                 listener.updateCurrentBoardElements();
             });
             t.setOnKeyPressed(event -> {
                 if (event.getCode().equals(KeyCode.ENTER)) {
-                    ((Checklist) boardElement).getChecklistLines().get(listElements.indexOf(t)).setLine(t.getText());
-                    // ((Checklist) boardElement).getCheckItems().set(listElements.indexOf(t),
-                    // t.getText());
+                    ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
                     ((Checklist) boardElement).addChecklistLine();
                     listener.updateCurrentBoardElements();
                     listener.drawBoardElementControllers();
@@ -124,16 +120,12 @@ public class BoardElementController {
             listElements.add(t);
             ((Checklist) boardElement).addChecklistLine();
             t.setOnKeyReleased((event) -> {
-                ((Checklist) boardElement).getChecklistLines().get(listElements.indexOf(t)).setLine(t.getText());
-                // ((Checklist) boardElement).getCheckItems().set(listElements.indexOf(t),
-                // t.getText());
+                ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
                 listener.updateCurrentBoardElements();
             });
             t.setOnKeyPressed(event -> {
                 if (event.getCode().equals(KeyCode.ENTER)) {
-                    ((Checklist) boardElement).getChecklistLines().get(listElements.indexOf(t)).setLine(t.getText());
-                    // ((Checklist) boardElement).getCheckItems().set(listElements.indexOf(t),
-                    // t.getText());
+                    ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
                     ((Checklist) boardElement).addChecklistLine();
                     listener.updateCurrentBoardElements();
                     listener.drawBoardElementControllers();
@@ -176,14 +168,11 @@ public class BoardElementController {
             CheckBox checkBox = new CheckBox();
             Checklist checklist = (Checklist) getBoardElement();
             checkBox.setSelected(checklist.getChecklistLines().get(listElements.indexOf(e)).getChecked());
-            // checkBox.setSelected(checklist.isChecked(listElements.indexOf(e)));
             checkBox.setOnAction(event -> {
                 if (checkBox.isSelected()) {
-                    // checklist.check(listElements.indexOf(e));
-                    checklist.getChecklistLines().get(listElements.indexOf(e)).checked(true);
+                    checklist.setChecklistChecked(listElements.indexOf(e), true);
                 } else {
-                    checklist.getChecklistLines().get(listElements.indexOf(e)).checked(false);
-                    // checklist.uncheck(listElements.indexOf(e));
+                    checklist.setChecklistChecked(listElements.indexOf(e), false);
                 }
                 listener.updateCurrentBoardElements();
             });
@@ -203,7 +192,7 @@ public class BoardElementController {
         return null;
     }
 
-    public BoardElement getBoardElement() {
+    protected BoardElement getBoardElement() {
         return boardElement;
     }
 }
