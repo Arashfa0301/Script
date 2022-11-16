@@ -1,11 +1,11 @@
 package ui;
 
 import core.main.Board;
-import core.main.BoardElement;
 import core.main.Checklist;
 import core.main.Note;
 import core.main.User;
 import data.DataHandler;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,7 +23,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -35,15 +34,12 @@ import java.util.stream.IntStream;
 
 public class ScriptController {
 
-    private static final int BUTTON_WIDTH = 190, NOTE_SIZE = 200;
-
-    private static final int H_GAP = 10;
+    protected static final int BUTTON_WIDTH = 190,
+            NOTE_SIZE = 200, H_GAP = 10;
 
     private Board currentBoard = null;
 
     private int columnsCount = 1;
-
-    private List<Board> boards;
 
     private DataHandler datahandler = new DataHandler();
 
@@ -70,13 +66,10 @@ public class ScriptController {
 
     private User user = Globals.user;
 
-    private List<BoardElement> currentBoardElements = new ArrayList<>();
-
     private List<BoardElementController> boardElementControllers = new ArrayList<>();
 
     @FXML
     private void initialize() {
-
         scriptSplitPane.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         datahandler = new DataHandler();
         user = Globals.user;
@@ -94,9 +87,8 @@ public class ScriptController {
                 }
             }
         });
-        boards = user.getBoards();
         try {
-            loadBoardButtons(boards);
+            loadBoardButtons(user.getBoards());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -105,8 +97,7 @@ public class ScriptController {
 
     @FXML
     private void onBoardButtonClick(ActionEvent ae) throws IOException {
-
-        Board selectedBoard = boards.stream()
+        Board selectedBoard = user.getBoards().stream()
                 .filter(board -> board.getBoardName().equals(((Button) ae.getSource()).getText()))
                 .findFirst()
                 .get();
@@ -114,10 +105,11 @@ public class ScriptController {
         boardTitle.setText(selectedBoard.getBoardName());
         boardDescription.setText(selectedBoard.getBoardDescription());
         currentBoard = selectedBoard;
-        currentBoardElements.clear();
-        currentBoard.getChecklists().stream().forEach(c -> currentBoardElements.add(c));
-        currentBoard.getNotes().stream().forEach(n -> currentBoardElements.add(n));
-
+        boardElementControllers.clear();
+        currentBoard.getChecklists().stream()
+                .forEach(boardElement -> boardElementControllers.add(new BoardElementController(boardElement, this)));
+        currentBoard.getNotes().stream()
+                .forEach(boardElement -> boardElementControllers.add(new BoardElementController(boardElement, this)));
         drawBoardElementControllers();
         update();
     }
@@ -131,11 +123,16 @@ public class ScriptController {
 
     @FXML
     private void editBoardTitle(KeyEvent event) throws IOException {
-        Button button = (Button) boardGrid.getChildren().get(boards.indexOf(currentBoard) * 2);
+        Button button = (Button) boardGrid.getChildren().get(user.getBoards().indexOf(currentBoard) * 2);
         TextField field = (TextField) event.getSource();
-        button.setText(field.getText());
-        currentBoard.setBoardName(field.getText());
-        save();
+        if (!field.getText().isBlank()) {
+            button.setText(field.getText());
+            currentBoard.setBoardName(field.getText());
+            save();
+        }
+        // button.setText(field.getText());
+        // currentBoard.setBoardName(field.getText());
+        // save();
     }
 
     @FXML
@@ -146,27 +143,27 @@ public class ScriptController {
 
     private void save() {
         if (!(currentBoard == null)) {
-            currentBoard.getChecklists().clear();
-            currentBoard.getNotes().clear();
-            currentBoardElements.stream().forEach(element -> {
+            currentBoard.clearCheckLists();
+            currentBoard.clearNotes();
+            boardElementControllers.stream().map(c -> c.getBoardElement()).forEach(element -> {
                 if (element instanceof Note) {
                     Note note = (Note) element;
                     currentBoard.addNote(note);
                 } else if (element instanceof Checklist) {
                     Checklist checklist = (Checklist) element;
-                    currentBoard.addchecklist(checklist);
+                    currentBoard.addChecklist(checklist);
                 }
             });
         }
-        user.setBoards(boards);
+        user.setBoards(user.getBoards());
         datahandler.write(user);
     }
 
     @FXML
     public void createBoard() {
         Board newBoard = new Board(boardName.getText(), "");
-        boards.add(newBoard);
-        createBoardButton(newBoard, boards.size() - 1);
+        user.getBoards().add(newBoard);
+        createBoardButton(newBoard, user.getBoards().size() - 1);
         boardName.clear();
         newBoardButtonEnable();
         save();
@@ -176,7 +173,7 @@ public class ScriptController {
     private void createNote() {
         Note note = new Note();
         currentBoard.addNote(note);
-        currentBoardElements.add(note);
+        boardElementControllers.add(new BoardElementController(note, this));
         drawBoardElementControllers();
         update();
         save();
@@ -184,9 +181,9 @@ public class ScriptController {
 
     @FXML
     private void createChecklist() {
-        Checklist checklist = new Checklist("", new ArrayList<String>());
-        currentBoard.addchecklist(checklist);
-        currentBoardElements.add(checklist);
+        Checklist checklist = new Checklist();
+        currentBoard.addChecklist(checklist);
+        boardElementControllers.add(new BoardElementController(checklist, this));
         drawBoardElementControllers();
         update();
         save();
@@ -246,9 +243,11 @@ public class ScriptController {
         });
         button.setId(board.getBoardName());
         button.setMaxWidth(BUTTON_WIDTH);
-        Button deleteButton = new Button("X");
-        deleteButton.setShape(new Circle(10));
+        MFXButton deleteButton = new MFXButton("X");
+        // deleteButton.setShape(new Circle(1));
+        // deleteButton.setStyle("-mfx-button-type: RAISED");
         deleteButton.setCursor(Cursor.HAND);
+        deleteButton.setStyle("-fx-background-color: transparent; -fx-border-color: black;");
         deleteButton.setOnAction((event) -> {
             try {
                 deleteBoard(event);
@@ -263,22 +262,22 @@ public class ScriptController {
     private void deleteBoard(ActionEvent ae) throws IOException {
         Button button = (Button) ae.getSource();
         int index = GridPane.getRowIndex(button);
-        boards.remove(index);
-        loadBoardButtons(boards);
+        user.getBoards().remove(index);
+        loadBoardButtons(user.getBoards());
         update();
         save();
     }
 
     private void update() {
         if (!(currentBoard == null)) {
-            newNoteButton.setDisable(currentBoardElements.size() == Board.MAX_ELEMENTS ? true : false);
-            newChecklistButton.setDisable(currentBoardElements.size() == Board.MAX_ELEMENTS ? true : false);
-            noteScreen.setVisible(!boards.contains(currentBoard) ? false : true);
+            newNoteButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS ? true : false);
+            newChecklistButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS ? true : false);
+            noteScreen.setVisible(!user.getBoards().contains(currentBoard) ? false : true);
         }
     }
 
     private Boolean checkNewBoardName() {
-        return !(boardName.getText().isBlank() || boards.stream().map(board -> (board.getBoardName()))
+        return !(boardName.getText().isBlank() || user.getBoards().stream().map(board -> (board.getBoardName()))
                 .collect(Collectors.toList()).contains(boardName.getText()));
     }
 
@@ -297,28 +296,26 @@ public class ScriptController {
             noteGrid.add(columnVBox, i, 0);
         });
 
-        boardElementControllers.clear();
-        currentBoardElements.stream().forEach(el -> {
-            boardElementControllers.add(new BoardElementController(el, this));
-        });
         boardElementControllers.stream().forEach(bec -> {
             VBox columnVBox = (VBox) noteGrid.getChildren()
-                    .get(currentBoardElements.indexOf(bec.getBoardElement()) % columnsCount);
+                    .get(boardElementControllers.stream().map(c -> c.getBoardElement()).toList()
+                            .indexOf(bec.getBoardElement()) % columnsCount);
             columnVBox.getChildren().add(bec.generateControl());
         });
     }
 
     public void updateCurrentBoardElements() {
-        currentBoardElements.clear();
-        boardElementControllers.stream().forEach(cntr -> currentBoardElements.add(cntr.getBoardElement()));
         save();
     }
 
     public void removeBoardElement(BoardElementController boardElementController) {
         boardElementControllers.remove(boardElementController);
-        currentBoardElements.remove(boardElementController.getBoardElement());
         drawBoardElementControllers();
         save();
+    }
+
+    protected Button getNewBoardButton() {
+        return newBoardButton;
     }
 
 }

@@ -66,6 +66,11 @@
             <version>2.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.github.palexdev</groupId>
+            <artifactId>materialfx</artifactId>
+            <version>11.13.5</version>
+        </dependency>
 
     </dependencies>
 

@@ -75,7 +75,12 @@ public class LoginController {
         });
     }
 
-    public Button getLoginButton() {
+    protected Button getLoginButton() {
         return loginButton;
     }
+
+    protected Button getCreateNewUserButton() {
+        return createNewUserButton;
+    }
+
 }
