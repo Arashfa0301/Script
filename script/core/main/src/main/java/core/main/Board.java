@@ -41,14 +41,14 @@ public class Board {
     }
 
     public void addNote(Note note) {
-        if (note == null && getNotes().size() + getChecklists().size() >= MAX_ELEMENTS) {
+        if (note == null || getNotes().size() + getChecklists().size() >= MAX_ELEMENTS) {
             throw new IllegalArgumentException();
         }
         notes.add(note);
     }
 
     public void addChecklist(Checklist checklist) {
-        if (checklist == null && getChecklists().size() + getNotes().size() >= MAX_ELEMENTS) {
+        if (checklist == null || getChecklists().size() + getNotes().size() >= MAX_ELEMENTS) {
             throw new IllegalArgumentException();
         }
         checklists.add(checklist);
@@ -56,7 +56,7 @@ public class Board {
 
     private void checkValidInputString(String input) {
         if (input.isEmpty()) {
-            throw new IllegalArgumentException("Innvalid argument");
+            throw new IllegalArgumentException("Invalid argument");
         }
     }
 

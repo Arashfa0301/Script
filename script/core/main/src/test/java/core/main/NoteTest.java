@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 public class NoteTest {
 
     @Test
+    @DisplayName("Test constructors")
     public void testConstructors() {
         Note emptyNote = new Note();
 
@@ -24,6 +26,7 @@ public class NoteTest {
     }
 
     @Test
+    @DisplayName("Test set text")
     public void testSetText() {
         Note note = new Note();
 
@@ -37,6 +40,7 @@ public class NoteTest {
     }
 
     @Test
+    @DisplayName("Test set title")
     public void testSetTitle() {
         Note note = new Note();
 
@@ -50,6 +54,7 @@ public class NoteTest {
     }
 
     @Test
+    @DisplayName("Test set color")
     public void testSetColor() {
         Note note = new Note();
 
@@ -61,6 +66,7 @@ public class NoteTest {
     }
 
     @Test
+    @DisplayName("Test get color values")
     public void testGetColorValues() {
         Note note = new Note();
 
@@ -79,6 +85,7 @@ public class NoteTest {
     }
 
     @Test
+    @DisplayName("Test pin")
     public void testPin() {
         Note note = new Note();
 
