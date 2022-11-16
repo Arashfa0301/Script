@@ -1,6 +1,5 @@
 package springboot.server;
 
-import core.main.Board;
 import core.main.User;
 import data.DataHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,13 +51,6 @@ public class ApiController {
     @PostMapping("/boards/remove/{boardName}")
     @ResponseStatus(HttpStatus.CREATED)
     public void removeBoard(@PathVariable("boardName") String boardName) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        datahandler.removeBoard(boardName, authentication.getName());
-    }
-
-    @PostMapping("/boards/edit/{boardName}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void putBoard(@RequestBody Board board) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         datahandler.removeBoard(boardName, authentication.getName());
     }
