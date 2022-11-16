@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -17,7 +18,7 @@ public class BoardTest {
     @Test
     @DisplayName("Test constructor")
     public void testConstructor() {
-        Board newBoard = new Board("Name", "Description");
+        Board newBoard = new Board("Name", "Description", new ArrayList<Note>(), new ArrayList<Checklist>());
         assertEquals("Name", newBoard.getBoardName());
         assertEquals("Description", newBoard.getBoardDescription());
     }
@@ -26,7 +27,7 @@ public class BoardTest {
     @DisplayName("Test add note")
     public void testAddNote() {
         // Tests that board is empty by default
-        Board board = new Board("Board", "Test");
+        Board board = new Board("Board", "Test", new ArrayList<Note>(), new ArrayList<Checklist>());
         assertTrue(board.getNotes().isEmpty() && board.getChecklists().isEmpty());
 
         // Tests that addBoardElement works as intended for a valid note
@@ -53,7 +54,7 @@ public class BoardTest {
     @Test
     @DisplayName("Test set name")
     public void testSetName() {
-        Board board = new Board("Name", "Description");
+        Board board = new Board("Name", "Description", new ArrayList<Note>(), new ArrayList<Checklist>());
         assertEquals("Name", board.getBoardName());
         board.setBoardName("New Name");
         assertEquals("New Name", board.getBoardName());
@@ -68,7 +69,7 @@ public class BoardTest {
     @Test
     @DisplayName("Test set desctription")
     public void testSetDescription() {
-        Board board = new Board("Name", "Description");
+        Board board = new Board("Name", "Description", new ArrayList<Note>(), new ArrayList<Checklist>());
         assertEquals("Description", board.getBoardDescription());
         board.setBoardDescription("New Description");
         assertEquals("New Description", board.getBoardDescription());
@@ -77,7 +78,7 @@ public class BoardTest {
     @Test
     @DisplayName("Test get notes")
     public void testGetNotes() {
-        Board board = new Board("Board", "Test");
+        Board board = new Board("Board", "Test", new ArrayList<Note>(), new ArrayList<Checklist>());
         Note note1 = new Note();
         Note note2 = new Note();
         board.addNote(note1);
@@ -90,7 +91,7 @@ public class BoardTest {
     @DisplayName("Test add checklists")
     public void testAddChecklists() {
         // Tests that board is empty by default
-        Board board = new Board("Board", "Test");
+        Board board = new Board("Board", "Test", new ArrayList<Note>(), new ArrayList<Checklist>());
         assertTrue(board.getChecklists().isEmpty() && board.getChecklists().isEmpty());
 
         // Tests that addBoardElement works as intended for a valid Checklist

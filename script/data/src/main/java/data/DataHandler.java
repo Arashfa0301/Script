@@ -3,6 +3,7 @@ package data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import core.main.Board;
 import core.main.User;
 
 import java.io.BufferedReader;
@@ -83,6 +84,18 @@ public class DataHandler {
             throw new IllegalArgumentException("The input user is invalid");
         }
         user.renameBoard(oldBoardname, newBoardname);
+        write(user);
+    }
+
+    public void updateBoard(String boardname, Board board, String username) {
+        if (boardname == null || board == null || boardname.isEmpty()) {
+            throw new NullPointerException("The input boardname or board is invalid");
+        }
+        User user = getUser(username);
+        if (user == null) {
+            throw new IllegalArgumentException("The input user is invalid");
+        }
+        user.putBoard(board, boardname);
         write(user);
     }
 

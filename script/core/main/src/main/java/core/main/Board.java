@@ -1,5 +1,8 @@
 package core.main;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +18,15 @@ public class Board {
      * @param boardName   A String that becomes the name of the board
      * @param description A short description of the contents of the board
      */
-    public Board(String boardName, String description) {
+
+    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+    public Board(@JsonProperty("boardName") String boardName, @JsonProperty("description") String description,
+            @JsonProperty("notes") List<Note> notes, @JsonProperty("checklists") List<Checklist> checklists) {
         checkValidInputString(boardName);
         this.boardName = boardName;
         this.description = description;
+        this.notes = notes;
+        this.checklists = checklists;
     }
 
     /**
@@ -46,6 +54,14 @@ public class Board {
      */
     public List<Note> getNotes() {
         return new ArrayList<Note>(notes);
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+
+    public void setChecklists(List<Checklist> checklists) {
+        this.checklists = checklists;
     }
 
     /**
