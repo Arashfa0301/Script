@@ -1,5 +1,6 @@
 package springboot.server;
 
+import core.main.Board;
 import core.main.User;
 import data.DataHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,26 @@ public class ApiController {
             @PathVariable("newBoardName") String newBoardName) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         datahandler.renameBoard(boardName, newBoardName, authentication.getName());
+    }
+
+    // @PutMapping("/board/{boardName}/note/{noteIndex}")
+    // @ResponseStatus(HttpStatus.CREATED)
+    // public void putBoardNotes(@PathVariable("boardName") String boardName,
+    // @PathVariable("noteIndex") int noteIndex, @RequestParam("text") String text,
+    // @RequestParam("color") String color, @RequestParam("title") String title,
+    // @RequestParam("isPinned") Boolean isPinned) {
+    // Authentication authentication =
+    // SecurityContextHolder.getContext().getAuthentication();
+    // datahandler.putBoardNote(boardName, noteIndex, text, color, title, isPinned,
+    // authentication.getName());
+    // }
+
+    @PutMapping("/board/{boardName}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void putBoardNotes(@PathVariable("boardName") String boardName,
+            @RequestBody Board board) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        datahandler.updateBoard(boardName, board, authentication.getName());
     }
 
     @PostMapping("/auth/register")

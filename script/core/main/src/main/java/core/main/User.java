@@ -18,7 +18,7 @@ public class User {
     private String firstName;
     private String lastName;
 
-    private List<Board> boards = new ArrayList<>();
+    private List<Board> boards;
 
     /**
      * Creates a User object if all input paramaters are valid.
@@ -56,6 +56,7 @@ public class User {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.boards = new ArrayList<>();
     }
 
     /**
@@ -135,7 +136,7 @@ public class User {
                 throw new IllegalArgumentException("Board already exists");
             }
         }
-        boards.add(new Board(boardname, ""));
+        boards.add(new Board(boardname, "", new ArrayList<Note>(), new ArrayList<Checklist>()));
     }
 
     public void removeBoard(String boardname) throws IllegalArgumentException {
@@ -147,11 +148,26 @@ public class User {
         board.setBoardName(newBoardname);
     }
 
-    public void addNote(String boardname, String listname) throws IllegalArgumentException {
+    public void addNote(String boardname) throws IllegalArgumentException {
         getBoard(boardname).addNote(new Note());
     }
 
-    public void removeNote(String boardname, String listname, int index) throws IllegalArgumentException {
+    public void removeNote(String boardname, int index) throws IllegalArgumentException {
         getBoard(boardname).getNotes().remove(index);
+    }
+
+    public void putBoard(Board board, String boardname) throws IllegalArgumentException {
+        // replace the board with the same name
+        int index = -1;
+        for (int i = 0; i < boards.size(); i++) {
+            if (boards.get(i).getBoardName().equals(board.getBoardName())) {
+                index = i;
+            }
+        }
+        if (index == -1) {
+            throw new IllegalArgumentException("Board not found");
+        } else {
+            boards.set(index, board);
+        }
     }
 }

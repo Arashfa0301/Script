@@ -161,7 +161,7 @@ public class ScriptController {
 
     @FXML
     public void createBoard() {
-        Board newBoard = new Board(boardName.getText(), "");
+        Board newBoard = new Board(boardName.getText(), "", new ArrayList<Note>(), new ArrayList<Checklist>());
         user.getBoards().add(newBoard);
         createBoardButton(newBoard, user.getBoards().size() - 1);
         boardName.clear();
