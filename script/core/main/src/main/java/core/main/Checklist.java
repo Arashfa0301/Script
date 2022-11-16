@@ -2,6 +2,8 @@ package core.main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Checklist extends BoardElement {
 
@@ -20,7 +22,21 @@ public class Checklist extends BoardElement {
     }
 
     public List<ChecklistLine> getChecklistLines() {
+        orderLines();
         return checklistLines;
+    }
+
+    public void orderLines() {
+        checklistLines = Stream.concat(
+                checklistLines.stream().filter(line -> !line.getChecked()).collect(Collectors.toList()).stream(),
+                checklistLines.stream().filter(line -> line.getChecked()).collect(Collectors.toList())
+                        .stream())
+                .collect(Collectors.toList());
+    }
+
+    public void removeChecklistLine(int i) {
+        orderLines();
+        checklistLines.remove(i);
     }
 
 }
