@@ -9,8 +9,11 @@ public class Checklist extends BoardElement {
 
     private List<ChecklistLine> checklistLines = new ArrayList<>();
 
+    /**
+     * Creates a Checklist object. Title is <code>""</code> by default.
+     */
     public Checklist() {
-        setTitle("");
+        super();
     }
 
     /**
