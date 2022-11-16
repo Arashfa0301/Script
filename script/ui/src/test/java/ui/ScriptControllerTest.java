@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -46,6 +47,7 @@ public class ScriptControllerTest extends ApplicationTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("Test create boards")
     void testCreateBoards() {
         assertTrue(user.getBoards().size() == 0, "No boards should exist yet");

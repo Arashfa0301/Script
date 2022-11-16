@@ -5,6 +5,7 @@ import core.main.Checklist;
 import core.main.Note;
 import core.main.User;
 import data.DataHandler;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +23,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -40,8 +40,6 @@ public class ScriptController {
     private Board currentBoard = null;
 
     private int columnsCount = 1;
-
-    private List<Board> boards;
 
     private DataHandler datahandler = new DataHandler();
 
@@ -72,7 +70,6 @@ public class ScriptController {
 
     @FXML
     private void initialize() {
-
         scriptSplitPane.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         datahandler = new DataHandler();
         user = Globals.user;
@@ -90,9 +87,8 @@ public class ScriptController {
                 }
             }
         });
-        boards = user.getBoards();
         try {
-            loadBoardButtons(boards);
+            loadBoardButtons(user.getBoards());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -101,8 +97,7 @@ public class ScriptController {
 
     @FXML
     private void onBoardButtonClick(ActionEvent ae) throws IOException {
-
-        Board selectedBoard = boards.stream()
+        Board selectedBoard = user.getBoards().stream()
                 .filter(board -> board.getBoardName().equals(((Button) ae.getSource()).getText()))
                 .findFirst()
                 .get();
@@ -115,7 +110,6 @@ public class ScriptController {
                 .forEach(boardElement -> boardElementControllers.add(new BoardElementController(boardElement, this)));
         currentBoard.getNotes().stream()
                 .forEach(boardElement -> boardElementControllers.add(new BoardElementController(boardElement, this)));
-
         drawBoardElementControllers();
         update();
     }
@@ -129,11 +123,16 @@ public class ScriptController {
 
     @FXML
     private void editBoardTitle(KeyEvent event) throws IOException {
-        Button button = (Button) boardGrid.getChildren().get(boards.indexOf(currentBoard) * 2);
+        Button button = (Button) boardGrid.getChildren().get(user.getBoards().indexOf(currentBoard) * 2);
         TextField field = (TextField) event.getSource();
-        button.setText(field.getText());
-        currentBoard.setBoardName(field.getText());
-        save();
+        if (!field.getText().isBlank()) {
+            button.setText(field.getText());
+            currentBoard.setBoardName(field.getText());
+            save();
+        }
+        // button.setText(field.getText());
+        // currentBoard.setBoardName(field.getText());
+        // save();
     }
 
     @FXML
@@ -156,15 +155,15 @@ public class ScriptController {
                 }
             });
         }
-        user.setBoards(boards);
+        user.setBoards(user.getBoards());
         datahandler.write(user);
     }
 
     @FXML
     public void createBoard() {
         Board newBoard = new Board(boardName.getText(), "");
-        boards.add(newBoard);
-        createBoardButton(newBoard, boards.size() - 1);
+        user.getBoards().add(newBoard);
+        createBoardButton(newBoard, user.getBoards().size() - 1);
         boardName.clear();
         newBoardButtonEnable();
         save();
@@ -244,9 +243,11 @@ public class ScriptController {
         });
         button.setId(board.getBoardName());
         button.setMaxWidth(BUTTON_WIDTH);
-        Button deleteButton = new Button("X");
-        deleteButton.setShape(new Circle(10));
+        MFXButton deleteButton = new MFXButton("X");
+        // deleteButton.setShape(new Circle(1));
+        // deleteButton.setStyle("-mfx-button-type: RAISED");
         deleteButton.setCursor(Cursor.HAND);
+        deleteButton.setStyle("-fx-background-color: transparent; -fx-border-color: black;");
         deleteButton.setOnAction((event) -> {
             try {
                 deleteBoard(event);
@@ -261,8 +262,8 @@ public class ScriptController {
     private void deleteBoard(ActionEvent ae) throws IOException {
         Button button = (Button) ae.getSource();
         int index = GridPane.getRowIndex(button);
-        boards.remove(index);
-        loadBoardButtons(boards);
+        user.getBoards().remove(index);
+        loadBoardButtons(user.getBoards());
         update();
         save();
     }
@@ -271,12 +272,12 @@ public class ScriptController {
         if (!(currentBoard == null)) {
             newNoteButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS ? true : false);
             newChecklistButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS ? true : false);
-            noteScreen.setVisible(!boards.contains(currentBoard) ? false : true);
+            noteScreen.setVisible(!user.getBoards().contains(currentBoard) ? false : true);
         }
     }
 
     private Boolean checkNewBoardName() {
-        return !(boardName.getText().isBlank() || boards.stream().map(board -> (board.getBoardName()))
+        return !(boardName.getText().isBlank() || user.getBoards().stream().map(board -> (board.getBoardName()))
                 .collect(Collectors.toList()).contains(boardName.getText()));
     }
 

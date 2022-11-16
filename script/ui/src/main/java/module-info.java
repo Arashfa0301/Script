@@ -5,6 +5,7 @@ module script.ui {
 	requires java.net.http;
 	requires script.core.main;
 	requires script.data;
+	requires MaterialFX;
 
 	opens ui to javafx.graphics, javafx.fxml;
 }
