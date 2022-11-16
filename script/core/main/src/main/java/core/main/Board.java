@@ -63,7 +63,7 @@ public class Board {
     }
 
     private void checkValidInputString(String input) {
-        if (input.isEmpty()) {
+        if (input.isEmpty() || input.length() > 20) {
             throw new IllegalArgumentException("Invalid argument");
         }
     }

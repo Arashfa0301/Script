@@ -20,7 +20,7 @@ import java.util.List;
 
 public class BoardElementController {
 
-    protected static final int BOARD_ELEMENT_WIDTH = 200, BOARD_ELEMENT_HEIGHT = 230;
+    protected static final int BOARD_ELEMENT_WIDTH = 200, BOARD_ELEMENT_HEIGHT = 230, TITLE_LIMIT = 23;
 
     private BoardElement boardElement;
 
@@ -41,8 +41,15 @@ public class BoardElementController {
         titleField.setStyle("-fx-font-weight: bold");
         titleField.setPromptText("Title");
         titleField.setOnKeyReleased(event -> {
-            boardElement.setTitle(titleField.getText());
-            listener.updateCurrentBoardElements();
+            try {
+                boardElement.setTitle(titleField.getText());
+                listener.updateCurrentBoardElements();
+            } catch (IllegalArgumentException e) {
+                titleField.setText(titleField.getText().substring(0, TITLE_LIMIT));
+                titleField.positionCaret(TITLE_LIMIT);
+                boardElement.setTitle(titleField.getText());
+                listener.updateCurrentBoardElements();
+            }
         });
 
         TextArea textField = new TextArea(((Note) boardElement).getText());
@@ -96,6 +103,17 @@ public class BoardElementController {
             listener.updateCurrentBoardElements();
         });
         titleField.setPromptText("Title");
+        titleField.setOnKeyReleased(event -> {
+            try {
+                boardElement.setTitle(titleField.getText());
+                listener.updateCurrentBoardElements();
+            } catch (IllegalArgumentException e) {
+                titleField.setText(titleField.getText().substring(0, TITLE_LIMIT));
+                titleField.positionCaret(TITLE_LIMIT);
+                boardElement.setTitle(titleField.getText());
+                listener.updateCurrentBoardElements();
+            }
+        });
 
         List<TextField> listElements = new ArrayList<>();
         ((Checklist) boardElement).getChecklistLines().stream().forEach(element -> {
