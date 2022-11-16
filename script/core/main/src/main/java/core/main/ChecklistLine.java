@@ -25,7 +25,7 @@ public class ChecklistLine {
      *
      * @return the boolean value of the ChecklistLine's <code>checked</code> boolean
      */
-    public Boolean getChecked() {
+    public Boolean isChecked() {
         return checked;
     }
 

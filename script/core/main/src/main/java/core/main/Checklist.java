@@ -56,6 +56,7 @@ public class Checklist extends BoardElement {
      */
     public void setChecklistChecked(int index, Boolean checked) {
         checklistLines.get(index).checked(checked);
+
     }
 
     /**
@@ -66,19 +67,16 @@ public class Checklist extends BoardElement {
      *         <code>true</code> for the list <code>checklistLines</code>
      */
     public boolean isEmpty() {
-        return (getTitle().isBlank() && checklistLines.isEmpty());
+        return getTitle().isBlank() && checklistLines.isEmpty();
     }
 
-    /**
-     * Orders the lines in a Checklist depending on wether or not their
-     * <code>checked</code> boolean is <code>true</code> or <code>false</code>.
-     */
     public void orderLines() {
         checklistLines = Stream.concat(
-                checklistLines.stream().filter(line -> !line.getChecked()).collect(Collectors.toList()).stream(),
-                checklistLines.stream().filter(line -> line.getChecked()).collect(Collectors.toList())
+                checklistLines.stream().filter(line -> !line.isChecked()).collect(Collectors.toList()).stream(),
+                checklistLines.stream().filter(line -> line.isChecked()).collect(Collectors.toList())
                         .stream())
                 .collect(Collectors.toList());
+
     }
 
     /**

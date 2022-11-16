@@ -3,7 +3,6 @@ package core.main;
 public abstract class BoardElement {
 
     private String title;
-    private boolean isPinned = false;
 
     /**
      * Creates a new board element. <code>title = ""</code> and
@@ -11,7 +10,6 @@ public abstract class BoardElement {
      */
     public BoardElement() {
         title = "";
-        isPinned = false;
     }
 
     /**
@@ -31,29 +29,4 @@ public abstract class BoardElement {
     public String getTitle() {
         return title;
     }
-
-    /**
-     * Pins the board element, which prioritizes it over other board elements.
-     */
-    public void pin() {
-        isPinned = true;
-    }
-
-    /**
-     * Removes the board element's priority over other board elements.
-     */
-    public void unPin() {
-        isPinned = false;
-    }
-
-    /**
-     * Checks if a board element is pinned.
-     *
-     * @return <code>true</code> if board element is pinned, otherwise
-     *         <code>false</code>
-     */
-    public boolean isPinned() {
-        return isPinned;
-    }
-
 }

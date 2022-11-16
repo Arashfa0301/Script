@@ -95,7 +95,7 @@ public class BoardElementController {
             TextField t = new TextField(element.getLine());
             listElements.add(t);
             t.setDisable(
-                    ((Checklist) getBoardElement()).getChecklistLines().get(listElements.indexOf(t)).getChecked());
+                    ((Checklist) getBoardElement()).getChecklistLines().get(listElements.indexOf(t)).isChecked());
             t.setOnKeyReleased((event) -> {
                 ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
                 listener.updateCurrentBoardElements();
@@ -159,7 +159,7 @@ public class BoardElementController {
         listElements.forEach(e -> {
             Checklist checklist = (Checklist) getBoardElement();
             MFXCheckbox checkBox = new MFXCheckbox();
-            checkBox.setSelected(checklist.getChecklistLines().get(listElements.indexOf(e)).getChecked());
+            checkBox.setSelected(checklist.getChecklistLines().get(listElements.indexOf(e)).isChecked());
             checkBox.setOnAction(event -> {
                 if (checkBox.isSelected()) {
                     checklist.setChecklistChecked(listElements.indexOf(e), true);
