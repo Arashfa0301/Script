@@ -18,6 +18,26 @@ public class User {
     private String password, firstName, lastName;
     private List<Board> boards = new ArrayList<>();
 
+    /**
+     * Creates a User object if all input paramaters are valid.
+     *
+     * @param username  a String that will be the User's username
+     * @param password  a String that will be the User's password
+     * @param firstName a String that will be the User's first name
+     * @param lastName  a String that will be the User's last name
+     * @throws IllegalArgumentException if
+     *                                  <code>!Pattern.matches("^[A-Za-z0-9_.]+$"</code>,
+     *                                  <code>isBlank()</code> or
+     *                                  <code>isEmpty()</code> is true for the
+     *                                  String input of either
+     *                                  <code>username</code>,
+     *                                  <code>firstName</code> or
+     *                                  <code>lastName</code>
+     * @throws IllegalArgumentException if <code>isBlank()</code> or
+     *                                  <code>isEmpty()</code> is <code>true</code>
+     *                                  for the inputted String of
+     *                                  <code>password</code>
+     */
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public User(@JsonProperty("username") String username, @JsonProperty("password") String password,
             @JsonProperty("firstName") String firstName, @JsonProperty("lastName") String lastName) {
@@ -36,34 +56,69 @@ public class User {
         this.lastName = lastName;
     }
 
+    /**
+     * Gets the User's username.
+     *
+     * @return the User's username as a String
+     */
     @JsonGetter("username")
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Gets the User's password.
+     *
+     * @return the User's password as a String
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Sets the User's password.
+     *
+     * @param password a String that will become the User's new password
+     */
     @JsonSetter("password")
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     * Gets the User's first name.
+     *
+     * @return the User's first name as a String
+     */
     @JsonGetter("firstName")
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * Gets the User's last name.
+     *
+     * @return the User's last name as a String
+     */
     @JsonGetter("lastName")
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     * Gets the User's boards.
+     *
+     * @return the User's boards as a List
+     */
     public List<Board> getBoards() {
         return new ArrayList<Board>(boards);
     }
 
+    /**
+     * Sets the User's boards.
+     *
+     * @param boards a List of Board objects to assign to the User
+     */
     public void setBoards(List<Board> boards) {
         this.boards = new ArrayList<Board>(boards);
     }
