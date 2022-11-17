@@ -117,17 +117,8 @@ public class User {
         return new ArrayList<Board>(boards);
     }
 
-    private Board getBoard(String boardname) throws IllegalArgumentException {
-        for (Board board : boards) {
-            if (board.getBoardName().equals(boardname)) {
-                return board;
-            }
-        }
-        throw new IllegalArgumentException("Board not found");
-    }
-
-    public void setBoards(List<Board> boards) {
-        this.boards = new ArrayList<Board>(boards);
+    public void addBoard(Board board) {
+        boards.add(board);
     }
 
     public void addBoard(String boardname) {
@@ -139,8 +130,30 @@ public class User {
         boards.add(new Board(boardname, "", new ArrayList<Note>(), new ArrayList<Checklist>()));
     }
 
+    public void removeBoard(int index) {
+        boards.remove(index);
+    }
+
     public void removeBoard(String boardname) throws IllegalArgumentException {
         boards.remove(getBoard(boardname));
+    }
+
+    private Board getBoard(String boardname) throws IllegalArgumentException {
+        for (Board board : boards) {
+            if (board.getBoardName().equals(boardname)) {
+                return board;
+            }
+        }
+        throw new IllegalArgumentException("Board not found");
+    }
+
+    /**
+     * Sets the User's boards.
+     *
+     * @param boards a List of Board objects to assign to the User
+     */
+    public void setBoards(List<Board> boards) {
+        this.boards = new ArrayList<Board>(boards);
     }
 
     public void renameBoard(String oldBoardname, String newBoardname) throws IllegalArgumentException {

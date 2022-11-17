@@ -48,12 +48,12 @@ public class BoardElementController {
             }
         });
 
-        TextArea textField = new TextArea(((Note) boardElement).getText());
-        textField.setPromptText("Notes");
-        textField.setWrapText(true);
-        textField.setPrefSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_WIDTH);
-        textField.setOnKeyReleased(event -> {
-            ((Note) boardElement).setText(textField.getText());
+        TextArea textArea = new TextArea(((Note) boardElement).getText());
+        textArea.setPromptText("Notes");
+        textArea.setWrapText(true);
+        textArea.setPrefSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_WIDTH);
+        textArea.setOnKeyReleased(event -> {
+            ((Note) boardElement).setText(textArea.getText());
             listener.updateCurrentBoardElements();
         });
 
@@ -63,7 +63,7 @@ public class BoardElementController {
         notePane.getChildren().add(topPane);
         notePane.setPrefSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_HEIGHT);
         notePane.setMaxSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_HEIGHT);
-        notePane.getChildren().add(textField);
+        notePane.getChildren().add(textArea);
         topPane.getChildren().add(titleField);
 
         MFXButton deleteButton = new MFXButton("X");

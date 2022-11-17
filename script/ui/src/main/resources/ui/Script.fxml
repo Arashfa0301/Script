@@ -191,7 +191,7 @@
                               <Font name="Poppins Medium" size="20.0" />
                            </font>
                         </TextField>
-                        <TextField fx:id="boardDescription" onKeyReleased="#editBoardDescription" promptText="A simple description" style="-fx-text-fill: rgba(0,0,0,1);">
+                        <TextField fx:id="boardDescription" onKeyReleased="#editBoardDescription" prefHeight="27.0" prefWidth="249.0" promptText="A simple description" style="-fx-text-fill: rgba(0,0,0,1);">
                            <font>
                               <Font name="Poppins Regular" size="13.0" />
                            </font>
