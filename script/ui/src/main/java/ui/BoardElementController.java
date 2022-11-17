@@ -107,7 +107,7 @@ public class BoardElementController {
             TextField t = new TextField(element.getLine());
             listElements.add(t);
             t.setDisable(
-                    ((Checklist) getBoardElement()).getChecklistLines().get(listElements.indexOf(t)).getChecked());
+                    ((Checklist) getBoardElement()).getChecklistLines().get(listElements.indexOf(t)).isChecked());
             t.setOnKeyReleased((event) -> {
                 ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
             });
@@ -167,7 +167,7 @@ public class BoardElementController {
         listElements.forEach(e -> {
             Checklist checklist = (Checklist) getBoardElement();
             MFXCheckbox checkBox = new MFXCheckbox();
-            checkBox.setSelected(checklist.getChecklistLines().get(listElements.indexOf(e)).getChecked());
+            checkBox.setSelected(checklist.getChecklistLines().get(listElements.indexOf(e)).isChecked());
             checkBox.setOnAction(event -> {
                 if (checkBox.isSelected()) {
                     checklist.setChecklistChecked(listElements.indexOf(e), true);
@@ -209,13 +209,11 @@ public class BoardElementController {
         return notePane;
     }
 
-    public VBox generateControl() {
-        if (boardElement instanceof Note) {
-            return generateNote();
-        } else if (boardElement instanceof Checklist) {
-            return generateChecklist();
-        }
-        return null;
+    protected VBox generateControl() {
+
+        return (boardElement instanceof Note) ? generateNote()
+                : (boardElement instanceof Checklist) ? generateChecklist() : null;
+
     }
 
     protected BoardElement getBoardElement() {

@@ -27,9 +27,9 @@ public class ChecklistTest {
         assertEquals(Arrays.asList("test", "testing"), Arrays.asList(checklist.getChecklistLines().get(0).getLine(),
                 checklist.getChecklistLines().get(1).getLine()));
 
-        assertFalse(checklist.getChecklistLines().get(0).getChecked());
+        assertFalse(checklist.getChecklistLines().get(0).isChecked());
         checklist.getChecklistLines().get(0).setChecked(true);
-        assertTrue(checklist.getChecklistLines().get(0).getChecked());
+        assertTrue(checklist.getChecklistLines().get(0).isChecked());
         Checklist checklist2 = new Checklist();
         checklist2.setTitle("title");
         assertFalse(checklist2.isEmpty());

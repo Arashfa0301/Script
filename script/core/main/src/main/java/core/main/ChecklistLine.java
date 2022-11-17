@@ -24,6 +24,10 @@ public class ChecklistLine {
         return line;
     }
 
+    public Boolean isChecked() {
+        return checked;
+    }
+
     /**
      * Sets the text of a ChecklistLine.
      *
