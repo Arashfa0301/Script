@@ -2,13 +2,10 @@ package core.main;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 public class NoteTest {
 
@@ -21,22 +18,22 @@ public class NoteTest {
         assertEquals("", emptyNote.getTitle());
 
         // Tests if Text of the note is empty.
-        assertEquals("", emptyNote.getText());
+        assertEquals("", emptyNote.getContent());
 
     }
 
     @Test
     @DisplayName("Test set text")
-    public void testSetText() {
+    public void testsetContent() {
         Note note = new Note();
 
-        // Tests if setText() works from empty string
-        note.setText("New text");
-        assertEquals("New text", note.getText());
+        // Tests if setContent() works from empty string
+        note.setContent("New text");
+        assertEquals("New text", note.getContent());
 
-        // Tests if setText() works from a populated string
-        note.setText("Other text");
-        assertEquals("Other text", note.getText());
+        // Tests if setContent() works from a populated string
+        note.setContent("Other text");
+        assertEquals("Other text", note.getContent());
     }
 
     @Test
@@ -54,37 +51,6 @@ public class NoteTest {
     }
 
     @Test
-    @DisplayName("Test set color")
-    public void testSetColor() {
-        Note note = new Note();
-
-        // Test for an illegal color choice
-        assertThrows(IllegalArgumentException.class, () -> {
-            note.setColor("no color");
-        });
-
-    }
-
-    @Test
-    @DisplayName("Test get color values")
-    public void testGetColorValues() {
-        Note note = new Note();
-
-        // Test RGB values for default color
-        List<Integer> colorValues = note.getColorValues();
-        assertEquals(colorValues.get(0), 255);
-        assertEquals(colorValues.get(1), 255);
-        assertEquals(colorValues.get(2), 255);
-
-        // Test RGB values for new color
-        note.setColor("red");
-        colorValues = note.getColorValues();
-        assertEquals(colorValues.get(0), 255);
-        assertEquals(colorValues.get(1), 0);
-        assertEquals(colorValues.get(2), 0);
-    }
-
-    @Test
     @DisplayName("Test pin")
     public void testPin() {
         Note note = new Note();
@@ -93,11 +59,11 @@ public class NoteTest {
         assertFalse(note.isPinned());
 
         // Tests that pin() works as intended
-        note.pin();
+        note.setIsPinned(true);
         assertTrue(note.isPinned());
 
         // Tests that unPin() works as intended
-        note.unPin();
+        note.setIsPinned(false);
         assertFalse(note.isPinned());
     }
 }

@@ -28,7 +28,7 @@ public class ChecklistTest {
                 checklist.getChecklistLines().get(1).getLine()));
 
         assertFalse(checklist.getChecklistLines().get(0).isChecked());
-        checklist.getChecklistLines().get(0).checked(true);
+        checklist.getChecklistLines().get(0).setChecked(true);
         assertTrue(checklist.getChecklistLines().get(0).isChecked());
         Checklist checklist2 = new Checklist();
         checklist2.setTitle("title");

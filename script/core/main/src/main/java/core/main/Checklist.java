@@ -1,10 +1,15 @@
 package core.main;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Checklist extends BoardElement {
 
     private List<ChecklistLine> checklistLines = new ArrayList<>();
@@ -23,6 +28,7 @@ public class Checklist extends BoardElement {
      * @return an array of checklines
      *
      */
+    @JsonGetter("checklistLines")
     public List<ChecklistLine> getChecklistLines() {
         Collections.sort(checklistLines, new Comparator<ChecklistLine>() {
 
@@ -33,6 +39,11 @@ public class Checklist extends BoardElement {
 
         });
         return new ArrayList<ChecklistLine>(checklistLines);
+    }
+
+    @JsonSetter("checklistLines")
+    public void setlistLines(ArrayList<ChecklistLine> checklistLines) {
+        this.checklistLines = checklistLines;
     }
 
     /**
@@ -62,7 +73,7 @@ public class Checklist extends BoardElement {
      * @param checked the boolean value that checked will have
      */
     public void setChecklistChecked(int index, Boolean checked) {
-        checklistLines.get(index).checked(checked);
+        checklistLines.get(index).setChecked(checked);
     }
 
     /**

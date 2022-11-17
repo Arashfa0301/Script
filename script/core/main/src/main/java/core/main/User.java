@@ -69,6 +69,11 @@ public class User {
         return username;
     }
 
+    @JsonSetter("boards")
+    public void setBoard(List<Board> boards) {
+        this.boards = boards;
+    }
+
     /**
      * Gets the User's password.
      *
@@ -130,12 +135,8 @@ public class User {
         boards.add(new Board(boardname, "", new ArrayList<Note>(), new ArrayList<Checklist>()));
     }
 
-    public void removeBoard(int index) {
-        boards.remove(index);
-    }
-
-    public void removeBoard(String boardname) throws IllegalArgumentException {
-        boards.remove(getBoard(boardname));
+    public Board getBoard(int index) {
+        return boards.get(index);
     }
 
     private Board getBoard(String boardname) throws IllegalArgumentException {
@@ -147,13 +148,12 @@ public class User {
         throw new IllegalArgumentException("Board not found");
     }
 
-    /**
-     * Sets the User's boards.
-     *
-     * @param boards a List of Board objects to assign to the User
-     */
     public void setBoards(List<Board> boards) {
         this.boards = new ArrayList<Board>(boards);
+    }
+
+    public void removeBoard(String boardname) throws IllegalArgumentException {
+        boards.remove(getBoard(boardname));
     }
 
     public void renameBoard(String oldBoardname, String newBoardname) throws IllegalArgumentException {

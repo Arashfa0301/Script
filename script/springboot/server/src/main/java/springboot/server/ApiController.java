@@ -43,39 +43,19 @@ public class ApiController {
         }
     }
 
-    @PostMapping("/boards/create/{boardName}")
+    @GetMapping("/boards/create/{boardName}")
     @ResponseStatus(HttpStatus.CREATED)
     public void createBoard(@PathVariable("boardName") String boardName) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         datahandler.createBoard(boardName, authentication.getName());
     }
 
-    @PostMapping("/boards/remove/{boardName}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @GetMapping("/boards/remove/{boardName}")
+    @ResponseStatus(HttpStatus.OK)
     public void removeBoard(@PathVariable("boardName") String boardName) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         datahandler.removeBoard(boardName, authentication.getName());
     }
-
-    @PutMapping("/boards/rename/{boardName}/{newBoardName}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void renameBoard(@PathVariable("boardName") String boardName,
-            @PathVariable("newBoardName") String newBoardName) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        datahandler.renameBoard(boardName, newBoardName, authentication.getName());
-    }
-
-    // @PutMapping("/board/{boardName}/note/{noteIndex}")
-    // @ResponseStatus(HttpStatus.CREATED)
-    // public void putBoardNotes(@PathVariable("boardName") String boardName,
-    // @PathVariable("noteIndex") int noteIndex, @RequestParam("text") String text,
-    // @RequestParam("color") String color, @RequestParam("title") String title,
-    // @RequestParam("isPinned") Boolean isPinned) {
-    // Authentication authentication =
-    // SecurityContextHolder.getContext().getAuthentication();
-    // datahandler.putBoardNote(boardName, noteIndex, text, color, title, isPinned,
-    // authentication.getName());
-    // }
 
     @PutMapping("/board/{boardName}")
     @ResponseStatus(HttpStatus.CREATED)
