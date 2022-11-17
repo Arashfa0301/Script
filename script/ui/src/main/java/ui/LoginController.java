@@ -1,6 +1,6 @@
 package ui;
 
-import core.main.User;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 
 import java.io.IOException;
 
@@ -25,16 +26,14 @@ public class LoginController {
     private Button loginButton, swapRegisterButton;
 
     @FXML
-    private TextField usernameField;
+    private TextField usernameField, invalidField;
 
     @FXML
     private PasswordField passwordField;
 
     @FXML
     private void initialize() {
-        if (!(Globals.windowHeight == 0)) {
-            loginAnchor.setPrefSize(Globals.windowWidth, Globals.windowHeight);
-        }
+        loginAnchor.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         remoteModelAccess = new RemoteModelAccess();
         windowManager = new WindowManager();
         createWindowSizeListener();
@@ -42,9 +41,18 @@ public class LoginController {
 
     @FXML
     private void handleLoginButton(ActionEvent ae) throws IOException {
-        User user = remoteModelAccess.getUser(usernameField.getText(), passwordField.getText());
-        Globals.user = user;
-        windowManager.switchScreen(ae, "Script.fxml");
+        try {
+            Globals.user = remoteModelAccess.getUser(usernameField.getText(), passwordField.getText());
+            windowManager.switchScreen(ae, "Script.fxml");
+        } catch (Exception e) {
+            TranslateTransition transition = new TranslateTransition();
+            transition.setDuration(Duration.seconds(2));
+            transition.setNode(invalidField);
+            transition.setAutoReverse(false);
+            invalidField.setVisible(true);
+            transition.setOnFinished(event -> invalidField.setVisible(false));
+            transition.play();
+        }
     }
 
     @FXML
