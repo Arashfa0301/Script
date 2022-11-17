@@ -88,13 +88,10 @@ public class DataHandler {
     }
 
     public void updateBoard(String boardname, Board board, String username) {
-        if (boardname == null || board == null || boardname.isEmpty()) {
-            throw new NullPointerException("The input boardname or board is invalid");
+        if (boardname == null || board == null || boardname.isEmpty() || getUser(username) == null) {
+            throw new NullPointerException("The input argument is not valid");
         }
         User user = getUser(username);
-        if (user == null) {
-            throw new IllegalArgumentException("The input user is invalid");
-        }
         user.putBoard(board, boardname);
         write(user);
     }
