@@ -10,7 +10,6 @@
     </parent>
 
     <dependencies>
-
         <dependency>
             <groupId>it1901</groupId>
             <artifactId>script-core.main</artifactId>

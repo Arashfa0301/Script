@@ -3,6 +3,7 @@ package data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import core.main.Board;
 import core.main.User;
 
 import java.io.BufferedReader;
@@ -49,6 +50,55 @@ public class DataHandler {
         }
     }
 
+    public void createBoard(String boardname, String username) throws IllegalArgumentException {
+        if (boardname == null || username == null || boardname.isEmpty() || username.isEmpty()) {
+            throw new NullPointerException("The input boardname or username is invalid");
+        }
+        User user = getUser(username);
+        if (user == null) {
+            throw new IllegalArgumentException("The input user is invalid");
+        }
+        user.addBoard(boardname);
+        write(user);
+    }
+
+    public void removeBoard(String boardname, String username) {
+        if (boardname == null || username == null || boardname.isEmpty() || username.isEmpty()) {
+            throw new NullPointerException("The input boardname or username is invalid");
+        }
+        User user = getUser(username);
+        if (user == null) {
+            throw new IllegalArgumentException("The input user is invalid");
+        }
+        user.removeBoard(boardname);
+        write(user);
+    }
+
+    public void renameBoard(String oldBoardname, String newBoardname, String username) {
+        if (oldBoardname == null || newBoardname == null || username == null || oldBoardname.isEmpty()
+                || newBoardname.isEmpty() || username.isEmpty()) {
+            throw new NullPointerException("The input boardname or username is invalid");
+        }
+        User user = getUser(username);
+        if (user == null) {
+            throw new IllegalArgumentException("The input user is invalid");
+        }
+        user.renameBoard(oldBoardname, newBoardname);
+        write(user);
+    }
+
+    public void updateBoard(String boardname, Board board, String username) {
+        if (boardname == null || board == null || boardname.isEmpty()) {
+            throw new NullPointerException("The input boardname or board is invalid");
+        }
+        User user = getUser(username);
+        if (user == null) {
+            throw new IllegalArgumentException("The input user is invalid");
+        }
+        user.putBoard(board, boardname);
+        write(user);
+    }
+
     public List<User> read() {
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new FileInputStream(getFilePath()), Charset.defaultCharset()))) {
@@ -78,11 +128,8 @@ public class DataHandler {
         return FILE_PATH + "/" + FILE_NAME + ".json";
     }
 
-    public User getUser(String user) {
-        if (user.isEmpty()) {
-            throw new IllegalArgumentException("Username is not valid (Either empty or null");
-        }
-        return read().stream().filter(u -> u.getUsername().equals(user)).findAny().orElse(null);
+    public User getUser(String username) {
+        return read().stream().filter(u -> u.getUsername().equals(username)).findAny().orElse(null);
     }
 
     public Boolean userExists(String username) {

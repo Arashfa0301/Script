@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,10 +45,11 @@ public class UserTest {
     public void testSetBoards() {
         User user = new User("user", "password", "first", "last");
         user.setBoards(Stream.of(
-                new Board("board1", "desc1"),
-                new Board("board2", "desc2")).collect(Collectors.toList()));
+                new Board("board1", "desc1", new ArrayList<Note>(), new ArrayList<Checklist>()),
+                new Board("board2", "desc2", new ArrayList<Note>(), new ArrayList<Checklist>()))
+                .collect(Collectors.toList()));
 
-        Board board3 = new Board("board3", "desc3");
+        Board board3 = new Board("board3", "desc3", new ArrayList<Note>(), new ArrayList<Checklist>());
         assertEquals(user.getBoards().size(), 2);
         assertFalse(user.getBoards().contains(board3));
         assertTrue(user.getBoards().get(0).getBoardName().equals("board1")

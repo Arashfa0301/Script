@@ -12,7 +12,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
-public class LoginController {
+public class RegisterController {
 
     private RemoteModelAccess remoteModelAccess;
 
@@ -22,13 +22,13 @@ public class LoginController {
     private AnchorPane loginAnchor;
 
     @FXML
-    private Button loginButton, swapRegisterButton;
-
-    @FXML
-    private TextField usernameField;
+    private TextField usernameField, firstNameField, lastNameField;
 
     @FXML
     private PasswordField passwordField;
+
+    @FXML
+    private Button registerButton;
 
     @FXML
     private void initialize() {
@@ -41,29 +41,36 @@ public class LoginController {
     }
 
     @FXML
-    private void handleLoginButton(ActionEvent ae) throws IOException {
-        User user = remoteModelAccess.getUser(usernameField.getText(), passwordField.getText());
-        Globals.user = user;
-        windowManager.switchScreen(ae, "Script.fxml");
-    }
-
-    @FXML
-    private void swapToRegisterScreen(ActionEvent ae) throws IOException {
-        windowManager.switchScreen(ae, "Register.fxml");
+    private void swapToLoginScreen(ActionEvent ae) throws IOException {
+        windowManager.switchScreen(ae, "Login.fxml");
     }
 
     @FXML
     private void handleEnter(KeyEvent ke) {
         if (ke.getCode().equals(KeyCode.ENTER)) {
-            if (!loginButton.isDisabled()) {
-                loginButton.fire();
+            if (!registerButton.isDisabled()) {
+                registerButton.fire();
             }
         }
     }
 
     @FXML
     private void checkInput() {
-        loginButton.setDisable(passwordField.getLength() == 0 || usernameField.getLength() == 0);
+        registerButton.setDisable(usernameField.getLength() == 0 || passwordField.getLength() == 0
+                || firstNameField.getLength() == 0 || lastNameField.getLength() == 0);
+    }
+
+    @FXML
+    private void handleRegisterNewUser(ActionEvent ae) throws IOException {
+        try {
+            remoteModelAccess.register(firstNameField.getText(), lastNameField.getText(), usernameField.getText(),
+                    passwordField.getText());
+            User user = remoteModelAccess.getUser(usernameField.getText(), passwordField.getText());
+            Globals.user = user;
+            windowManager.switchScreen(ae, "Script.fxml");
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void createWindowSizeListener() {
@@ -74,5 +81,4 @@ public class LoginController {
             Globals.windowHeight = (double) newVal;
         });
     }
-
 }

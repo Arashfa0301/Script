@@ -1,5 +1,6 @@
 package springboot.server;
 
+import core.main.Board;
 import core.main.User;
 import data.DataHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,6 +41,48 @@ public class ApiController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "You are not authorized to access this resource");
         }
+    }
+
+    @PostMapping("/boards/create/{boardName}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createBoard(@PathVariable("boardName") String boardName) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        datahandler.createBoard(boardName, authentication.getName());
+    }
+
+    @PostMapping("/boards/remove/{boardName}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void removeBoard(@PathVariable("boardName") String boardName) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        datahandler.removeBoard(boardName, authentication.getName());
+    }
+
+    @PutMapping("/boards/rename/{boardName}/{newBoardName}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void renameBoard(@PathVariable("boardName") String boardName,
+            @PathVariable("newBoardName") String newBoardName) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        datahandler.renameBoard(boardName, newBoardName, authentication.getName());
+    }
+
+    // @PutMapping("/board/{boardName}/note/{noteIndex}")
+    // @ResponseStatus(HttpStatus.CREATED)
+    // public void putBoardNotes(@PathVariable("boardName") String boardName,
+    // @PathVariable("noteIndex") int noteIndex, @RequestParam("text") String text,
+    // @RequestParam("color") String color, @RequestParam("title") String title,
+    // @RequestParam("isPinned") Boolean isPinned) {
+    // Authentication authentication =
+    // SecurityContextHolder.getContext().getAuthentication();
+    // datahandler.putBoardNote(boardName, noteIndex, text, color, title, isPinned,
+    // authentication.getName());
+    // }
+
+    @PutMapping("/board/{boardName}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void putBoardNotes(@PathVariable("boardName") String boardName,
+            @RequestBody Board board) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        datahandler.updateBoard(boardName, board, authentication.getName());
     }
 
     @PostMapping("/auth/register")

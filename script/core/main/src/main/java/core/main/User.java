@@ -14,9 +14,11 @@ import java.util.regex.Pattern;
 public class User {
 
     private String username;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password, firstName, lastName;
-    private List<Board> boards = new ArrayList<>();
+    private String password;
+    private String firstName;
+    private String lastName;
+
+    private List<Board> boards;
 
     /**
      * Creates a User object if all input paramaters are valid.
@@ -54,6 +56,7 @@ public class User {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.boards = new ArrayList<>();
     }
 
     /**
@@ -118,8 +121,30 @@ public class User {
         boards.add(board);
     }
 
+    public void addBoard(String boardname) {
+        for (Board board : boards) {
+            if (board.getBoardName().equals(boardname)) {
+                throw new IllegalArgumentException("Board already exists");
+            }
+        }
+        boards.add(new Board(boardname, "", new ArrayList<Note>(), new ArrayList<Checklist>()));
+    }
+
     public void removeBoard(int index) {
         boards.remove(index);
+    }
+
+    public void removeBoard(String boardname) throws IllegalArgumentException {
+        boards.remove(getBoard(boardname));
+    }
+
+    private Board getBoard(String boardname) throws IllegalArgumentException {
+        for (Board board : boards) {
+            if (board.getBoardName().equals(boardname)) {
+                return board;
+            }
+        }
+        throw new IllegalArgumentException("Board not found");
     }
 
     /**
@@ -131,4 +156,31 @@ public class User {
         this.boards = new ArrayList<Board>(boards);
     }
 
+    public void renameBoard(String oldBoardname, String newBoardname) throws IllegalArgumentException {
+        Board board = getBoard(oldBoardname);
+        board.setBoardName(newBoardname);
+    }
+
+    public void addNote(String boardname) throws IllegalArgumentException {
+        getBoard(boardname).addNote(new Note());
+    }
+
+    public void removeNote(String boardname, int index) throws IllegalArgumentException {
+        getBoard(boardname).getNotes().remove(index);
+    }
+
+    public void putBoard(Board board, String boardname) throws IllegalArgumentException {
+        // replace the board with the same name
+        int index = -1;
+        for (int i = 0; i < boards.size(); i++) {
+            if (boards.get(i).getBoardName().equals(board.getBoardName())) {
+                index = i;
+            }
+        }
+        if (index == -1) {
+            throw new IllegalArgumentException("Board not found");
+        } else {
+            boards.set(index, board);
+        }
+    }
 }
