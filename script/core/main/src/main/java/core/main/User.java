@@ -123,7 +123,6 @@ public class User {
     }
 
     public void addBoard(String boardname) throws IllegalArgumentException {
-        checkUserContainsBoard(boardname);
         boards.add(new Board(boardname, "", new ArrayList<Note>(), new ArrayList<Checklist>()));
     }
 
