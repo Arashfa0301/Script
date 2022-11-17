@@ -1,14 +1,14 @@
 package ui;
 
 import core.main.User;
+import io.github.palexdev.materialfx.controls.MFXPasswordField;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 
 import java.io.IOException;
 
@@ -22,19 +22,17 @@ public class RegisterController {
     private AnchorPane loginAnchor;
 
     @FXML
-    private TextField usernameField, firstNameField, lastNameField;
+    private TextField usernameField, firstNameField, lastNameField, invalidField;
 
     @FXML
-    private PasswordField passwordField;
+    private MFXPasswordField passwordField;
 
     @FXML
     private Button registerButton;
 
     @FXML
     private void initialize() {
-        if (!(Globals.windowHeight == 0)) {
-            loginAnchor.setPrefSize(Globals.windowWidth, Globals.windowHeight);
-        }
+        loginAnchor.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         remoteModelAccess = new RemoteModelAccess();
         windowManager = new WindowManager();
         createWindowSizeListener();
@@ -46,18 +44,9 @@ public class RegisterController {
     }
 
     @FXML
-    private void handleEnter(KeyEvent ke) {
-        if (ke.getCode().equals(KeyCode.ENTER)) {
-            if (!registerButton.isDisabled()) {
-                registerButton.fire();
-            }
-        }
-    }
-
-    @FXML
     private void checkInput() {
-        registerButton.setDisable(usernameField.getLength() == 0 || passwordField.getLength() == 0
-                || firstNameField.getLength() == 0 || lastNameField.getLength() == 0);
+        registerButton.setDisable(usernameField.getText().isBlank() || passwordField.getText().isBlank()
+                || firstNameField.getText().isBlank() || lastNameField.getText().isBlank());
     }
 
     @FXML
@@ -69,7 +58,13 @@ public class RegisterController {
             Globals.user = user;
             windowManager.switchScreen(ae, "Script.fxml");
         } catch (RuntimeException e) {
-            System.out.println(e.getMessage());
+            TranslateTransition transition = new TranslateTransition();
+            transition.setDuration(Duration.seconds(2));
+            transition.setNode(invalidField);
+            transition.setAutoReverse(false);
+            invalidField.setVisible(true);
+            transition.setOnFinished(event -> invalidField.setVisible(false));
+            transition.play();
         }
     }
 
