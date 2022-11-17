@@ -114,6 +114,14 @@ public class User {
         return new ArrayList<Board>(boards);
     }
 
+    public void addBoard(Board board) {
+        boards.add(board);
+    }
+
+    public void removeBoard(int index) {
+        boards.remove(index);
+    }
+
     /**
      * Sets the User's boards.
      *
