@@ -1,0 +1,13 @@
+# Å lage release 3
+
+I dette dokumentet drøfter vi over hva som har gått bra og hva som har gått dårlig i utviklingsprosessen av release 3.
+
+## Hva har funket?
+Pipelines har vært en stor hjelp når vi har sendt merge requests for å sikre at programmet ikke ødelegges av koden som merges. Jacoco har også hjulpet mye med å se hvilke deler av koden som mangler testing, og har gjort det lett å finne hvilke metoder som mangler testdekning. Noe som også hjalp en del var at vi delte inn i arbeidsområder på starten av innleveringen, slik at hvert gruppemedlem hadde en egen del av prosjektet de fokuserte ekstra på. To personer utviklet ui og kontroller, en person lagde REST-API, og den siste utvidet tester og skrev brukerhistorier.
+I denne versjonen av appen begynte vi med å kommentere koden vår med javadoc. Slik ble det mye lettere å holde styr på funksjonene og hva de gjorde. Vi hadde også en god arbeidsvane ved å sitte sammen mens vi programmerte. Slik kunne vi raskt og effektiv få hverandre til å godta merge requester og kommentere eventuelle forbedringer.
+
+## Hva har ikke funket?
+På noen tidspunkter fikk vi veldig mange merge requests som vi ikke skulle merge enda. Dette skjedde fordi flere av merge requestene endret på de samme filene. Etter forrige innlevering ble vi enige om å lage brukerhistoriene tidlig i prosessen. Vi føler idéen var god, men siden de siste brukerhistoriene ble lagd så kort etter brukerhistoriene til innlevering 2 så ble de veldig like og dekket mye av de samme områdene. Noe som også ikke har funket særlig godt er at vi har måttet oppdatere og endre testene flere ganger av ulike grunner. Core testene måtte blant annet endres på en del ettersom kjernestrukturen gikk gjennom en ganske stor endring med implementasjonen av checklists, og flere av metodene byttet navn og virkemåte. Ui testene måtte deaktiveres store deler av denne arbeidsprosessen fordi controlleren gikk gjennom noen store endringer i hvordan den behandlet Board, Note og Checklist klassene. (Se strukturelle endringer)
+
+## Strukturelle endringer
+Vi endret alle getters i koden til å returnere en kopi av objektet istedenfor selve objektet. Dette gjorde vi for å sikre god innkapsling. Vi har også gjort det slik at hvert element på en oppslagstavle har en egen controller. Dette gjorde vi for å slippe å kjøre matematiske kalkulasjoner for å finne indeksen på et element hver gang det skulle gjøres endringer. Dette fungerte mye bedre enn metodene vi brukte før, men gjorde også at ui testene ble helt utdaterte.
