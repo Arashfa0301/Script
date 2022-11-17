@@ -38,14 +38,26 @@ public class BoardElementController {
         titleField.setPromptText("Title");
         titleField.setOnKeyReleased(event -> {
             boardElement.setTitle(titleField.getText());
+<<<<<<< HEAD
         });
 
         TextArea textField = new TextArea(((Note) boardElement).getContent());
+=======
+            listener.updateCurrentBoardElements();
+        });
+
+        TextArea textField = new TextArea(((Note) boardElement).getText());
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
         textField.setPromptText("Notes");
         textField.setWrapText(true);
         textField.setPrefSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_WIDTH);
         textField.setOnKeyReleased(event -> {
+<<<<<<< HEAD
             ((Note) boardElement).setContent(textField.getText());
+=======
+            ((Note) boardElement).setText(textField.getText());
+            listener.updateCurrentBoardElements();
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
         });
 
         HBox topPane = new HBox();
@@ -84,6 +96,10 @@ public class BoardElementController {
         titleField.setStyle("-fx-font-weight: bold; -fx-font-size: 14");
         titleField.setOnKeyReleased(event -> {
             boardElement.setTitle(titleField.getText());
+<<<<<<< HEAD
+=======
+            listener.updateCurrentBoardElements();
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
         });
         titleField.setPromptText("Title");
 
@@ -95,11 +111,19 @@ public class BoardElementController {
                     ((Checklist) getBoardElement()).getChecklistLines().get(listElements.indexOf(t)).getChecked());
             t.setOnKeyReleased((event) -> {
                 ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
+<<<<<<< HEAD
+=======
+                listener.updateCurrentBoardElements();
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
             });
             t.setOnKeyPressed(event -> {
                 if (event.getCode().equals(KeyCode.ENTER)) {
                     ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
                     ((Checklist) boardElement).addChecklistLine();
+<<<<<<< HEAD
+=======
+                    listener.updateCurrentBoardElements();
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
                     listener.drawBoardElementControllers();
                 }
             });
@@ -111,11 +135,19 @@ public class BoardElementController {
             ((Checklist) boardElement).addChecklistLine();
             t.setOnKeyReleased((event) -> {
                 ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
+<<<<<<< HEAD
+=======
+                listener.updateCurrentBoardElements();
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
             });
             t.setOnKeyPressed(event -> {
                 if (event.getCode().equals(KeyCode.ENTER)) {
                     ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
                     ((Checklist) boardElement).addChecklistLine();
+<<<<<<< HEAD
+=======
+                    listener.updateCurrentBoardElements();
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
                     listener.drawBoardElementControllers();
                 }
             });
@@ -159,6 +191,10 @@ public class BoardElementController {
                 } else {
                     checklist.setChecklistChecked(listElements.indexOf(e), false);
                 }
+<<<<<<< HEAD
+=======
+                listener.updateCurrentBoardElements();
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
                 listener.drawBoardElementControllers();
             });
             MFXButton delButton = new MFXButton("X");
@@ -168,6 +204,10 @@ public class BoardElementController {
             delButton.setVisible(false);
             delButton.setOnAction((event) -> {
                 checklist.removeChecklistLine(listElements.indexOf(e));
+<<<<<<< HEAD
+=======
+                listener.updateCurrentBoardElements();
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
                 listener.drawBoardElementControllers();
             });
             HBox hbox = new HBox();
@@ -183,6 +223,10 @@ public class BoardElementController {
         MFXButton addLineButton = new MFXButton("+");
         addLineButton.setOnAction(event -> {
             ((Checklist) boardElement).addChecklistLine();
+<<<<<<< HEAD
+=======
+            listener.updateCurrentBoardElements();
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
             listener.drawBoardElementControllers();
         });
         addLineButton.setStyle("-mfx-button-type: RAISED");

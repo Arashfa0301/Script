@@ -48,10 +48,17 @@ public class User {
             if (!Pattern.matches("^[A-Za-z0-9_.]+$", input) || input.isBlank() || input.isEmpty()) {
                 throw new IllegalArgumentException(String.format("Invalid input: %s", input));
             }
+<<<<<<< HEAD
         }
         if (password.isBlank() || password.isEmpty()) {
             throw new IllegalArgumentException("Invalid password");
         }
+=======
+        }
+        if (password.isBlank() || password.isEmpty()) {
+            throw new IllegalArgumentException("Invalid password");
+        }
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -69,11 +76,14 @@ public class User {
         return username;
     }
 
+<<<<<<< HEAD
     @JsonSetter("boards")
     public void setBoard(List<Board> boards) {
         this.boards = boards;
     }
 
+=======
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
     /**
      * Gets the User's password.
      *
@@ -81,6 +91,7 @@ public class User {
      */
     public String getPassword() {
         return password;
+<<<<<<< HEAD
     }
 
     /**
@@ -114,6 +125,41 @@ public class User {
     }
 
     /**
+=======
+    }
+
+    /**
+     * Sets the User's password.
+     *
+     * @param password a String that will become the User's new password
+     */
+    @JsonSetter("password")
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * Gets the User's first name.
+     *
+     * @return the User's first name as a String
+     */
+    @JsonGetter("firstName")
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * Gets the User's last name.
+     *
+     * @return the User's last name as a String
+     */
+    @JsonGetter("lastName")
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
      * Gets the User's boards.
      *
      * @return the User's boards as a List
@@ -129,14 +175,18 @@ public class User {
             }
         }
         throw new IllegalArgumentException("Board not found");
+<<<<<<< HEAD
     }
 
     public Board getBoard(int index) {
         return boards.get(index);
+=======
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
     }
 
     public void setBoards(List<Board> boards) {
         this.boards = new ArrayList<Board>(boards);
+<<<<<<< HEAD
     }
 
     public void addBoard(String boardname) {
@@ -156,6 +206,23 @@ public class User {
         boards.remove(getBoard(boardname));
     }
 
+=======
+    }
+
+    public void addBoard(String boardname) {
+        for (Board board : boards) {
+            if (board.getBoardName().equals(boardname)) {
+                throw new IllegalArgumentException("Board already exists");
+            }
+        }
+        boards.add(new Board(boardname, "", new ArrayList<Note>(), new ArrayList<Checklist>()));
+    }
+
+    public void removeBoard(String boardname) throws IllegalArgumentException {
+        boards.remove(getBoard(boardname));
+    }
+
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
     public void renameBoard(String oldBoardname, String newBoardname) throws IllegalArgumentException {
         Board board = getBoard(oldBoardname);
         board.setBoardName(newBoardname);

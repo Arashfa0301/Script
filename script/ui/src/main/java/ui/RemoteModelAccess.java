@@ -1,8 +1,12 @@
 package ui;
 
+<<<<<<< HEAD
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.main.Board;
+=======
+import com.fasterxml.jackson.databind.ObjectMapper;
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
 import core.main.User;
 
 import java.io.IOException;
@@ -32,7 +36,10 @@ public class RemoteModelAccess implements ModelAccess {
 
     @Override
     public void register(String firstName, String lastName, String username, String password) throws RuntimeException {
+<<<<<<< HEAD
         System.out.println(String.format("[RemoteModelAccess] Creating new user with username %s", username));
+=======
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(endpointBaseUri.resolve("/auth/register/"))
@@ -54,7 +61,10 @@ public class RemoteModelAccess implements ModelAccess {
 
     @Override
     public User getUser(String username, String password) {
+<<<<<<< HEAD
         System.out.println(String.format("[RemoteModelAccess] Getting user class for %s", username));
+=======
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(endpointBaseUri.resolve(String.format("/user/%s/", username)))
@@ -77,6 +87,7 @@ public class RemoteModelAccess implements ModelAccess {
             throw new IllegalArgumentException(e);
         }
     }
+<<<<<<< HEAD
 
     @Override
     public void createBoard(String boardname, String username, String password) throws IllegalArgumentException {
@@ -154,4 +165,6 @@ public class RemoteModelAccess implements ModelAccess {
             throw new RuntimeException(e);
         }
     }
+=======
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
 }

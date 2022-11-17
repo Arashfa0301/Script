@@ -24,7 +24,11 @@ public class NoteTest {
 
     @Test
     @DisplayName("Test set text")
+<<<<<<< HEAD
     public void testsetContent() {
+=======
+    public void testSetText() {
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
         Note note = new Note();
 
         // Tests if setContent() works from empty string
@@ -51,6 +55,40 @@ public class NoteTest {
     }
 
     @Test
+<<<<<<< HEAD
+=======
+    @DisplayName("Test set color")
+    public void testSetColor() {
+        Note note = new Note();
+
+        // Test for an illegal color choice
+        assertThrows(IllegalArgumentException.class, () -> {
+            note.setColor("no color");
+        });
+
+    }
+
+    @Test
+    @DisplayName("Test get color values")
+    public void testGetColorValues() {
+        Note note = new Note();
+
+        // Test RGB values for default color
+        List<Integer> colorValues = note.getColorValues();
+        assertEquals(colorValues.get(0), 255);
+        assertEquals(colorValues.get(1), 255);
+        assertEquals(colorValues.get(2), 255);
+
+        // Test RGB values for new color
+        note.setColor("red");
+        colorValues = note.getColorValues();
+        assertEquals(colorValues.get(0), 255);
+        assertEquals(colorValues.get(1), 0);
+        assertEquals(colorValues.get(2), 0);
+    }
+
+    @Test
+>>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
     @DisplayName("Test pin")
     public void testPin() {
         Note note = new Note();
