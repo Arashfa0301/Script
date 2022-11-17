@@ -1,13 +1,11 @@
 package ui;
 
+import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
@@ -29,7 +27,7 @@ public class LoginController {
     private TextField usernameField, invalidField;
 
     @FXML
-    private PasswordField passwordField;
+    private MFXPasswordField passwordField;
 
     @FXML
     private void initialize() {
@@ -58,15 +56,6 @@ public class LoginController {
     @FXML
     private void swapToRegisterScreen(ActionEvent ae) throws IOException {
         windowManager.switchScreen(ae, "Register.fxml");
-    }
-
-    @FXML
-    private void handleEnter(KeyEvent ke) {
-        if (ke.getCode().equals(KeyCode.ENTER)) {
-            if (!loginButton.isDisabled()) {
-                loginButton.fire();
-            }
-        }
     }
 
     @FXML
