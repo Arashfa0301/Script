@@ -55,14 +55,6 @@ public class Board {
         return new ArrayList<Note>(notes);
     }
 
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
-    }
-
-    public void setChecklists(List<Checklist> checklists) {
-        this.checklists = checklists;
-    }
-
     /**
      * Gets all the checklists that the board contains.
      *
@@ -103,9 +95,7 @@ public class Board {
      *                                  elements
      */
     public void addNote(Note note) {
-        if (note == null || getNotes().size() + getChecklists().size() >= MAX_ELEMENTS) {
-            throw new IllegalArgumentException("The number of notes exceed the maximum amount");
-        }
+        checkAddBoardElement(note);
         notes.add(note);
     }
 
@@ -118,9 +108,7 @@ public class Board {
      *                                  elements
      */
     public void addChecklist(Checklist checklist) {
-        if (checklist == null || getChecklists().size() + getNotes().size() >= MAX_ELEMENTS) {
-            throw new IllegalArgumentException("The number of checklits exceed the maximum amount");
-        }
+        checkAddBoardElement(checklist);
         checklists.add(checklist);
     }
 
@@ -148,6 +136,23 @@ public class Board {
     private void checkValidInputString(String input) {
         if (input.isEmpty() || input.length() > 20) {
             throw new IllegalArgumentException("Invalid argument");
+        }
+    }
+
+    /**
+     * Checks if the boardElement is empty and if there exists free space for it in
+     * either of the lists.
+     *
+     * @param input a BoardElement to be checked
+     * @throws IllegalArgumentException if <code>input</code> is
+     *                                  <code>null</code> or
+     *                                  <code>getChecklists().size()</code> and
+     *                                  <code>getNotes().size()</code> is bigger
+     *                                  than <code>MAX_ELEMENTS</code>
+     */
+    private void checkAddBoardElement(BoardElement boardElement) {
+        if (boardElement == null || getChecklists().size() + getNotes().size() >= MAX_ELEMENTS) {
+            throw new IllegalArgumentException("The number of checklits exceed the maximum amount");
         }
     }
 

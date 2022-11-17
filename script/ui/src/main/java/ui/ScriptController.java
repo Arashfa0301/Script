@@ -150,10 +150,8 @@ public class ScriptController {
             throw new IllegalArgumentException(e);
         }
 
-        Board newBoard = new Board(boardName.getText(), "", new ArrayList<Note>(),
-                new ArrayList<Checklist>());
-        user.addBoard(newBoard);
-        createBoardButton(newBoard, user.getBoards().size() - 1);
+        user.addBoard(boardName.getText());
+        createBoardButton(boardName.getText(), user.getBoards().size() - 1);
         boardName.clear();
         newBoardButtonEnable();
     }
@@ -213,13 +211,13 @@ public class ScriptController {
     public void loadBoardButtons(List<Board> boards) throws IOException {
         boardGrid.getChildren().clear();
         IntStream.range(0, boards.size()).forEach(i -> {
-            createBoardButton(boards.get(i), i);
+            createBoardButton(boards.get(i).getBoardName(), i);
         });
         boardGrid.setStyle("-fx-background-color: transparent");
     }
 
-    private void createBoardButton(Board board, int index) {
-        Button button = new Button(board.getBoardName());
+    private void createBoardButton(String boardName, int index) {
+        Button button = new Button(boardName);
         button.wrapTextProperty().setValue(true);
         button.setStyle("-fx-background-color: transparent; -fx-alignment: center-left;");
         button.setPadding(new Insets(0, 0, 0, 0));
@@ -231,7 +229,7 @@ public class ScriptController {
                 e.printStackTrace();
             }
         });
-        button.setId(board.getBoardName());
+        button.setId(boardName);
         button.setMaxWidth(BUTTON_WIDTH);
         MFXButton deleteButton = new MFXButton("X");
         deleteButton.setCursor(Cursor.HAND);
