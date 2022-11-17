@@ -2,7 +2,8 @@ package core.main;
 
 public abstract class BoardElement {
 
-    private String title;
+    private static final int TITLE_LIMIT = 23;
+    private String title = "";
     private boolean isPinned = false;
 
     /**
@@ -10,8 +11,6 @@ public abstract class BoardElement {
      * <code>isPinned = false</code> by default.
      */
     public BoardElement() {
-        title = "";
-        isPinned = false;
     }
 
     /**
@@ -20,6 +19,9 @@ public abstract class BoardElement {
      * @param title a String that becomes the title of the board element
      */
     public void setTitle(String title) {
+        if (title.length() > TITLE_LIMIT) {
+            throw new IllegalArgumentException("The title length should not exceed 20 characters");
+        }
         this.title = title;
     }
 
