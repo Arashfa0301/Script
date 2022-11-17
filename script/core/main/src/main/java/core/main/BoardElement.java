@@ -1,5 +1,8 @@
 package core.main;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 public abstract class BoardElement {
 
     private static final int TITLE_LIMIT = 23;
@@ -18,6 +21,7 @@ public abstract class BoardElement {
      *
      * @param title a String that becomes the title of the board element
      */
+    @JsonSetter("title")
     public void setTitle(String title) {
         if (title.length() > TITLE_LIMIT) {
             throw new IllegalArgumentException("The title length should not exceed 20 characters");
@@ -30,6 +34,7 @@ public abstract class BoardElement {
      *
      * @return the title of the board element as a String
      */
+    @JsonGetter("title")
     public String getTitle() {
         return title;
     }
@@ -37,15 +42,9 @@ public abstract class BoardElement {
     /**
      * Pins the board element, which prioritizes it over other board elements.
      */
-    public void pin() {
-        isPinned = true;
-    }
-
-    /**
-     * Removes the board element's priority over other board elements.
-     */
-    public void unPin() {
-        isPinned = false;
+    @JsonSetter("isPinned")
+    public void setIsPinned(Boolean pinned) {
+        isPinned = pinned;
     }
 
     /**
@@ -54,8 +53,8 @@ public abstract class BoardElement {
      * @return <code>true</code> if board element is pinned, otherwise
      *         <code>false</code>
      */
+    @JsonGetter("isPinned")
     public boolean isPinned() {
         return isPinned;
     }
-
 }

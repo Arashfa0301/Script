@@ -4,7 +4,6 @@ import core.main.Board;
 import core.main.Checklist;
 import core.main.Note;
 import core.main.User;
-import data.DataHandler;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,7 +40,7 @@ public class ScriptController {
 
     private int columnsCount = 1;
 
-    private DataHandler datahandler = new DataHandler();
+    private RemoteModelAccess remoteModelAccess;
 
     @FXML
     private GridPane boardGrid, noteGrid;
@@ -71,9 +70,9 @@ public class ScriptController {
     @FXML
     private void initialize() {
         scriptSplitPane.setPrefSize(Globals.windowWidth, Globals.windowHeight);
-        datahandler = new DataHandler();
+        remoteModelAccess = new RemoteModelAccess();
         user = Globals.user;
-        username.setText(user.getUsername());
+        username.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
         exampleMail.setText(user.getUsername().toLowerCase() + "@example.com");
         noteScrollPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             int oldColumnsCount = columnsCount;
@@ -97,6 +96,9 @@ public class ScriptController {
 
     @FXML
     private void onBoardButtonClick(ActionEvent ae) throws IOException {
+        if (currentBoard != null) {
+            saveBoard(currentBoard);
+        }
         Board selectedBoard = user.getBoards().stream()
                 .filter(board -> board.getBoardName().equals(((Button) ae.getSource()).getText()))
                 .findFirst()
@@ -128,41 +130,32 @@ public class ScriptController {
         if (checkBoardName(field)) {
             button.setText(field.getText());
             currentBoard.setBoardName(field.getText());
-            save();
         }
     }
 
     @FXML
     private void editBoardDescription(KeyEvent event) throws IOException {
         currentBoard.setBoardDescription(((TextField) event.getSource()).getText());
-        save();
     }
 
-    private void save() {
-        if (!(currentBoard == null)) {
-            currentBoard.clearCheckLists();
-            currentBoard.clearNotes();
-            boardElementControllers.stream().map(c -> c.getBoardElement()).forEach(element -> {
-                if (element instanceof Note) {
-                    Note note = (Note) element;
-                    currentBoard.addNote(note);
-                } else if (element instanceof Checklist) {
-                    Checklist checklist = (Checklist) element;
-                    currentBoard.addChecklist(checklist);
-                }
-            });
-        }
-        datahandler.write(user);
+    private void saveBoard(Board board) {
+        remoteModelAccess.putBoard(board, user.getUsername(), user.getPassword());
     }
 
     @FXML
     public void createBoard() {
-        Board newBoard = new Board(boardName.getText(), "", new ArrayList<Note>(), new ArrayList<Checklist>());
+        try {
+            remoteModelAccess.createBoard(boardName.getText(), user.getUsername(), user.getPassword());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e);
+        }
+
+        Board newBoard = new Board(boardName.getText(), "", new ArrayList<Note>(),
+                new ArrayList<Checklist>());
         user.addBoard(newBoard);
         createBoardButton(newBoard, user.getBoards().size() - 1);
         boardName.clear();
         newBoardButtonEnable();
-        save();
     }
 
     @FXML
@@ -172,7 +165,6 @@ public class ScriptController {
         boardElementControllers.add(new BoardElementController(note, this));
         drawBoardElementControllers();
         update();
-        save();
     }
 
     @FXML
@@ -182,7 +174,6 @@ public class ScriptController {
         boardElementControllers.add(new BoardElementController(checklist, this));
         drawBoardElementControllers();
         update();
-        save();
     }
 
     @FXML
@@ -192,6 +183,9 @@ public class ScriptController {
 
     @FXML
     private void handleLogoutButton(ActionEvent ae) throws IOException {
+        if (currentBoard != null) {
+            saveBoard(currentBoard);
+        }
         switchScreen(ae, "Login.fxml");
     }
 
@@ -256,10 +250,16 @@ public class ScriptController {
     private void deleteBoard(ActionEvent ae) throws IOException {
         Button button = (Button) ae.getSource();
         int index = GridPane.getRowIndex(button);
-        user.removeBoard(index);
+        Button boardButton = (Button) boardGrid.getChildren().get(index * 2);
+        String boardName = boardButton.getText();
+        try {
+            remoteModelAccess.removeBoard(boardName, user.getUsername(), user.getPassword());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e);
+        }
+        user.removeBoard(boardName);
         loadBoardButtons(user.getBoards());
         update();
-        save();
     }
 
     private void update() {
@@ -276,7 +276,6 @@ public class ScriptController {
     }
 
     public void drawBoardElementControllers() {
-
         noteGrid.getChildren().clear();
         noteGrid.getColumnConstraints().clear();
         noteGrid.getRowConstraints().clear();
@@ -298,14 +297,20 @@ public class ScriptController {
         });
     }
 
-    public void updateCurrentBoardElements() {
-        save();
-    }
-
     public void removeBoardElement(BoardElementController boardElementController) {
         boardElementControllers.remove(boardElementController);
+        currentBoard.clearCheckLists();
+        currentBoard.clearNotes();
+        boardElementControllers.stream().map(c -> c.getBoardElement()).forEach(element -> {
+            if (element instanceof Note) {
+                Note note = (Note) element;
+                currentBoard.addNote(note);
+            } else if (element instanceof Checklist) {
+                Checklist checklist = (Checklist) element;
+                currentBoard.addChecklist(checklist);
+            }
+        });
         drawBoardElementControllers();
-        save();
     }
 
     protected Button getNewBoardButton() {

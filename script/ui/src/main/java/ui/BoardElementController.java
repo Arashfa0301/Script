@@ -39,22 +39,19 @@ public class BoardElementController {
         titleField.setOnKeyReleased(event -> {
             try {
                 boardElement.setTitle(titleField.getText());
-                listener.updateCurrentBoardElements();
             } catch (IllegalArgumentException e) {
                 titleField.setText(titleField.getText().substring(0, TITLE_LIMIT));
                 titleField.positionCaret(TITLE_LIMIT);
                 boardElement.setTitle(titleField.getText());
-                listener.updateCurrentBoardElements();
             }
         });
 
-        TextArea textArea = new TextArea(((Note) boardElement).getText());
+        TextArea textArea = new TextArea(((Note) boardElement).getContent());
         textArea.setPromptText("Notes");
         textArea.setWrapText(true);
         textArea.setPrefSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_WIDTH);
         textArea.setOnKeyReleased(event -> {
-            ((Note) boardElement).setText(textArea.getText());
-            listener.updateCurrentBoardElements();
+            ((Note) boardElement).setContent(textArea.getText());
         });
 
         HBox topPane = new HBox();
@@ -93,18 +90,15 @@ public class BoardElementController {
         titleField.setStyle("-fx-font-weight: bold; -fx-font-size: 14");
         titleField.setOnKeyReleased(event -> {
             boardElement.setTitle(titleField.getText());
-            listener.updateCurrentBoardElements();
         });
         titleField.setPromptText("Title");
         titleField.setOnKeyReleased(event -> {
             try {
                 boardElement.setTitle(titleField.getText());
-                listener.updateCurrentBoardElements();
             } catch (IllegalArgumentException e) {
                 titleField.setText(titleField.getText().substring(0, TITLE_LIMIT));
                 titleField.positionCaret(TITLE_LIMIT);
                 boardElement.setTitle(titleField.getText());
-                listener.updateCurrentBoardElements();
             }
         });
 
@@ -116,13 +110,11 @@ public class BoardElementController {
                     ((Checklist) getBoardElement()).getChecklistLines().get(listElements.indexOf(t)).getChecked());
             t.setOnKeyReleased((event) -> {
                 ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
-                listener.updateCurrentBoardElements();
             });
             t.setOnKeyPressed(event -> {
                 if (event.getCode().equals(KeyCode.ENTER)) {
                     ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
                     ((Checklist) boardElement).addChecklistLine();
-                    listener.updateCurrentBoardElements();
                     listener.drawBoardElementControllers();
                 }
             });
@@ -134,13 +126,11 @@ public class BoardElementController {
             ((Checklist) boardElement).addChecklistLine();
             t.setOnKeyReleased((event) -> {
                 ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
-                listener.updateCurrentBoardElements();
             });
             t.setOnKeyPressed(event -> {
                 if (event.getCode().equals(KeyCode.ENTER)) {
                     ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
                     ((Checklist) boardElement).addChecklistLine();
-                    listener.updateCurrentBoardElements();
                     listener.drawBoardElementControllers();
                 }
             });
@@ -184,7 +174,6 @@ public class BoardElementController {
                 } else {
                     checklist.setChecklistChecked(listElements.indexOf(e), false);
                 }
-                listener.updateCurrentBoardElements();
                 listener.drawBoardElementControllers();
             });
             MFXButton delButton = new MFXButton("X");
@@ -194,7 +183,6 @@ public class BoardElementController {
             delButton.setVisible(false);
             delButton.setOnAction((event) -> {
                 checklist.removeChecklistLine(listElements.indexOf(e));
-                listener.updateCurrentBoardElements();
                 listener.drawBoardElementControllers();
             });
             HBox hbox = new HBox();
@@ -210,7 +198,6 @@ public class BoardElementController {
         MFXButton addLineButton = new MFXButton("+");
         addLineButton.setOnAction(event -> {
             ((Checklist) boardElement).addChecklistLine();
-            listener.updateCurrentBoardElements();
             listener.drawBoardElementControllers();
         });
         addLineButton.setStyle("-mfx-button-type: RAISED");
