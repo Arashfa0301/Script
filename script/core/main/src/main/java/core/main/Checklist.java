@@ -1,9 +1,9 @@
 package core.main;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Checklist extends BoardElement {
 
@@ -24,7 +24,14 @@ public class Checklist extends BoardElement {
      *
      */
     public List<ChecklistLine> getChecklistLines() {
-        orderLines();
+        Collections.sort(checklistLines, new Comparator<ChecklistLine>() {
+
+            @Override
+            public int compare(ChecklistLine o1, ChecklistLine o2) {
+                return (o1.isChecked().equals(o2.isChecked())) ? 1 : o1.isChecked() ? 1 : -1;
+            }
+
+        });
         return new ArrayList<ChecklistLine>(checklistLines);
     }
 
@@ -66,19 +73,7 @@ public class Checklist extends BoardElement {
      *         <code>true</code> for the list <code>checklistLines</code>
      */
     public boolean isEmpty() {
-        return (getTitle().isBlank() && checklistLines.isEmpty());
-    }
-
-    /**
-     * Orders the lines in a Checklist depending on wether or not their
-     * <code>checked</code> boolean is <code>true</code> or <code>false</code>.
-     */
-    public void orderLines() {
-        checklistLines = Stream.concat(
-                checklistLines.stream().filter(line -> !line.getChecked()).collect(Collectors.toList()).stream(),
-                checklistLines.stream().filter(line -> line.getChecked()).collect(Collectors.toList())
-                        .stream())
-                .collect(Collectors.toList());
+        return getTitle().isBlank() && checklistLines.isEmpty();
     }
 
     /**
@@ -88,7 +83,6 @@ public class Checklist extends BoardElement {
      *          to remove
      */
     public void removeChecklistLine(int i) {
-        orderLines();
         checklistLines.remove(i);
     }
 
