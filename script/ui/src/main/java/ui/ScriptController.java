@@ -7,12 +7,8 @@ import core.main.User;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
@@ -23,7 +19,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,11 +62,12 @@ public class ScriptController {
 
     private List<BoardElementController> boardElementControllers = new ArrayList<>();
 
+    private WindowManager windowManager = new WindowManager();
+
     @FXML
     private void initialize() {
         scriptSplitPane.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         remoteModelAccess = new RemoteModelAccess();
-        user = Globals.user;
         username.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
         exampleMail.setText(user.getUsername().toLowerCase() + "@example.com");
         noteScrollPane.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -113,7 +109,7 @@ public class ScriptController {
         currentBoard.getNotes().stream()
                 .forEach(boardElement -> boardElementControllers.add(new BoardElementController(boardElement, this)));
         drawBoardElementControllers();
-        update();
+        updateScreen();
     }
 
     @FXML
@@ -143,7 +139,7 @@ public class ScriptController {
     }
 
     @FXML
-    public void createBoard() {
+    private void createBoard() {
         try {
             remoteModelAccess.createBoard(boardName.getText(), user.getUsername(), user.getPassword());
         } catch (IllegalArgumentException e) {
@@ -162,7 +158,7 @@ public class ScriptController {
         currentBoard.addNote(note);
         boardElementControllers.add(new BoardElementController(note, this));
         drawBoardElementControllers();
-        update();
+        updateScreen();
     }
 
     @FXML
@@ -171,7 +167,7 @@ public class ScriptController {
         currentBoard.addChecklist(checklist);
         boardElementControllers.add(new BoardElementController(checklist, this));
         drawBoardElementControllers();
-        update();
+        updateScreen();
     }
 
     @FXML
@@ -184,15 +180,7 @@ public class ScriptController {
         if (currentBoard != null) {
             saveBoard(currentBoard);
         }
-        switchScreen(ae, "Login.fxml");
-    }
-
-    private void switchScreen(ActionEvent ae, String file) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(file));
-        Stage stage = (Stage) ((Node) ae.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        windowManager.switchScreen(ae, "Login.fxml");
     }
 
     private void newBoardButtonEnable() {
@@ -208,7 +196,7 @@ public class ScriptController {
         });
     }
 
-    public void loadBoardButtons(List<Board> boards) throws IOException {
+    private void loadBoardButtons(List<Board> boards) throws IOException {
         boardGrid.getChildren().clear();
         IntStream.range(0, boards.size()).forEach(i -> {
             createBoardButton(boards.get(i).getBoardName(), i);
@@ -246,10 +234,8 @@ public class ScriptController {
 
     @FXML
     private void deleteBoard(ActionEvent ae) throws IOException {
-        Button button = (Button) ae.getSource();
-        int index = GridPane.getRowIndex(button);
-        Button boardButton = (Button) boardGrid.getChildren().get(index * 2);
-        String boardName = boardButton.getText();
+        String boardName = ((Button) boardGrid.getChildren().get(GridPane.getRowIndex((Button) ae.getSource()) * 2))
+                .getText();
         try {
             remoteModelAccess.removeBoard(boardName, user.getUsername(), user.getPassword());
         } catch (IllegalArgumentException e) {
@@ -257,10 +243,10 @@ public class ScriptController {
         }
         user.removeBoard(boardName);
         loadBoardButtons(user.getBoards());
-        update();
+        updateScreen();
     }
 
-    private void update() {
+    private void updateScreen() {
         if (!(currentBoard == null)) {
             newNoteButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS);
             newChecklistButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS);
@@ -301,11 +287,9 @@ public class ScriptController {
         currentBoard.clearNotes();
         boardElementControllers.stream().map(c -> c.getBoardElement()).forEach(element -> {
             if (element instanceof Note) {
-                Note note = (Note) element;
-                currentBoard.addNote(note);
+                currentBoard.addNote((Note) element);
             } else if (element instanceof Checklist) {
-                Checklist checklist = (Checklist) element;
-                currentBoard.addChecklist(checklist);
+                currentBoard.addChecklist((Checklist) element);
             }
         });
         drawBoardElementControllers();
