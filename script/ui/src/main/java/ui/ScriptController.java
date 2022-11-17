@@ -118,7 +118,7 @@ public class ScriptController {
 
     @FXML
     private void handleBoardNameEnter(KeyEvent ke) {
-        if (ke.getCode().equals(KeyCode.ENTER) && checkNewBoardName()) {
+        if (ke.getCode().equals(KeyCode.ENTER) && checkBoardName(boardName)) {
             createBoard();
         }
     }
@@ -127,7 +127,7 @@ public class ScriptController {
     private void editBoardTitle(KeyEvent event) throws IOException {
         Button button = (Button) boardGrid.getChildren().get(user.getBoards().indexOf(currentBoard) * 2);
         TextField field = (TextField) event.getSource();
-        if (!field.getText().isBlank()) {
+        if (checkBoardName(field)) {
             button.setText(field.getText());
             currentBoard.setBoardName(field.getText());
         }
@@ -198,7 +198,7 @@ public class ScriptController {
     }
 
     private void newBoardButtonEnable() {
-        newBoardButton.setDisable(checkNewBoardName() ? false : true);
+        newBoardButton.setDisable(!checkBoardName(boardName));
     }
 
     private void createWindowSizeListener() {
@@ -234,8 +234,6 @@ public class ScriptController {
         button.setId(board.getBoardName());
         button.setMaxWidth(BUTTON_WIDTH);
         MFXButton deleteButton = new MFXButton("X");
-        // deleteButton.setShape(new Circle(1));
-        // deleteButton.setStyle("-mfx-button-type: RAISED");
         deleteButton.setCursor(Cursor.HAND);
         deleteButton.setStyle("-fx-background-color: transparent; -fx-border-color: black;");
         deleteButton.setOnAction((event) -> {
@@ -266,15 +264,15 @@ public class ScriptController {
 
     private void update() {
         if (!(currentBoard == null)) {
-            newNoteButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS ? true : false);
-            newChecklistButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS ? true : false);
-            noteScreen.setVisible(!user.getBoards().contains(currentBoard) ? false : true);
+            newNoteButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS);
+            newChecklistButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS);
+            noteScreen.setVisible(user.getBoards().contains(currentBoard));
         }
     }
 
-    private Boolean checkNewBoardName() {
-        return !(boardName.getText().isBlank() || user.getBoards().stream().map(board -> (board.getBoardName()))
-                .collect(Collectors.toList()).contains(boardName.getText()));
+    private Boolean checkBoardName(TextField textField) {
+        return !(textField.getText().isBlank() || user.getBoards().stream().map(board -> (board.getBoardName()))
+                .collect(Collectors.toList()).contains(textField.getText()));
     }
 
     public void drawBoardElementControllers() {

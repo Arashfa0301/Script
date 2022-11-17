@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 public abstract class BoardElement {
 
+    private static final int TITLE_LIMIT = 23;
     private String title = "";
     private boolean isPinned = false;
 
@@ -22,6 +23,9 @@ public abstract class BoardElement {
      */
     @JsonSetter("title")
     public void setTitle(String title) {
+        if (title.length() > TITLE_LIMIT) {
+            throw new IllegalArgumentException("The title length should not exceed 20 characters");
+        }
         this.title = title;
     }
 

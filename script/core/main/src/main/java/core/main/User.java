@@ -122,13 +122,17 @@ public class User {
         return new ArrayList<Board>(boards);
     }
 
-    private Board getBoard(String boardname) throws IllegalArgumentException {
+    public void addBoard(Board board) {
+        boards.add(board);
+    }
+
+    public void addBoard(String boardname) {
         for (Board board : boards) {
             if (board.getBoardName().equals(boardname)) {
-                return board;
+                throw new IllegalArgumentException("Board already exists");
             }
         }
-        throw new IllegalArgumentException("Board not found");
+        boards.add(new Board(boardname, "", new ArrayList<Note>(), new ArrayList<Checklist>()));
     }
 
     public Board getBoard(int index) {
@@ -139,13 +143,17 @@ public class User {
         this.boards = new ArrayList<Board>(boards);
     }
 
-    public void addBoard(String boardname) {
+    public void removeBoard(String boardname) throws IllegalArgumentException {
+        boards.remove(getBoard(boardname));
+    }
+
+    private Board getBoard(String boardname) throws IllegalArgumentException {
         for (Board board : boards) {
             if (board.getBoardName().equals(boardname)) {
-                throw new IllegalArgumentException("Board already exists");
+                return board;
             }
         }
-        boards.add(new Board(boardname, "", new ArrayList<Note>(), new ArrayList<Checklist>()));
+        throw new IllegalArgumentException("Board not found");
     }
 
     public void addBoard(Board board) {

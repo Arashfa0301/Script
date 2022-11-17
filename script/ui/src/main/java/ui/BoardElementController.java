@@ -20,7 +20,7 @@ import java.util.List;
 
 public class BoardElementController {
 
-    protected static final int BOARD_ELEMENT_WIDTH = 200, BOARD_ELEMENT_HEIGHT = 230;
+    protected static final int BOARD_ELEMENT_WIDTH = 200, BOARD_ELEMENT_HEIGHT = 230, TITLE_LIMIT = 23;
 
     private BoardElement boardElement;
 
@@ -37,15 +37,24 @@ public class BoardElementController {
         titleField.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
         titleField.setPromptText("Title");
         titleField.setOnKeyReleased(event -> {
-            boardElement.setTitle(titleField.getText());
+            try {
+                boardElement.setTitle(titleField.getText());
+                listener.updateCurrentBoardElements();
+            } catch (IllegalArgumentException e) {
+                titleField.setText(titleField.getText().substring(0, TITLE_LIMIT));
+                titleField.positionCaret(TITLE_LIMIT);
+                boardElement.setTitle(titleField.getText());
+                listener.updateCurrentBoardElements();
+            }
         });
 
-        TextArea textField = new TextArea(((Note) boardElement).getContent());
-        textField.setPromptText("Notes");
-        textField.setWrapText(true);
-        textField.setPrefSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_WIDTH);
-        textField.setOnKeyReleased(event -> {
-            ((Note) boardElement).setContent(textField.getText());
+        TextArea textArea = new TextArea(((Note) boardElement).getText());
+        textArea.setPromptText("Notes");
+        textArea.setWrapText(true);
+        textArea.setPrefSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_WIDTH);
+        textArea.setOnKeyReleased(event -> {
+            ((Note) boardElement).setText(textArea.getText());
+            listener.updateCurrentBoardElements();
         });
 
         HBox topPane = new HBox();
@@ -54,7 +63,7 @@ public class BoardElementController {
         notePane.getChildren().add(topPane);
         notePane.setPrefSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_HEIGHT);
         notePane.setMaxSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_HEIGHT);
-        notePane.getChildren().add(textField);
+        notePane.getChildren().add(textArea);
         topPane.getChildren().add(titleField);
 
         MFXButton deleteButton = new MFXButton("X");
@@ -86,6 +95,17 @@ public class BoardElementController {
             boardElement.setTitle(titleField.getText());
         });
         titleField.setPromptText("Title");
+        titleField.setOnKeyReleased(event -> {
+            try {
+                boardElement.setTitle(titleField.getText());
+                listener.updateCurrentBoardElements();
+            } catch (IllegalArgumentException e) {
+                titleField.setText(titleField.getText().substring(0, TITLE_LIMIT));
+                titleField.positionCaret(TITLE_LIMIT);
+                boardElement.setTitle(titleField.getText());
+                listener.updateCurrentBoardElements();
+            }
+        });
 
         List<TextField> listElements = new ArrayList<>();
         ((Checklist) boardElement).getChecklistLines().stream().forEach(element -> {
