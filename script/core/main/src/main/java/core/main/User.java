@@ -122,65 +122,38 @@ public class User {
         return new ArrayList<Board>(boards);
     }
 
-    public void addBoard(Board board) {
-        boards.add(board);
-    }
-
-    public void addBoard(String boardname) {
-        for (Board board : boards) {
-            if (board.getBoardName().equals(boardname)) {
-                throw new IllegalArgumentException("Board already exists");
-            }
-        }
+    public void addBoard(String boardname) throws IllegalArgumentException {
+        checkUserContainsBoard(boardname);
         boards.add(new Board(boardname, "", new ArrayList<Note>(), new ArrayList<Checklist>()));
     }
 
-    public Board getBoard(int index) {
-        return boards.get(index);
-    }
-
-    private Board getBoard(String boardname) throws IllegalArgumentException {
-        for (Board board : boards) {
-            if (board.getBoardName().equals(boardname)) {
-                return board;
-            }
-        }
-        throw new IllegalArgumentException("Board not found");
-    }
-
-    public void setBoards(List<Board> boards) {
-        this.boards = new ArrayList<Board>(boards);
+    public void putBoard(Board board, String boardname) throws IllegalArgumentException {
+        checkUserContainsBoard(board.getBoardName());
+        boards.set(
+                boards.indexOf(
+                        getBoard(board.getBoardName())),
+                board);
     }
 
     public void removeBoard(String boardname) throws IllegalArgumentException {
+        checkUserContainsBoard(boardname);
         boards.remove(getBoard(boardname));
     }
 
     public void renameBoard(String oldBoardname, String newBoardname) throws IllegalArgumentException {
-        Board board = getBoard(oldBoardname);
-        board.setBoardName(newBoardname);
+        checkUserContainsBoard(oldBoardname);
+        getBoard(oldBoardname).setBoardName(newBoardname);
     }
 
-    public void addNote(String boardname) throws IllegalArgumentException {
-        getBoard(boardname).addNote(new Note());
+    private Board getBoard(String boardname) throws IllegalArgumentException {
+        return boards.stream().filter(b -> b.getBoardName().equals(boardname)).findAny()
+                .orElseThrow(IllegalArgumentException::new);
     }
 
-    public void removeNote(String boardname, int index) throws IllegalArgumentException {
-        getBoard(boardname).getNotes().remove(index);
-    }
-
-    public void putBoard(Board board, String boardname) throws IllegalArgumentException {
-        // replace the board with the same name
-        int index = -1;
-        for (int i = 0; i < boards.size(); i++) {
-            if (boards.get(i).getBoardName().equals(board.getBoardName())) {
-                index = i;
-            }
-        }
-        if (index == -1) {
+    private void checkUserContainsBoard(String boardName) {
+        if (!boards.stream().anyMatch(b -> b.getBoardName().equals(boardName))) {
             throw new IllegalArgumentException("Board not found");
-        } else {
-            boards.set(index, board);
         }
     }
+
 }
