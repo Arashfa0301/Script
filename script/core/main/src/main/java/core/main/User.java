@@ -139,14 +139,6 @@ public class User {
         return boards.get(index);
     }
 
-    public void setBoards(List<Board> boards) {
-        this.boards = new ArrayList<Board>(boards);
-    }
-
-    public void removeBoard(String boardname) throws IllegalArgumentException {
-        boards.remove(getBoard(boardname));
-    }
-
     private Board getBoard(String boardname) throws IllegalArgumentException {
         for (Board board : boards) {
             if (board.getBoardName().equals(boardname)) {
@@ -156,8 +148,8 @@ public class User {
         throw new IllegalArgumentException("Board not found");
     }
 
-    public void addBoard(Board board) {
-        boards.add(board);
+    public void setBoards(List<Board> boards) {
+        this.boards = new ArrayList<Board>(boards);
     }
 
     public void removeBoard(String boardname) throws IllegalArgumentException {

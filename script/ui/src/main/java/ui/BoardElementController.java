@@ -39,22 +39,19 @@ public class BoardElementController {
         titleField.setOnKeyReleased(event -> {
             try {
                 boardElement.setTitle(titleField.getText());
-                listener.updateCurrentBoardElements();
             } catch (IllegalArgumentException e) {
                 titleField.setText(titleField.getText().substring(0, TITLE_LIMIT));
                 titleField.positionCaret(TITLE_LIMIT);
                 boardElement.setTitle(titleField.getText());
-                listener.updateCurrentBoardElements();
             }
         });
 
-        TextArea textArea = new TextArea(((Note) boardElement).getText());
+        TextArea textArea = new TextArea(((Note) boardElement).getContent());
         textArea.setPromptText("Notes");
         textArea.setWrapText(true);
         textArea.setPrefSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_WIDTH);
         textArea.setOnKeyReleased(event -> {
-            ((Note) boardElement).setText(textArea.getText());
-            listener.updateCurrentBoardElements();
+            ((Note) boardElement).setContent(textArea.getText());
         });
 
         HBox topPane = new HBox();
@@ -98,12 +95,10 @@ public class BoardElementController {
         titleField.setOnKeyReleased(event -> {
             try {
                 boardElement.setTitle(titleField.getText());
-                listener.updateCurrentBoardElements();
             } catch (IllegalArgumentException e) {
                 titleField.setText(titleField.getText().substring(0, TITLE_LIMIT));
                 titleField.positionCaret(TITLE_LIMIT);
                 boardElement.setTitle(titleField.getText());
-                listener.updateCurrentBoardElements();
             }
         });
 
