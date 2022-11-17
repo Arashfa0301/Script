@@ -1,55 +1,66 @@
 package ui;
 
 import core.main.User;
+import data.DataHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class LoginController {
 
-    private RemoteModelAccess remoteModelAccess;
-
-    private WindowManager windowManager;
+    private DataHandler datahandler;
 
     @FXML
     private AnchorPane loginAnchor;
 
     @FXML
-    private Button loginButton, swapRegisterButton;
+    private Button loginButton, createNewUserButton;
 
     @FXML
-    private TextField usernameField;
-
-    @FXML
-    private PasswordField passwordField;
+    private TextField loginField;
 
     @FXML
     private void initialize() {
         if (!(Globals.windowHeight == 0)) {
             loginAnchor.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         }
-        remoteModelAccess = new RemoteModelAccess();
-        windowManager = new WindowManager();
+        datahandler = new DataHandler();
         createWindowSizeListener();
     }
 
     @FXML
     private void handleLoginButton(ActionEvent ae) throws IOException {
-        User user = remoteModelAccess.getUser(usernameField.getText(), passwordField.getText());
+        User user = datahandler.getUser(loginField.getText());
         Globals.user = user;
-        windowManager.switchScreen(ae, "Script.fxml");
+        switchScreen(ae, "Script.fxml");
     }
 
     @FXML
-    private void swapToRegisterScreen(ActionEvent ae) throws IOException {
-        windowManager.switchScreen(ae, "Register.fxml");
+    private void handleCreateNewUserButton(ActionEvent ae) throws IOException {
+        try {
+            User user = new User(loginField.getText());
+            datahandler.write(user);
+            Globals.user = user;
+            switchScreen(ae, "Script.fxml");
+        } catch (IllegalArgumentException e) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Invalid username");
+            alert.setHeaderText("Username can only contain characters A-Z, a-z, 0-9, _ and .");
+            alert.show();
+        }
     }
 
     @FXML
@@ -58,12 +69,30 @@ public class LoginController {
             if (!loginButton.isDisabled()) {
                 loginButton.fire();
             }
+            if (!createNewUserButton.isDisabled()) {
+                createNewUserButton.fire();
+            }
         }
     }
 
+    private void switchScreen(ActionEvent ae, String file) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource(file));
+        Stage stage = (Stage) ((Node) ae.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private Boolean checkIfBlankUsername() {
+        return loginField.getText().isBlank();
+    }
+
     @FXML
-    private void checkInput() {
-        loginButton.setDisable(passwordField.getLength() == 0 || usernameField.getLength() == 0);
+    private void checkUsername() {
+        createNewUserButton.setDisable(
+                (!(!checkIfBlankUsername() && datahandler.getUser(loginField.getText()) == null)));
+        loginButton.setDisable(
+                (!(!checkIfBlankUsername() && datahandler.getUser(loginField.getText()) != null)));
     }
 
     private void createWindowSizeListener() {
@@ -75,4 +104,7 @@ public class LoginController {
         });
     }
 
+    public Button getLoginButton() {
+        return loginButton;
+    }
 }

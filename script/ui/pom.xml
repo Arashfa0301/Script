@@ -10,6 +10,7 @@
     </parent>
 
     <dependencies>
+
         <dependency>
             <groupId>it1901</groupId>
             <artifactId>script-core.main</artifactId>
@@ -66,11 +67,6 @@
             <version>2.2</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>io.github.palexdev</groupId>
-            <artifactId>materialfx</artifactId>
-            <version>11.13.5</version>
-        </dependency>
 
     </dependencies>
 
@@ -99,14 +95,6 @@
                 <configuration>
                     <!-- syntax: module-name/full-app-class-name -->
                     <mainClass>script.ui/ui.ScriptApp</mainClass>
-
-                    <compress>2</compress>
-                    <noHeaderFiles>true</noHeaderFiles>
-                    <stripDebug>true</stripDebug>
-                    <noManPages>true</noManPages>
-                    <launcher>Script</launcher>
-                    <jlinkImageName>Script</jlinkImageName>
-                    <jlinkZipName>Script</jlinkZipName>
                 </configuration>
             </plugin>
             <!-- Run the checkstyle code quality tool -->
@@ -129,34 +117,6 @@
                     </propertyName>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.panteleyev</groupId>
-                <artifactId>jpackage-maven-plugin</artifactId>
-                <version>1.4.0</version>
-                <configuration>
-                    <name>Script</name>
-                    <appVersion>1.0.0</appVersion>
-                    <vendor>it1901</vendor>
-                    <destination>target/dist</destination>
-                    <module>script.ui/ui.ScriptApp</module>
-                    <runtimeImage>target/Script</runtimeImage>
-                    <javaOptions>
-                        <option>-Dfile.encoding=UTF-8</option>
-                    </javaOptions>
-                    <!-- For running on Windows-->
-                    <winDirChooser>true</winDirChooser>
-                    <winShortcut>true</winShortcut>
-                    <winMenu>true</winMenu>
-                    <winMenuGroup>Script</winMenuGroup>
-                    <!-- For running on Linux-->
-                    <linuxShortcut>true</linuxShortcut>
-                    <linuxMenuGroup>Script</linuxMenuGroup>
-                </configuration>
-            </plugin>
-
-
-
         </plugins>
     </build>
 </project>
