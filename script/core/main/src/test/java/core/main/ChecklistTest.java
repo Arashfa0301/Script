@@ -28,11 +28,7 @@ public class ChecklistTest {
                 checklist.getChecklistLines().get(1).getLine()));
 
         assertFalse(checklist.getChecklistLines().get(0).getChecked());
-<<<<<<< HEAD
         checklist.getChecklistLines().get(0).setChecked(true);
-=======
-        checklist.getChecklistLines().get(0).checked(true);
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
         assertTrue(checklist.getChecklistLines().get(0).getChecked());
         Checklist checklist2 = new Checklist();
         checklist2.setTitle("title");

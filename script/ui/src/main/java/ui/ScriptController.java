@@ -4,10 +4,6 @@ import core.main.Board;
 import core.main.Checklist;
 import core.main.Note;
 import core.main.User;
-<<<<<<< HEAD
-=======
-import data.DataHandler;
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -44,11 +40,7 @@ public class ScriptController {
 
     private int columnsCount = 1;
 
-<<<<<<< HEAD
     private RemoteModelAccess remoteModelAccess;
-=======
-    private DataHandler datahandler = new DataHandler();
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
 
     @FXML
     private GridPane boardGrid, noteGrid;
@@ -80,11 +72,7 @@ public class ScriptController {
         scriptSplitPane.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         remoteModelAccess = new RemoteModelAccess();
         user = Globals.user;
-<<<<<<< HEAD
         username.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
-=======
-        username.setText(user.getUsername());
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
         exampleMail.setText(user.getUsername().toLowerCase() + "@example.com");
         noteScrollPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             int oldColumnsCount = columnsCount;
@@ -108,12 +96,9 @@ public class ScriptController {
 
     @FXML
     private void onBoardButtonClick(ActionEvent ae) throws IOException {
-<<<<<<< HEAD
         if (currentBoard != null) {
             saveBoard(currentBoard);
         }
-=======
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
         Board selectedBoard = user.getBoards().stream()
                 .filter(board -> board.getBoardName().equals(((Button) ae.getSource()).getText()))
                 .findFirst()
@@ -145,15 +130,7 @@ public class ScriptController {
         if (!field.getText().isBlank()) {
             button.setText(field.getText());
             currentBoard.setBoardName(field.getText());
-<<<<<<< HEAD
         }
-=======
-            save();
-        }
-        // button.setText(field.getText());
-        // currentBoard.setBoardName(field.getText());
-        // save();
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
     }
 
     @FXML
@@ -161,32 +138,12 @@ public class ScriptController {
         currentBoard.setBoardDescription(((TextField) event.getSource()).getText());
     }
 
-<<<<<<< HEAD
     private void saveBoard(Board board) {
         remoteModelAccess.putBoard(board, user.getUsername(), user.getPassword());
-=======
-    private void save() {
-        if (!(currentBoard == null)) {
-            currentBoard.clearCheckLists();
-            currentBoard.clearNotes();
-            boardElementControllers.stream().map(c -> c.getBoardElement()).forEach(element -> {
-                if (element instanceof Note) {
-                    Note note = (Note) element;
-                    currentBoard.addNote(note);
-                } else if (element instanceof Checklist) {
-                    Checklist checklist = (Checklist) element;
-                    currentBoard.addChecklist(checklist);
-                }
-            });
-        }
-        user.setBoards(user.getBoards());
-        datahandler.write(user);
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
     }
 
     @FXML
     public void createBoard() {
-<<<<<<< HEAD
         try {
             remoteModelAccess.createBoard(boardName.getText(), user.getUsername(), user.getPassword());
         } catch (IllegalArgumentException e) {
@@ -196,10 +153,6 @@ public class ScriptController {
         Board newBoard = new Board(boardName.getText(), "", new ArrayList<Note>(),
                 new ArrayList<Checklist>());
         user.addBoard(newBoard);
-=======
-        Board newBoard = new Board(boardName.getText(), "", new ArrayList<Note>(), new ArrayList<Checklist>());
-        user.getBoards().add(newBoard);
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
         createBoardButton(newBoard, user.getBoards().size() - 1);
         boardName.clear();
         newBoardButtonEnable();
@@ -299,7 +252,6 @@ public class ScriptController {
     private void deleteBoard(ActionEvent ae) throws IOException {
         Button button = (Button) ae.getSource();
         int index = GridPane.getRowIndex(button);
-<<<<<<< HEAD
         Button boardButton = (Button) boardGrid.getChildren().get(index * 2);
         String boardName = boardButton.getText();
         try {
@@ -326,29 +278,6 @@ public class ScriptController {
     }
 
     public void drawBoardElementControllers() {
-=======
-        user.getBoards().remove(index);
-        loadBoardButtons(user.getBoards());
-        update();
-        save();
-    }
-
-    private void update() {
-        if (!(currentBoard == null)) {
-            newNoteButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS ? true : false);
-            newChecklistButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS ? true : false);
-            noteScreen.setVisible(!user.getBoards().contains(currentBoard) ? false : true);
-        }
-    }
-
-    private Boolean checkNewBoardName() {
-        return !(boardName.getText().isBlank() || user.getBoards().stream().map(board -> (board.getBoardName()))
-                .collect(Collectors.toList()).contains(boardName.getText()));
-    }
-
-    public void drawBoardElementControllers() {
-
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
         noteGrid.getChildren().clear();
         noteGrid.getColumnConstraints().clear();
         noteGrid.getRowConstraints().clear();
@@ -367,7 +296,6 @@ public class ScriptController {
                     .get(boardElementControllers.stream().map(c -> c.getBoardElement()).toList()
                             .indexOf(bec.getBoardElement()) % columnsCount);
             columnVBox.getChildren().add(bec.generateControl());
-<<<<<<< HEAD
         });
     }
 
@@ -383,25 +311,10 @@ public class ScriptController {
                 Checklist checklist = (Checklist) element;
                 currentBoard.addChecklist(checklist);
             }
-=======
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
         });
         drawBoardElementControllers();
     }
 
-<<<<<<< HEAD
-=======
-    public void updateCurrentBoardElements() {
-        save();
-    }
-
-    public void removeBoardElement(BoardElementController boardElementController) {
-        boardElementControllers.remove(boardElementController);
-        drawBoardElementControllers();
-        save();
-    }
-
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
     protected Button getNewBoardButton() {
         return newBoardButton;
     }

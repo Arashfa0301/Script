@@ -18,10 +18,6 @@ public class Board {
      * @param boardName   A String that becomes the name of the board
      * @param description A short description of the contents of the board
      */
-<<<<<<< HEAD
-=======
-
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public Board(@JsonProperty("boardName") String boardName, @JsonProperty("description") String description,
             @JsonProperty("notes") List<Note> notes, @JsonProperty("checklists") List<Checklist> checklists) {

@@ -43,52 +43,20 @@ public class ApiController {
         }
     }
 
-<<<<<<< HEAD
     @GetMapping("/boards/create/{boardName}")
-=======
-    @PostMapping("/boards/create/{boardName}")
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
     @ResponseStatus(HttpStatus.CREATED)
     public void createBoard(@PathVariable("boardName") String boardName) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         datahandler.createBoard(boardName, authentication.getName());
     }
 
-<<<<<<< HEAD
     @GetMapping("/boards/remove/{boardName}")
     @ResponseStatus(HttpStatus.OK)
-=======
-    @PostMapping("/boards/remove/{boardName}")
-    @ResponseStatus(HttpStatus.CREATED)
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
     public void removeBoard(@PathVariable("boardName") String boardName) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         datahandler.removeBoard(boardName, authentication.getName());
     }
 
-<<<<<<< HEAD
-=======
-    @PutMapping("/boards/rename/{boardName}/{newBoardName}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void renameBoard(@PathVariable("boardName") String boardName,
-            @PathVariable("newBoardName") String newBoardName) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        datahandler.renameBoard(boardName, newBoardName, authentication.getName());
-    }
-
-    // @PutMapping("/board/{boardName}/note/{noteIndex}")
-    // @ResponseStatus(HttpStatus.CREATED)
-    // public void putBoardNotes(@PathVariable("boardName") String boardName,
-    // @PathVariable("noteIndex") int noteIndex, @RequestParam("text") String text,
-    // @RequestParam("color") String color, @RequestParam("title") String title,
-    // @RequestParam("isPinned") Boolean isPinned) {
-    // Authentication authentication =
-    // SecurityContextHolder.getContext().getAuthentication();
-    // datahandler.putBoardNote(boardName, noteIndex, text, color, title, isPinned,
-    // authentication.getName());
-    // }
-
->>>>>>> parent of 1fa8d64... Connect ScriptController with REST Api
     @PutMapping("/board/{boardName}")
     @ResponseStatus(HttpStatus.CREATED)
     public void putBoardNotes(@PathVariable("boardName") String boardName,
