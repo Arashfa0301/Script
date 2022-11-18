@@ -122,26 +122,30 @@ public class User {
         return new ArrayList<Board>(boards);
     }
 
-    public void addBoard(String boardname) throws IllegalArgumentException {
+    public User addBoard(String boardname) throws IllegalArgumentException {
         boards.add(new Board(boardname, "", new ArrayList<Note>(), new ArrayList<Checklist>()));
+        return this;
     }
 
-    public void putBoard(Board board, String boardname) throws IllegalArgumentException {
+    public User putBoard(Board board, String boardname) throws IllegalArgumentException {
         checkUserContainsBoard(board.getBoardName());
         boards.set(
                 boards.indexOf(
                         getBoard(board.getBoardName())),
                 board);
+        return this;
     }
 
-    public void removeBoard(String boardname) throws IllegalArgumentException {
+    public User removeBoard(String boardname) throws IllegalArgumentException {
         checkUserContainsBoard(boardname);
         boards.remove(getBoard(boardname));
+        return this;
     }
 
-    public void renameBoard(String oldBoardname, String newBoardname) throws IllegalArgumentException {
+    public User renameBoard(String oldBoardname, String newBoardname) throws IllegalArgumentException {
         checkUserContainsBoard(oldBoardname);
         getBoard(oldBoardname).setBoardName(newBoardname);
+        return this;
     }
 
     private Board getBoard(String boardname) throws IllegalArgumentException {

@@ -24,7 +24,7 @@ public abstract class BoardElement {
     @JsonSetter("title")
     public void setTitle(String title) {
         if (title.length() > TITLE_LIMIT) {
-            throw new IllegalArgumentException("The title length should not exceed 20 characters");
+            throw new IllegalArgumentException("The title length should not exceed 23 characters");
         }
         this.title = title;
     }
