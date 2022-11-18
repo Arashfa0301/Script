@@ -4,34 +4,43 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ChecklistTest {
 
     @Test
-    @Disabled
-    @DisplayName("Test checklist")
-    public void testCecklist() {
+    @DisplayName("Test Checklist")
+    public void testChecklist() {
+        // Tests constructor
         Checklist checklist = new Checklist();
-        assertTrue(checklist.isEmpty());
-        checklist.addChecklistLine();
-        checklist.getChecklistLines().get(0).setLine("test");
-        assertFalse(checklist.isEmpty());
-        assertEquals("test", checklist.getChecklistLines().get(0).getLine());
-        checklist.addChecklistLine();
-        checklist.getChecklistLines().get(1).setLine("testing");
-        assertEquals(Arrays.asList("test", "testing"), Arrays.asList(checklist.getChecklistLines().get(0).getLine(),
-                checklist.getChecklistLines().get(1).getLine()));
+        assertEquals("", checklist.getTitle());
+        assertEquals(false, checklist.isPinned());
 
-        assertFalse(checklist.getChecklistLines().get(0).isChecked());
-        checklist.getChecklistLines().get(0).setChecked(true);
-        assertTrue(checklist.getChecklistLines().get(0).isChecked());
-        Checklist checklist2 = new Checklist();
-        checklist2.setTitle("title");
-        assertFalse(checklist2.isEmpty());
+        // Tests getChecklistLines() and order of checklists
+        checklist.addChecklistLine();
+        checklist.addChecklistLine();
+        checklist.setChecklistChecked(0, true);
+        checklist.getChecklistLines();
+        assertTrue(!checklist.getChecklistLines().get(0).isChecked()
+                && checklist.getChecklistLines().get(1).isChecked());
+
+        // Tests setChecklistLine() and setListLines()
+        ArrayList<ChecklistLine> lines = new ArrayList<>(Arrays.asList(new ChecklistLine(), new ChecklistLine()));
+        checklist.setlistLines(lines);
+        checklist.setChecklistline(0, "test");
+        assertEquals(checklist.getChecklistLines().get(0).getLine(), "test");
+
+        // Tests removeLine() and isEmpty()
+        checklist.setTitle("test");
+        assertFalse(checklist.isEmpty());
+        checklist.setTitle("");
+        assertFalse(checklist.isEmpty());
+        checklist.removeChecklistLine(1);
+        checklist.removeChecklistLine(0);
+        assertTrue(checklist.isEmpty());
     }
 }

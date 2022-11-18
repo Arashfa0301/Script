@@ -92,7 +92,7 @@ public class DataHandler {
             throw new NullPointerException("The input argument is not valid");
         }
         User user = getUser(username);
-        user.putBoard(board, boardname);
+        user.putBoard(board);
         write(user);
     }
 

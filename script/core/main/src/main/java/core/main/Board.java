@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Board {
     public static final int MAX_ELEMENTS = 256;
+    public static final int MAX_TITLE_LENGHT = 20;
     private String boardName, description;
     private List<Note> notes = new ArrayList<>();
     private List<Checklist> checklists = new ArrayList<>();
@@ -120,7 +121,7 @@ public class Board {
     }
 
     /**
-     * Clears the list containing checklists.
+     * Clears the list containing notes.
      */
     public void clearNotes() {
         notes.clear();
@@ -134,7 +135,7 @@ public class Board {
      *                                  <code>true</code> for <code>input</code>
      */
     private void checkValidInputString(String input) {
-        if (input.isEmpty() || input.length() > 20) {
+        if (input.isEmpty() || input.length() > MAX_TITLE_LENGHT) {
             throw new IllegalArgumentException("Invalid argument");
         }
     }
