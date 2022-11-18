@@ -6,6 +6,8 @@ import core.main.Note;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
@@ -45,13 +47,13 @@ public class BoardElementController {
                 boardElement.setTitle(titleField.getText());
             }
         });
-
-        TextArea textArea = new TextArea(((Note) boardElement).getContent());
+        Note note = (Note) boardElement;
+        TextArea textArea = new TextArea(note.getContent());
         textArea.setPromptText("Notes");
         textArea.setWrapText(true);
         textArea.setPrefSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_WIDTH);
         textArea.setOnKeyReleased(event -> {
-            ((Note) boardElement).setContent(textArea.getText());
+            note.setContent(textArea.getText());
         });
 
         HBox topPane = new HBox();
@@ -86,7 +88,8 @@ public class BoardElementController {
     }
 
     private VBox generateChecklist() {
-        TextField titleField = new TextField(((Checklist) boardElement).getTitle());
+        Checklist checklist = (Checklist) boardElement;
+        TextField titleField = new TextField(checklist.getTitle());
         titleField.setStyle("-fx-font-weight: bold; -fx-font-size: 14");
         titleField.setOnKeyReleased(event -> {
             boardElement.setTitle(titleField.getText());
@@ -103,34 +106,34 @@ public class BoardElementController {
         });
 
         List<TextField> listElements = new ArrayList<>();
-        ((Checklist) boardElement).getChecklistLines().stream().forEach(element -> {
+        checklist.getChecklistLines().stream().forEach(element -> {
             TextField t = new TextField(element.getLine());
             listElements.add(t);
             t.setDisable(
                     ((Checklist) getBoardElement()).getChecklistLines().get(listElements.indexOf(t)).isChecked());
             t.setOnKeyReleased((event) -> {
-                ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
+                checklist.setChecklistline(listElements.indexOf(t), t.getText());
             });
             t.setOnKeyPressed(event -> {
                 if (event.getCode().equals(KeyCode.ENTER)) {
-                    ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
-                    ((Checklist) boardElement).addChecklistLine();
+                    checklist.setChecklistline(listElements.indexOf(t), t.getText());
+                    addChecklistLine(checklist);
                     listener.drawBoardElementControllers();
                 }
             });
             t.setPromptText("Add a list element");
         });
-        if (((Checklist) boardElement).isEmpty()) {
+        if (checklist.isEmpty()) {
             TextField t = new TextField();
             listElements.add(t);
-            ((Checklist) boardElement).addChecklistLine();
+            checklist.addChecklistLine();
             t.setOnKeyReleased((event) -> {
-                ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
+                checklist.setChecklistline(listElements.indexOf(t), t.getText());
             });
             t.setOnKeyPressed(event -> {
                 if (event.getCode().equals(KeyCode.ENTER)) {
-                    ((Checklist) boardElement).setChecklistline(listElements.indexOf(t), t.getText());
-                    ((Checklist) boardElement).addChecklistLine();
+                    checklist.setChecklistline(listElements.indexOf(t), t.getText());
+                    addChecklistLine(checklist);
                     listener.drawBoardElementControllers();
                 }
             });
@@ -165,7 +168,6 @@ public class BoardElementController {
         });
 
         listElements.forEach(e -> {
-            Checklist checklist = (Checklist) getBoardElement();
             MFXCheckbox checkBox = new MFXCheckbox();
             checkBox.setSelected(checklist.getChecklistLines().get(listElements.indexOf(e)).isChecked());
             checkBox.setOnAction(event -> {
@@ -197,7 +199,7 @@ public class BoardElementController {
         });
         MFXButton addLineButton = new MFXButton("+");
         addLineButton.setOnAction(event -> {
-            ((Checklist) boardElement).addChecklistLine();
+            addChecklistLine(checklist);
             listener.drawBoardElementControllers();
         });
         addLineButton.setStyle("-mfx-button-type: RAISED");
@@ -207,6 +209,16 @@ public class BoardElementController {
         hbox.getChildren().add(addLineButton);
         notePane.getChildren().add(hbox);
         return notePane;
+    }
+
+    private void addChecklistLine(Checklist checklist) {
+        try {
+            checklist.addChecklistLine();
+        } catch (IllegalStateException e) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setHeaderText("Checklist has reached the maximum amount of lines");
+            alert.show();
+        }
     }
 
     protected VBox generateControl() {
