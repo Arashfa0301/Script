@@ -27,6 +27,11 @@
             <artifactId>script-ui</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>it1901</groupId>
+            <artifactId>script-springboot.server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
