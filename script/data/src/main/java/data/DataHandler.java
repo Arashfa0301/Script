@@ -18,6 +18,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DataHandler {
@@ -32,12 +33,8 @@ public class DataHandler {
     }
 
     public void write(User user) {
-        if (user == null || user.getUsername() == null) {
-            throw new NullPointerException("The input user is invalid");
-        }
-        if (user.getUsername().isEmpty()) {
-            throw new IllegalArgumentException("The input user is invalid");
-        }
+        checkIfUserIsNull(user);
+        checkNullPointException(user.getUsername());
         List<User> users = read();
         users.removeIf(u -> u.getUsername().equals(user.getUsername()));
         users.add(user);
@@ -50,45 +47,26 @@ public class DataHandler {
         }
     }
 
-    public void createBoard(String boardname, String username) throws IllegalArgumentException {
-        if (boardname == null || username == null || boardname.isEmpty() || username.isEmpty()) {
-            throw new NullPointerException("The input boardname or username is invalid");
-        }
-        User user = getUser(username);
-        if (user == null) {
-            throw new IllegalArgumentException("The input user is invalid");
-        }
-        user.addBoard(boardname);
-        write(user);
+    public void createBoard(String boardname, String username) {
+        checkNullPointException(boardname, username);
+        checkIfUserIsNull(getUser(username));
+        write(getUser(username).addBoard(boardname));
     }
 
     public void removeBoard(String boardname, String username) {
-        if (boardname == null || username == null || boardname.isEmpty() || username.isEmpty()) {
-            throw new NullPointerException("The input boardname or username is invalid");
-        }
-        User user = getUser(username);
-        if (user == null) {
-            throw new IllegalArgumentException("The input user is invalid");
-        }
-        user.removeBoard(boardname);
-        write(user);
+        checkNullPointException(boardname, username);
+        checkIfUserIsNull(getUser(username));
+        write(getUser(username).removeBoard(boardname));
     }
 
     public void renameBoard(String oldBoardname, String newBoardname, String username) {
-        if (oldBoardname == null || newBoardname == null || username == null || oldBoardname.isEmpty()
-                || newBoardname.isEmpty() || username.isEmpty()) {
-            throw new NullPointerException("The input boardname or username is invalid");
-        }
-        User user = getUser(username);
-        if (user == null) {
-            throw new IllegalArgumentException("The input user is invalid");
-        }
-        user.renameBoard(oldBoardname, newBoardname);
-        write(user);
+        checkNullPointException(oldBoardname, newBoardname, username);
+        checkIfUserIsNull(getUser(username));
+        write(getUser(username).renameBoard(oldBoardname, newBoardname));
     }
 
     public void updateBoard(String boardname, Board board, String username) {
-        if (boardname == null || board == null || boardname.isEmpty() || getUser(username) == null) {
+        if (board == null) {
             throw new NullPointerException("The input argument is not valid");
         }
         User user = getUser(username);
@@ -143,4 +121,17 @@ public class DataHandler {
             ex.printStackTrace();
         }
     }
+
+    private void checkNullPointException(String... strings) {
+        if (new ArrayList<String>(Arrays.asList(strings)).stream().anyMatch(s -> s == null || s.isBlank())) {
+            throw new IllegalArgumentException("The give input is invalid. Either null or empty");
+        }
+    }
+
+    private void checkIfUserIsNull(User user) {
+        if (user == null) {
+            throw new NullPointerException("The input user is null");
+        }
+    }
+
 }

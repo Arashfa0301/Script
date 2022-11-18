@@ -11,7 +11,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Checklist extends BoardElement {
-
+    public static final int MAX_LINE_COUNT = 40;
     private List<ChecklistLine> checklistLines = new ArrayList<>();
 
     /**
@@ -50,6 +50,9 @@ public class Checklist extends BoardElement {
      * Adds a ChecklistLine to the list of ChecklistLines.
      */
     public void addChecklistLine() {
+        if (checklistLines.size() >= MAX_LINE_COUNT) {
+            throw new IllegalStateException("Lines can't exceed the max line count");
+        }
         checklistLines.add(new ChecklistLine());
     }
 
