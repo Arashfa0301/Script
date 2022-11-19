@@ -122,12 +122,24 @@ public class User {
         return new ArrayList<Board>(boards);
     }
 
-    public User addBoard(String boardname) throws IllegalArgumentException {
+    /**
+     * Adds the input board to the user's list of boards
+     *
+     * @param boardname a string sepresenting the name of the board
+     * @return the user
+     */
+    public User addBoard(String boardname) {
         boards.add(new Board(boardname, "", new ArrayList<Note>(), new ArrayList<Checklist>()));
         return this;
     }
 
-    public User putBoard(Board board, String boardname) throws IllegalArgumentException {
+    /**
+     *
+     * @param board
+     * @param boardname
+     * @return
+     */
+    public User putBoard(Board board, String boardname) {
         checkUserContainsBoard(board.getBoardName());
         boards.set(
                 boards.indexOf(

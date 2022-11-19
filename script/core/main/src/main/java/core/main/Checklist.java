@@ -96,8 +96,8 @@ public class Checklist extends BoardElement {
      * @param i an integer which determines which index in the list checklistLines
      *          to remove
      */
-    public void removeChecklistLine(int i) {
-        checklistLines.remove(i);
+    public void removeChecklistLine(int index) {
+        checklistLines.remove(index);
     }
 
 }
