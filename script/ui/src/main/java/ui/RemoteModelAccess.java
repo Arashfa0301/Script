@@ -109,7 +109,6 @@ public class RemoteModelAccess implements ModelAccess {
                 .uri(endpointBaseUri.resolve(String.format("/boards/remove/%s/", boardname)))
                 .header(ACCEPT_HEADER, APPLICATION_JSON)
                 .header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
-                // add basic auth header
                 .header("Authorization", "Basic " + Base64.getEncoder()
                         .encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8)))
                 .GET()
@@ -121,6 +120,30 @@ public class RemoteModelAccess implements ModelAccess {
             }
         } catch (IOException | InterruptedException e) {
             throw new IllegalArgumentException(e);
+        }
+    }
+
+    @Override
+    public void renameBoard(String oldBoardName, String newBoardName, String username, String password)
+            throws IllegalArgumentException {
+        System.out.println(String.format("[RemoteModelAccess] Renaming board %s to %s", oldBoardName, newBoardName));
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(endpointBaseUri.resolve(String.format("/boards/rename/%s/%s/", oldBoardName, newBoardName)))
+                .header(ACCEPT_HEADER, APPLICATION_JSON)
+                .header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
+                .header("Authorization", "Basic " + Base64.getEncoder()
+                        .encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8)))
+                .POST(HttpRequest.BodyPublishers
+                        .ofString(""))
+                .build();
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                throw new RuntimeException("Unexpected response code: " + response.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 

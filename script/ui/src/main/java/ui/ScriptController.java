@@ -33,6 +33,8 @@ public class ScriptController {
 
     private Board currentBoard = null;
 
+    private String oldBoardName = "";
+
     private int columnsCount = 1;
 
     private RemoteModelAccess remoteModelAccess;
@@ -135,7 +137,17 @@ public class ScriptController {
     }
 
     private void saveBoard(Board board) {
-        remoteModelAccess.putBoard(board, user.getUsername(), user.getPassword());
+        try {
+            if (!board.getBoardName().equals(oldBoardName)) {
+                remoteModelAccess.renameBoard(oldBoardName, board.getBoardName(), user.getUsername(),
+                        user.getPassword());
+            }
+            remoteModelAccess.putBoard(board, user.getUsername(), user.getPassword());
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            board.setBoardName(oldBoardName);
+            remoteModelAccess.putBoard(board, user.getUsername(), user.getPassword());
+        }
     }
 
     @FXML

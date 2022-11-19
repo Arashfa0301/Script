@@ -6,6 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class UserTest {
 
     @Test
@@ -35,5 +39,35 @@ public class UserTest {
         assertEquals("1", user.getPassword());
         user.setPassword("2");
         assertEquals("2", user.getPassword());
+    }
+
+    @Test
+    @DisplayName("")
+    public void testBoardFunctions() {
+        User user = new User("test", "test", "test", "test");
+        List<Board> boards = new ArrayList<>(
+                Arrays.asList(new Board("1", "null", null, null), new Board("2", "null", null, null)));
+        user.setBoard(boards);
+        assertEquals("1", user.getBoards().get(0).getBoardName());
+        assertEquals("2", user.getBoards().get(1).getBoardName());
+
+        user.addBoard("3");
+        assertEquals("3", user.getBoards().get(2).getBoardName());
+
+        Board changedBoard = user.getBoards().get(0);
+        changedBoard.setBoardName("test");
+        user.putBoard(changedBoard);
+        assertEquals(changedBoard, user.getBoards().get(0));
+
+        user.renameBoard("test", "testing");
+        assertEquals("testing", user.getBoards().get(0).getBoardName());
+        assertThrows(IllegalArgumentException.class, () -> {
+            user.renameBoard("test", "failedTest");
+        });
+
+        user.removeBoard("testing");
+        assertThrows(IllegalArgumentException.class, () -> {
+            user.removeBoard("testing");
+        });
     }
 }

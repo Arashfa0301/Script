@@ -118,7 +118,7 @@ public class Board {
     }
 
     /**
-     * Clears the list containing checklists.
+     * Clears the list containing notes.
      */
     public void clearNotes() {
         notes.clear();
