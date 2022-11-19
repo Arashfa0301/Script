@@ -44,7 +44,7 @@ public class BoardTest {
         // Tests for exception case: Exceeded MAX_NOTES
         // stream with 256
         List<Note> notes = Arrays.asList(
-                IntStream.range(1, 256).mapToObj(i -> new Note()).toArray(Note[]::new));
+                IntStream.range(1, 100).mapToObj(i -> new Note()).toArray(Note[]::new));
         notes.stream().forEach(n -> board.addNote(n));
         assertThrows(IllegalArgumentException.class, () -> {
             board.addNote(new Note());
@@ -111,7 +111,7 @@ public class BoardTest {
         // Tests for exception case: Exceeded MAX_ChecklistS
         // stream with 256
         List<Checklist> checklists = Arrays.asList(
-                IntStream.range(1, 256).mapToObj(i -> new Checklist()).toArray(Checklist[]::new));
+                IntStream.range(1, 100).mapToObj(i -> new Checklist()).toArray(Checklist[]::new));
         checklists.stream().forEach(n -> board.addChecklist(n));
         assertThrows(IllegalArgumentException.class, () -> {
             board.addChecklist(new Checklist());
