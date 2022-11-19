@@ -1,0 +1,50 @@
+[
+	{
+		"username": "user1",
+		"password": "password",
+		"firstName": "first",
+		"lastName": "last",
+		"boards": []
+	},
+	{
+		"username": "user2",
+		"password": "password",
+		"firstName": "first",
+		"lastName": "last",
+		"boards": [
+			{
+				"boardName": "board1",
+				"description": "description",
+				"notes": [
+					{
+						"content": "content",
+						"title": "title",
+						"isPinned": false
+					}
+				],
+				"checklists": [
+					{
+						"checklistLines": [
+							{
+								"line": "line1",
+								"checked": false
+							},
+							{
+								"line": "line2",
+								"checked": true
+							}
+						],
+						"title": "title",
+						"isPinned": false
+					}
+				]
+			},
+			{
+				"boardName": "board2",
+				"description": "",
+				"notes": [],
+				"checklists": []
+			}
+		]
+	}
+]
