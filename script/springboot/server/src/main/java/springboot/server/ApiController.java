@@ -22,7 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public class ApiController {
 
-    private DataHandler datahandler = new DataHandler();
+    private DataHandler datahandler = new DataHandler("users");
     private InMemoryUserDetailsManager inMemoryUserDetailsManager;
 
     @Autowired
@@ -68,6 +68,7 @@ public class ApiController {
     @PostMapping("/auth/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void postBody(@RequestBody User user) {
+        // TODO: change userExists name
         if (datahandler.userExists(user.getUsername())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
         }

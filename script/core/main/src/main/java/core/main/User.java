@@ -59,6 +59,14 @@ public class User {
         this.boards = new ArrayList<>();
     }
 
+    public User() {
+        username = "";
+        password = "";
+        firstName = "";
+        lastName = "";
+        boards = new ArrayList<>();
+    }
+
     /**
      * Gets the User's username.
      *

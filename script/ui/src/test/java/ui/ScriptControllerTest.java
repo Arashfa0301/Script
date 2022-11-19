@@ -26,7 +26,7 @@ public class ScriptControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) throws IOException {
-        dataHandler = new DataHandler();
+        dataHandler = new DataHandler("users");
         user = new User("username", "password", "first", "last");
         dataHandler.removeUser("username");
         dataHandler.write(user);

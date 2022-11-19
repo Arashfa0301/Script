@@ -17,17 +17,21 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class DataHandler {
 
-    private static final String FILE_NAME = "users";
     private static final String FILE_PATH = System.getProperty("user.home");
+    private String fileName;
     private Gson gson;
 
-    public DataHandler() {
+    public DataHandler(String fileName) {
+
+        this.fileName = fileName;
         gson = new GsonBuilder().setPrettyPrinting().create();
         read();
     }
@@ -55,6 +59,14 @@ public class DataHandler {
             e.printStackTrace();
             return new ArrayList<>();
         }
+    }
+
+    public void clearSavedData() throws IOException {
+        Files.delete(Paths.get(getFilePath()));
+    }
+
+    public void makeFile() throws IOException {
+        Files.createFile(Paths.get(getFilePath()));
     }
 
     public void write(User user) {
@@ -100,7 +112,7 @@ public class DataHandler {
     }
 
     private String getFilePath() {
-        return FILE_PATH + "/" + FILE_NAME + ".json";
+        return FILE_PATH + "/" + fileName + ".json";
     }
 
     public User getUser(String username) {
@@ -133,5 +145,4 @@ public class DataHandler {
             throw new NullPointerException("The input user is null");
         }
     }
-
 }
