@@ -45,11 +45,11 @@ public class User {
             @JsonProperty("firstName") String firstName, @JsonProperty("lastName") String lastName) {
         String[] inputs = new String[] { username, firstName, lastName };
         for (String input : inputs) {
-            if (!Pattern.matches("^[A-Za-z0-9_.]+$", input) || input.isBlank() || input.isEmpty()) {
+            if (!Pattern.matches("^[A-Za-z0-9_.]+$", input) || input.isBlank()) {
                 throw new IllegalArgumentException(String.format("Invalid input: %s", input));
             }
         }
-        if (password.isBlank() || password.isEmpty()) {
+        if (password.isBlank()) {
             throw new IllegalArgumentException("Invalid password");
         }
         this.username = username;
@@ -135,7 +135,7 @@ public class User {
         return this;
     }
 
-    public User putBoard(Board board, String boardname) throws IllegalArgumentException {
+    public User putBoard(Board board) throws IllegalArgumentException {
         checkUserContainsBoard(board.getBoardName());
         boards.set(
                 boards.indexOf(

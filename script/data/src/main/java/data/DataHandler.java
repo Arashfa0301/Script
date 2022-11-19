@@ -106,9 +106,9 @@ public class DataHandler {
         if (board == null) {
             throw new NullPointerException("The input argument is not valid");
         }
-        checkNullPointException(boardname, username);
-        checkIfUserIsNull(getUser(username));
-        write(getUser(username).putBoard(board, boardname));
+        User user = getUser(username);
+        user.putBoard(board);
+        write(user);
     }
 
     private String getFilePath() {

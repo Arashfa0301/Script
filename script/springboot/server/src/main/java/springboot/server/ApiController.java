@@ -57,6 +57,14 @@ public class ApiController {
         datahandler.removeBoard(boardName, authentication.getName());
     }
 
+    @PostMapping("/boards/rename/{boardName}/{newBoardName}")
+    @ResponseStatus(HttpStatus.OK)
+    public void renameBoard(@PathVariable("boardName") String boardName,
+            @PathVariable("newBoardName") String newBoardName) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        datahandler.renameBoard(boardName, newBoardName, authentication.getName());
+    }
+
     @PutMapping("/board/{boardName}")
     @ResponseStatus(HttpStatus.CREATED)
     public void putBoardNotes(@PathVariable("boardName") String boardName,

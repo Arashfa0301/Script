@@ -13,5 +13,8 @@ public interface ModelAccess {
 
     void removeBoard(String boardname, String username, String password) throws IllegalArgumentException;
 
+    void renameBoard(String oldBoardName, String newBoardName, String username, String password)
+            throws IllegalArgumentException;
+
     void putBoard(Board board, String username, String password) throws IllegalArgumentException;
 }
