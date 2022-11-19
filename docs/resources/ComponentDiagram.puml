@@ -1,0 +1,50 @@
+@startuml script module architecture
+
+component script.core {
+	package core.main #EDDBC0
+}
+
+component jackson #LightCoral {
+}
+
+component gson #LightCoral {
+
+}
+
+component script.ui{
+	package ui #EDDBC0
+}
+
+component javafx {
+	component fxml {
+	}
+}
+
+component script.data {
+	package data #EDDBC0
+}
+
+component script.springboot.server {
+  package springboot.server #EDDBC0
+}
+
+component spring #LightCoral {
+}
+
+script.ui .> javafx
+script.ui .> fxml
+
+ui .left.> data
+
+core.main .left.> jackson
+
+data ..> jackson
+data ..> gson
+data ..> core.main
+
+script.springboot.server ..> spring
+script.springboot.server ..> jackson
+
+springboot.server ..> data
+
+@enduml
