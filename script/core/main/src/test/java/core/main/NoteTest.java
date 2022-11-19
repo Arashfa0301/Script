@@ -2,6 +2,7 @@ package core.main;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
@@ -48,6 +49,10 @@ public class NoteTest {
         // Tests if setTitle() works from populated string
         note.setTitle("Other Title");
         assertEquals("Other Title", note.getTitle());
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            note.setTitle("123456789012345678901234");
+        });
     }
 
     @Test

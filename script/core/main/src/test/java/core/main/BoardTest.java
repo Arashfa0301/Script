@@ -64,6 +64,9 @@ public class BoardTest {
         assertThrows(NullPointerException.class, () -> {
             board.setBoardName(null);
         });
+        assertThrows(IllegalArgumentException.class, () -> {
+            board.setBoardName("123456789012345678901");
+        });
     }
 
     @Test
@@ -113,5 +116,19 @@ public class BoardTest {
         assertThrows(IllegalArgumentException.class, () -> {
             board.addChecklist(new Checklist());
         });
+    }
+
+    @Test
+    @DisplayName("Test clear functions")
+    public void testClear() {
+        Board board = new Board("board", "description", new ArrayList<>(), new ArrayList<>());
+        board.addNote(new Note());
+        board.addChecklist(new Checklist());
+        assertFalse(board.getChecklists().isEmpty() && board.getNotes().isEmpty());
+        board.clearCheckLists();
+        assertTrue(board.getChecklists().isEmpty());
+        assertFalse(board.getNotes().isEmpty());
+        board.clearNotes();
+        assertTrue(board.getChecklists().isEmpty() && board.getNotes().isEmpty());
     }
 }

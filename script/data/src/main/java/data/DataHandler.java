@@ -32,31 +32,6 @@ public class DataHandler {
         read();
     }
 
-    public List<User> read() {
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(getFilePath()), Charset.defaultCharset()))) {
-
-            Type userListType = new TypeToken<ArrayList<User>>() {
-            }.getType();
-
-            List<User> users = gson.fromJson(reader, userListType);
-
-            if (users == null) {
-                return new ArrayList<>();
-            }
-            return users;
-        } catch (FileNotFoundException e) {
-            if (new File(FILE_PATH).mkdir()) {
-                return new ArrayList<>();
-            } else {
-                return new ArrayList<>();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-
     public void write(User user) {
         checkIfUserIsNull(user);
         checkNullPointException(user.getUsername());
@@ -94,9 +69,34 @@ public class DataHandler {
         if (board == null) {
             throw new NullPointerException("The input argument is not valid");
         }
-        checkNullPointException(boardname, username);
-        checkIfUserIsNull(getUser(username));
-        write(getUser(username).putBoard(board, boardname));
+        User user = getUser(username);
+        user.putBoard(board);
+        write(user);
+    }
+
+    public List<User> read() {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(getFilePath()), Charset.defaultCharset()))) {
+
+            Type userListType = new TypeToken<ArrayList<User>>() {
+            }.getType();
+
+            List<User> users = gson.fromJson(reader, userListType);
+
+            if (users == null) {
+                return new ArrayList<>();
+            }
+            return users;
+        } catch (FileNotFoundException e) {
+            if (new File(FILE_PATH).mkdir()) {
+                return new ArrayList<>();
+            } else {
+                return new ArrayList<>();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     private String getFilePath() {

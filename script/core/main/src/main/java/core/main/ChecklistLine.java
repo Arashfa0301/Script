@@ -24,10 +24,6 @@ public class ChecklistLine {
         return line;
     }
 
-    public Boolean isChecked() {
-        return checked;
-    }
-
     /**
      * Sets the text of a ChecklistLine.
      *
@@ -44,7 +40,7 @@ public class ChecklistLine {
      * @return the boolean value of the ChecklistLine's <code>checked</code> boolean
      */
     @JsonGetter("checked")
-    public Boolean getChecked() {
+    public Boolean isChecked() {
         return checked;
     }
 
