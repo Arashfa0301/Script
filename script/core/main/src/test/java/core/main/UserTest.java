@@ -26,12 +26,6 @@ public class UserTest {
         assertThrows(IllegalArgumentException.class, () -> {
             new User("\\\\/ ", "dnoijsd", "sdofh", "dailf");
         });
-        assertThrows(IllegalArgumentException.class, () -> {
-            new User("null", "", "null", "null");
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            new User("null", "   ", "null", "null");
-        });
     }
 
     @Test

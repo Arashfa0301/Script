@@ -48,10 +48,13 @@ public class Checklist extends BoardElement {
 
     /**
      * Adds a ChecklistLine to the list of ChecklistLines.
+     *
+     * @throws IllegalStateException if the size <code>checklistLines</code> is at
+     *                               it's limit
      */
     public void addChecklistLine() {
         if (checklistLines.size() >= MAX_LINE_COUNT) {
-            throw new IllegalStateException("Lines can't exceed the max line count");
+            throw new IllegalStateException("Lines can't exceed the max line count.");
         }
         checklistLines.add(new ChecklistLine());
     }
@@ -62,8 +65,10 @@ public class Checklist extends BoardElement {
      * @param index an integer that corresponds to the index of the ChecklistLine
      *              that should be changed
      * @param line  a String that will become the new content of the ChecklistLine
+     * @see Checklist#checkIndexOutofbounds(int)
      */
     public void setChecklistline(int index, String line) {
+        checkIndexOutofbounds(index);
         checklistLines.get(index).setLine(line);
     }
 
@@ -74,8 +79,10 @@ public class Checklist extends BoardElement {
      * @param index   an integer that corresponds to the index of the ChecklistLine
      *                that should be changed
      * @param checked the boolean value that checked will have
+     * @see Checklist#checkIndexOutofbounds(int)
      */
     public void setChecklistChecked(int index, Boolean checked) {
+        checkIndexOutofbounds(index);
         checklistLines.get(index).setChecked(checked);
     }
 
@@ -93,11 +100,19 @@ public class Checklist extends BoardElement {
     /**
      * Removes the ChecklistLine found at the given index.
      *
-     * @param i an integer which determines which index in the list checklistLines
-     *          to remove
+     * @param index which determines which index in the list checklistLines
+     *              to remove
+     * @see Checklist#checkIndexOutofbounds(int)
      */
     public void removeChecklistLine(int index) {
+        checkIndexOutofbounds(index);
         checklistLines.remove(index);
+    }
+
+    private void checkIndexOutofbounds(int index) {
+        if (index >= checklistLines.size() || index < 0) {
+            throw new IllegalArgumentException("The input argument index is out of range.");
+        }
     }
 
 }

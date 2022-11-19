@@ -19,7 +19,7 @@ public class BoardTest {
     @DisplayName("Test constructor")
     public void testConstructor() {
         Board newBoard = new Board("Name", "Description", new ArrayList<Note>(), new ArrayList<Checklist>());
-        assertEquals("Name", newBoard.getBoardName());
+        assertEquals("Name", newBoard.getName());
         assertEquals("Description", newBoard.getBoardDescription());
     }
 
@@ -44,7 +44,7 @@ public class BoardTest {
         // Tests for exception case: Exceeded MAX_NOTES
         // stream with 256
         List<Note> notes = Arrays.asList(
-                IntStream.range(1, 256).mapToObj(i -> new Note()).toArray(Note[]::new));
+                IntStream.range(1, 100).mapToObj(i -> new Note()).toArray(Note[]::new));
         notes.stream().forEach(n -> board.addNote(n));
         assertThrows(IllegalArgumentException.class, () -> {
             board.addNote(new Note());
@@ -55,15 +55,9 @@ public class BoardTest {
     @DisplayName("Test set name")
     public void testSetName() {
         Board board = new Board("Name", "Description", new ArrayList<Note>(), new ArrayList<Checklist>());
-        assertEquals("Name", board.getBoardName());
+        assertEquals("Name", board.getName());
         board.setBoardName("New Name");
-        assertEquals("New Name", board.getBoardName());
-        assertThrows(IllegalArgumentException.class, () -> {
-            board.setBoardName("");
-        });
-        assertThrows(NullPointerException.class, () -> {
-            board.setBoardName(null);
-        });
+        assertEquals("New Name", board.getName());
     }
 
     @Test
@@ -106,9 +100,9 @@ public class BoardTest {
         });
 
         // Tests for exception case: Exceeded MAX_ChecklistS
-        // stream with 256
+        // stream with 100
         List<Checklist> checklists = Arrays.asList(
-                IntStream.range(1, 256).mapToObj(i -> new Checklist()).toArray(Checklist[]::new));
+                IntStream.range(1, 100).mapToObj(i -> new Checklist()).toArray(Checklist[]::new));
         checklists.stream().forEach(n -> board.addChecklist(n));
         assertThrows(IllegalArgumentException.class, () -> {
             board.addChecklist(new Checklist());

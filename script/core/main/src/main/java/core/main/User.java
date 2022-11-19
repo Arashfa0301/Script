@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-@JsonPropertyOrder({ "username", "firstName", "lastName", "boards" })
+@JsonPropertyOrder({ "userame", "firstName", "lastName", "boards" })
 public class User {
 
     private String username;
@@ -29,28 +29,20 @@ public class User {
      * @param lastName  a String that will be the User's last name
      * @throws IllegalArgumentException if
      *                                  <code>!Pattern.matches("^[A-Za-z0-9_.]+$"</code>,
-     *                                  <code>isBlank()</code> or
-     *                                  <code>isEmpty()</code> is true for the
+     *                                  <code>isBlank()</code> is true for the
      *                                  String input of either
      *                                  <code>username</code>,
      *                                  <code>firstName</code> or
      *                                  <code>lastName</code>
-     * @throws IllegalArgumentException if <code>isBlank()</code> or
-     *                                  <code>isEmpty()</code> is <code>true</code>
-     *                                  for the inputted String of
-     *                                  <code>password</code>
      */
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public User(@JsonProperty("username") String username, @JsonProperty("password") String password,
             @JsonProperty("firstName") String firstName, @JsonProperty("lastName") String lastName) {
         String[] inputs = new String[] { username, firstName, lastName };
         for (String input : inputs) {
-            if (!Pattern.matches("^[A-Za-z0-9_.]+$", input) || input.isBlank() || input.isEmpty()) {
+            if (!Pattern.matches("^[A-Za-z0-9_.]+$", input)) {
                 throw new IllegalArgumentException(String.format("Invalid input: %s", input));
             }
-        }
-        if (password.isBlank() || password.isEmpty()) {
-            throw new IllegalArgumentException("Invalid password");
         }
         this.username = username;
         this.password = password;
@@ -123,7 +115,7 @@ public class User {
     }
 
     /**
-     * Adds the input board to the user's list of boards
+     * Adds the input board to the user's list of boards.
      *
      * @param boardname a string sepresenting the name of the board
      * @return the user
@@ -134,40 +126,73 @@ public class User {
     }
 
     /**
+     * Updates a board in user's list of boards by the name of input board.
      *
-     * @param board
-     * @param boardname
-     * @return
+     * @param board a board that will be updated in the user's board list
+     * @return the user
+     * @see User#checkUserContainsBoard(String)
      */
-    public User putBoard(Board board, String boardname) {
-        checkUserContainsBoard(board.getBoardName());
+    public User putBoard(Board board) {
+        // DOTO: change name: putBoard -> updateBoard??
+        checkUserContainsBoard(board.getName());
         boards.set(
                 boards.indexOf(
-                        getBoard(board.getBoardName())),
+                        getBoard(board.getName())),
                 board);
         return this;
     }
 
+    /**
+     * Removes the inut board from te user's list of boards.
+     *
+     * @param boardname a string of the board's name
+     * @return the user
+     * @see User#checkUserContainsBoard(String)
+     */
     public User removeBoard(String boardname) throws IllegalArgumentException {
         checkUserContainsBoard(boardname);
         boards.remove(getBoard(boardname));
         return this;
     }
 
-    public User renameBoard(String oldBoardname, String newBoardname) throws IllegalArgumentException {
-        checkUserContainsBoard(oldBoardname);
-        getBoard(oldBoardname).setBoardName(newBoardname);
+    /**
+     * Rename a board in user's list of boards by it's oldname and newname.
+     *
+     * @param oldBoardName a string of the board's old/current name
+     * @param newBoardName a string of the board's new/future name
+     * @return the user
+     * @see User#checkUserContainsBoard(String)
+     */
+    public User renameBoard(String oldBoardName, String newBoardName) {
+        checkUserContainsBoard(oldBoardName);
+        getBoard(oldBoardName).setBoardName(newBoardName);
         return this;
     }
 
-    private Board getBoard(String boardname) throws IllegalArgumentException {
-        return boards.stream().filter(b -> b.getBoardName().equals(boardname)).findAny()
+    /**
+     * Finds and returns the board, from user's list of board, specified by the
+     * input.
+     *
+     * @param boardName a string of the board's name
+     * @return board specified by the input boardname
+     * @see User#checkUserContainsBoard(String)
+     */
+    private Board getBoard(String boardName) {
+        checkUserContainsBoard(boardName);
+        return boards.stream().filter(b -> b.getName().equals(boardName)).findAny()
                 .orElseThrow(IllegalArgumentException::new);
     }
 
+    /**
+     * Checks if the specified board exists in the user's list of board.
+     *
+     * @param boardName a string of the board's name
+     * @throws IllegalArgumentException if <code>boardname</code> is not in
+     *                                  <code>boards</code>
+     */
     private void checkUserContainsBoard(String boardName) {
-        if (!boards.stream().anyMatch(b -> b.getBoardName().equals(boardName))) {
-            throw new IllegalArgumentException("Board not found");
+        if (!boards.stream().anyMatch(b -> b.getName().equals(boardName))) {
+            throw new IllegalArgumentException("Board not found.");
         }
     }
 

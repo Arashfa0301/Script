@@ -96,7 +96,7 @@ public class DataHandler {
         }
         checkNullPointException(boardname, username);
         checkIfUserIsNull(getUser(username));
-        write(getUser(username).putBoard(board, boardname));
+        write(getUser(username).putBoard(board));
     }
 
     private String getFilePath() {

@@ -7,22 +7,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
-    public static final int MAX_ELEMENTS = 256;
-    private String boardName, description;
+    public static final int MAX_ELEMENTS = 100;
+    private String name, description;
     private List<Note> notes = new ArrayList<>();
     private List<Checklist> checklists = new ArrayList<>();
 
     /**
      * Creates a Board object.
      *
-     * @param boardName   A String that becomes the name of the board
+     * @param name        A String that becomes the name of the board
      * @param description A short description of the contents of the board
+     * @param notes       A list of notes that become the notes of the board
+     * @param checklists  A list of checklists that become the checklists of the
+     *                    board
+     * @throws NullPointerException if either <code>notes</code> or
+     *                              <code>checklists</code> is <code>null</code>
      */
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public Board(@JsonProperty("boardName") String boardName, @JsonProperty("description") String description,
+    public Board(@JsonProperty("boardName") String name, @JsonProperty("description") String description,
             @JsonProperty("notes") List<Note> notes, @JsonProperty("checklists") List<Checklist> checklists) {
-        checkValidInputString(boardName);
-        this.boardName = boardName;
+        this.name = name;
         this.description = description;
         this.notes = notes;
         this.checklists = checklists;
@@ -33,8 +37,8 @@ public class Board {
      *
      * @return the name of the board
      */
-    public String getBoardName() {
-        return boardName;
+    public String getName() {
+        return name;
     }
 
     /**
@@ -68,12 +72,10 @@ public class Board {
      * Sets the name of the board. Validates the String input with
      * <code>checkValidInputString</code>.
      *
-     * @param boardName a String that will become the new name of the board.
-     * @see Board#checkValidInputString()
+     * @param name a String that will become the new name of the board.
      */
-    public void setBoardName(String boardName) {
-        checkValidInputString(boardName);
-        this.boardName = boardName;
+    public void setBoardName(String name) {
+        this.name = name;
     }
 
     /**
@@ -90,9 +92,7 @@ public class Board {
      * Adds a note to the board.
      *
      * @param note a Note object to add to the board
-     * @throws IllegalArgumentException if <code>note == null</code> if the board
-     *                                  already contains the maximum amount of
-     *                                  elements
+     * @see Board#checkAddBoardElement(BoardElement)
      */
     public void addNote(Note note) {
         checkAddBoardElement(note);
@@ -103,9 +103,7 @@ public class Board {
      * Adds a checklist to the board.
      *
      * @param checklist a Checklist object to add to the board
-     * @throws IllegalArgumentException if <code>checklist == null</code> or the
-     *                                  board already contains the maximum amount of
-     *                                  elements
+     * @see Board#checkAddBoardElement(BoardElement)
      */
     public void addChecklist(Checklist checklist) {
         checkAddBoardElement(checklist);
@@ -127,19 +125,6 @@ public class Board {
     }
 
     /**
-     * Checks if a String is valid.
-     *
-     * @param input a String to be checked
-     * @throws IllegalArgumentException if <code>isEmpty()</code> returns
-     *                                  <code>true</code> for <code>input</code>
-     */
-    private void checkValidInputString(String input) {
-        if (input.isEmpty() || input.length() > 20) {
-            throw new IllegalArgumentException("Invalid argument");
-        }
-    }
-
-    /**
      * Checks if the boardElement is empty and if there exists free space for it in
      * either of the lists.
      *
@@ -152,8 +137,7 @@ public class Board {
      */
     private void checkAddBoardElement(BoardElement boardElement) {
         if (boardElement == null || getChecklists().size() + getNotes().size() >= MAX_ELEMENTS) {
-            throw new IllegalArgumentException("The number of checklits exceed the maximum amount");
+            throw new IllegalArgumentException("The number of checklits exceed the maximum amount.");
         }
     }
-
 }

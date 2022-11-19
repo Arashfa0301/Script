@@ -20,11 +20,13 @@ public abstract class BoardElement {
      * Sets the title of a board element.
      *
      * @param title a String that becomes the title of the board element
+     * @throws IllegalArgumentException if the size <code>title</code> exceeds the
+     *                                  maximum allow length
      */
     @JsonSetter("title")
     public void setTitle(String title) {
         if (title.length() > TITLE_LIMIT) {
-            throw new IllegalArgumentException("The title length should not exceed 23 characters");
+            throw new IllegalArgumentException("The title length should not exceed 23 characters.");
         }
         this.title = title;
     }

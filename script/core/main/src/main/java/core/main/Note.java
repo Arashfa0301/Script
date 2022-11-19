@@ -35,4 +35,5 @@ public class Note extends BoardElement {
     public void setContent(String content) {
         this.content = content;
     }
+
 }

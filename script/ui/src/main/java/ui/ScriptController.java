@@ -96,11 +96,11 @@ public class ScriptController {
             saveBoard(currentBoard);
         }
         Board selectedBoard = user.getBoards().stream()
-                .filter(board -> board.getBoardName().equals(((Button) ae.getSource()).getText()))
+                .filter(board -> board.getName().equals(((Button) ae.getSource()).getText()))
                 .findFirst()
                 .get();
         noteScreen.setVisible(true);
-        boardTitle.setText(selectedBoard.getBoardName());
+        boardTitle.setText(selectedBoard.getName());
         boardDescription.setText(selectedBoard.getBoardDescription());
         currentBoard = selectedBoard;
         boardElementControllers.clear();
@@ -199,7 +199,7 @@ public class ScriptController {
     private void loadBoardButtons(List<Board> boards) throws IOException {
         boardGrid.getChildren().clear();
         IntStream.range(0, boards.size()).forEach(i -> {
-            createBoardButton(boards.get(i).getBoardName(), i);
+            createBoardButton(boards.get(i).getName(), i);
         });
         boardGrid.setStyle("-fx-background-color: transparent");
     }
@@ -255,7 +255,7 @@ public class ScriptController {
     }
 
     private Boolean checkBoardName(TextField textField) {
-        return !(textField.getText().isBlank() || user.getBoards().stream().map(board -> (board.getBoardName()))
+        return !(textField.getText().isBlank() || user.getBoards().stream().map(board -> (board.getName()))
                 .collect(Collectors.toList()).contains(textField.getText()));
     }
 
