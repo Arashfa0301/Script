@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
-    public static final int MAX_ELEMENTS = 256;
+    public static final int MAX_ELEMENTS = 100;
     public static final int MAX_TITLE_LENGHT = 20;
     private String boardName, description;
     private List<Note> notes = new ArrayList<>();

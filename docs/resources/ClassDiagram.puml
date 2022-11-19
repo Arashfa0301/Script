@@ -1,0 +1,52 @@
+@startuml
+class User [[java:core.main.user]] {
+	-String username
+	-String password
+	-String firstName
+    -String lastName
+    -List<Board> boards
+}
+
+class Board [[java:core.main.Board]] {
+	+{static} int MAX_ELEMENTS = 100
+    -String boardName
+    -String description
+    -List<Note> notes
+    -List<Checklist> checklists
+}
+
+abstract class BoardElement [[java:core.main.BoardElement]] {
+	-String title
+    -Boolean isPinned
+}
+
+class Note [[java:core.main.Note]] {
+	-String content
+    ... inherited from BoardElement ...
+    -String title
+    -Boolean isPinned
+}
+
+class Checklist [[java:core.main.Checklist]] {
+	+{static} int MAX_LINE_COUNT = 40
+	-List<ChecklistLine> checklistLines
+    ... inherited from BoardElement ...
+    -String title
+    -Boolean isPinned
+}
+
+class ChecklistLine [[java:core.main.ChecklistLine]] {
+    -String line
+    -Boolean checked    
+}
+
+
+
+User "1" --> "*" Board : boards
+Board "1"--> "*" Checklist : checklists
+Board "1" --> "*" Note : notes
+Checklist "1" --> "*" ChecklistLine : checklistLines
+BoardElement <|-- Checklist
+BoardElement <|-- Note
+
+@enduml
