@@ -89,8 +89,4 @@ public class ApiController {
                         .build());
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "Success!";
-    }
 }
