@@ -54,19 +54,19 @@ public class UserTest {
         List<Board> boards = new ArrayList<>(
                 Arrays.asList(new Board("1", "null", null, null), new Board("2", "null", null, null)));
         user.setBoard(boards);
-        assertEquals("1", user.getBoards().get(0).getBoardName());
-        assertEquals("2", user.getBoards().get(1).getBoardName());
+        assertEquals("1", user.getBoards().get(0).getName());
+        assertEquals("2", user.getBoards().get(1).getName());
 
         user.addBoard("3");
-        assertEquals("3", user.getBoards().get(2).getBoardName());
+        assertEquals("3", user.getBoards().get(2).getName());
 
         Board changedBoard = user.getBoards().get(0);
-        changedBoard.setBoardName("test");
+        changedBoard.setName("test");
         user.putBoard(changedBoard);
         assertEquals(changedBoard, user.getBoards().get(0));
 
         user.renameBoard("test", "testing");
-        assertEquals("testing", user.getBoards().get(0).getBoardName());
+        assertEquals("testing", user.getBoards().get(0).getName());
         assertThrows(IllegalArgumentException.class, () -> {
             user.renameBoard("test", "failedTest");
         });

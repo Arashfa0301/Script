@@ -16,6 +16,8 @@ public class Checklist extends BoardElement {
 
     /**
      * Creates a Checklist object. Title is <code>""</code> by default.
+     *
+     * @see BoardElement#BoardElement()
      */
     public Checklist() {
         super();
@@ -48,10 +50,13 @@ public class Checklist extends BoardElement {
 
     /**
      * Adds a ChecklistLine to the list of ChecklistLines.
+     *
+     * @throws IllegalStateException if the size <code>checklistLines</code> is at
+     *                               it's limit
      */
     public void addChecklistLine() {
         if (checklistLines.size() >= MAX_LINE_COUNT) {
-            throw new IllegalStateException("Lines can't exceed the max line count");
+            throw new IllegalStateException("Lines can't exceed the max line count.");
         }
         checklistLines.add(new ChecklistLine());
     }
@@ -99,5 +104,4 @@ public class Checklist extends BoardElement {
     public void removeChecklistLine(int i) {
         checklistLines.remove(i);
     }
-
 }

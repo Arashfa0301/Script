@@ -19,7 +19,7 @@ public class BoardTest {
     @DisplayName("Test constructor")
     public void testConstructor() {
         Board newBoard = new Board("Name", "Description", new ArrayList<Note>(), new ArrayList<Checklist>());
-        assertEquals("Name", newBoard.getBoardName());
+        assertEquals("Name", newBoard.getName());
         assertEquals("Description", newBoard.getBoardDescription());
     }
 
@@ -55,18 +55,9 @@ public class BoardTest {
     @DisplayName("Test set name")
     public void testSetName() {
         Board board = new Board("Name", "Description", new ArrayList<Note>(), new ArrayList<Checklist>());
-        assertEquals("Name", board.getBoardName());
-        board.setBoardName("New Name");
-        assertEquals("New Name", board.getBoardName());
-        assertThrows(IllegalArgumentException.class, () -> {
-            board.setBoardName("");
-        });
-        assertThrows(NullPointerException.class, () -> {
-            board.setBoardName(null);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            board.setBoardName("123456789012345678901");
-        });
+        assertEquals("Name", board.getName());
+        board.setName("New Name");
+        assertEquals("New Name", board.getName());
     }
 
     @Test

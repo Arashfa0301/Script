@@ -99,12 +99,12 @@ public class ScriptController {
             saveBoard(currentBoard);
         }
         Board selectedBoard = user.getBoards().stream()
-                .filter(board -> board.getBoardName().equals(((Button) ae.getSource()).getText()))
+                .filter(board -> board.getName().equals(((Button) ae.getSource()).getText()))
                 .findFirst()
                 .get();
         noteScreen.setVisible(true);
-        boardTitle.setText(selectedBoard.getBoardName());
-        oldBoardName = selectedBoard.getBoardName();
+        boardTitle.setText(selectedBoard.getName());
+        oldBoardName = selectedBoard.getName();
         boardDescription.setText(selectedBoard.getBoardDescription());
         currentBoard = selectedBoard;
         boardElementControllers.clear();
@@ -129,7 +129,7 @@ public class ScriptController {
         TextField field = (TextField) event.getSource();
         if (checkBoardName(field)) {
             button.setText(field.getText());
-            currentBoard.setBoardName(field.getText());
+            currentBoard.setName(field.getText());
         }
     }
 
@@ -140,14 +140,14 @@ public class ScriptController {
 
     protected void saveBoard(Board board) {
         try {
-            if (!board.getBoardName().equals(oldBoardName)) {
-                remoteModelAccess.renameBoard(oldBoardName, board.getBoardName(), user.getUsername(),
+            if (!board.getName().equals(oldBoardName)) {
+                remoteModelAccess.renameBoard(oldBoardName, board.getName(), user.getUsername(),
                         user.getPassword());
             }
             remoteModelAccess.putBoard(board, user.getUsername(), user.getPassword());
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-            board.setBoardName(oldBoardName);
+            board.setName(oldBoardName);
             remoteModelAccess.putBoard(board, user.getUsername(), user.getPassword());
         }
     }
@@ -210,7 +210,7 @@ public class ScriptController {
     private void loadBoardButtons(List<Board> boards) throws IOException {
         boardGrid.getChildren().clear();
         IntStream.range(0, boards.size()).forEach(i -> {
-            createBoardButton(boards.get(i).getBoardName(), i);
+            createBoardButton(boards.get(i).getName(), i);
         });
         boardGrid.setStyle("-fx-background-color: transparent");
     }
@@ -266,7 +266,7 @@ public class ScriptController {
     }
 
     private Boolean checkBoardName(TextField textField) {
-        return !(textField.getText().isBlank() || user.getBoards().stream().map(board -> (board.getBoardName()))
+        return !(textField.getText().isBlank() || user.getBoards().stream().map(board -> (board.getName()))
                 .collect(Collectors.toList()).contains(textField.getText()));
     }
 
