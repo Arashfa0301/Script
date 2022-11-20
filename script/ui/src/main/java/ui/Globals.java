@@ -8,4 +8,6 @@ abstract class Globals {
 
     protected static User user;
 
+    protected static ScriptController scriptController = null;
+
 }

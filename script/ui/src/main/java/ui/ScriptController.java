@@ -68,6 +68,7 @@ public class ScriptController {
 
     @FXML
     private void initialize() {
+        Globals.scriptController = this;
         scriptSplitPane.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         remoteModelAccess = new RemoteModelAccess();
         username.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
@@ -137,7 +138,7 @@ public class ScriptController {
         currentBoard.setBoardDescription(((TextField) event.getSource()).getText());
     }
 
-    private void saveBoard(Board board) {
+    protected void saveBoard(Board board) {
         try {
             if (!board.getBoardName().equals(oldBoardName)) {
                 remoteModelAccess.renameBoard(oldBoardName, board.getBoardName(), user.getUsername(),
@@ -189,6 +190,7 @@ public class ScriptController {
         if (currentBoard != null) {
             saveBoard(currentBoard);
         }
+        Globals.scriptController = null;
         windowManager.switchScreen(ae, "Login.fxml");
     }
 
@@ -307,6 +309,10 @@ public class ScriptController {
 
     protected Button getNewBoardButton() {
         return newBoardButton;
+    }
+
+    protected Board getCurrentBoard() {
+        return currentBoard;
     }
 
 }
