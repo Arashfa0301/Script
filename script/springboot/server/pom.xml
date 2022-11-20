@@ -91,6 +91,21 @@
       <version>5.7.5</version>
 			<scope>test</scope>
 		</dependency>
+
+         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>4.0.0</version>
+    </dependency>
+
+    <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.9.1</version>
+            <scope>compile</scope>
+        </dependency>
+
   </dependencies>
 
   <build>
@@ -103,11 +118,11 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <argLine>
-            @{jaCoCoArgLine} --add-opens warehouse.springboot.server/springboot.server=ALL-UNNAMED
+            @{jaCoCoArgLine} --add-opens script.springboot.server/springboot.server=ALL-UNNAMED
           </argLine>
         </configuration>
       </plugin>
-      <!-- Run the checkstyle code quality tool -->
+      <!-- Run the checkstyle code quality tool-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>

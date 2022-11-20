@@ -1,6 +1,5 @@
 package ui;
 
-import core.main.User;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -54,10 +53,10 @@ public class RegisterController {
         try {
             remoteModelAccess.register(firstNameField.getText(), lastNameField.getText(), usernameField.getText(),
                     passwordField.getText());
-            User user = remoteModelAccess.getUser(usernameField.getText(), passwordField.getText());
-            Globals.user = user;
+            Globals.user = remoteModelAccess.getUser(usernameField.getText(), passwordField.getText());
             windowManager.switchScreen(ae, "Script.fxml");
         } catch (RuntimeException e) {
+            System.out.println(e);
             TranslateTransition transition = new TranslateTransition();
             transition.setDuration(Duration.seconds(2));
             transition.setNode(invalidField);

@@ -18,7 +18,7 @@ import java.util.Collection;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    DataHandler datahandler = new DataHandler();
+    DataHandler datahandler = new DataHandler("users");
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
