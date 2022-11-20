@@ -16,7 +16,7 @@ component script.ui{
 }
 
 component javafx {
-	component fxml {
+	component fxml #LightCoral {
 	}
 }
 
@@ -31,20 +31,21 @@ component script.springboot.server {
 component spring #LightCoral {
 }
 
-script.ui .> javafx
+script.ui .left.> javafx
 script.ui .> fxml
+script.ui .> core.main
 
-ui .left.> data
+ui ...> data
 
-core.main .left.> jackson
+core.main ..> jackson
 
 data ..> jackson
 data ..> gson
-data ..> core.main
+data .left.> core.main
 
-script.springboot.server ..> spring
+script.springboot.server .> spring
 script.springboot.server ..> jackson
 
-springboot.server ..> data
+springboot.server ...> data
 
 @enduml
