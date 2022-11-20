@@ -1,4 +1,4 @@
-@startuml script module architecture
+@startuml ComponentDiagram
 
 component script.core {
 	package core.main #EDDBC0

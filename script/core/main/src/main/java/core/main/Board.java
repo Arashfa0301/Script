@@ -152,8 +152,10 @@ public class Board {
      *                                  than <code>MAX_ELEMENTS</code>
      */
     private void checkAddBoardElement(BoardElement boardElement) {
-        if (boardElement == null || getChecklists().size() + getNotes().size() >= MAX_ELEMENTS) {
-            throw new IllegalArgumentException("The number of checklits exceed the maximum amount");
+        if (getChecklists().size() + getNotes().size() >= MAX_ELEMENTS) {
+            throw new IllegalStateException("The number of checklits exceed the maximum amount");
+        } else if (boardElement == null) {
+            throw new IllegalArgumentException("BoardElement cannot be null");
         }
     }
 

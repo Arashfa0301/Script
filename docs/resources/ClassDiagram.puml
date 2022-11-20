@@ -1,4 +1,5 @@
-@startuml
+@startuml ClassDiagram
+
 class User [[java:core.main.user]] {
 	-String username
 	-String password

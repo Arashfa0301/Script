@@ -46,7 +46,7 @@ public class BoardTest {
         List<Note> notes = Arrays.asList(
                 IntStream.range(1, 100).mapToObj(i -> new Note()).toArray(Note[]::new));
         notes.stream().forEach(n -> board.addNote(n));
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IllegalStateException.class, () -> {
             board.addNote(new Note());
         });
     }
@@ -113,7 +113,7 @@ public class BoardTest {
         List<Checklist> checklists = Arrays.asList(
                 IntStream.range(1, 100).mapToObj(i -> new Checklist()).toArray(Checklist[]::new));
         checklists.stream().forEach(n -> board.addChecklist(n));
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IllegalStateException.class, () -> {
             board.addChecklist(new Checklist());
         });
     }
