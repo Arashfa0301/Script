@@ -60,6 +60,9 @@ public class User {
         this.boards = new ArrayList<>();
     }
 
+    /**
+     * Creates an empty user object.
+     */
     public User() {
         username = "";
         password = "";
@@ -131,51 +134,90 @@ public class User {
         return new ArrayList<Board>(boards);
     }
 
-    public User addBoard(String boardname) throws IllegalArgumentException {
+    /**
+     * Adds the input board to the user's list of boards.
+     *
+     * @param boardname a string sepresenting the name of the board
+     * @return the user
+     * @throws IllegalStateException if the size of <code>boards</code> is already
+     *                               at it's limit
+     */
+    public User addBoard(String boardname) {
+        if (boards.size() >= MAX_BOARD_COUNT) {
+            throw new IllegalStateException("Amount of boards cannot exceed 100.");
+        }
         Board board = new Board(boardname, "", new ArrayList<Note>(), new ArrayList<Checklist>());
-        checkAddBoard(board);
         boards.add(board);
         return this;
     }
 
-    public User putBoard(Board board) throws IllegalArgumentException {
-        checkUserContainsBoard(board.getBoardName());
+    /**
+     * Updates a board in user's list of boards by the name of input board.
+     *
+     * @param board a board that will be updated in the user's board list
+     * @return the user
+     * @see User#checkUserContainsBoard(String)
+     */
+    public User putBoard(Board board) {
+        checkUserContainsBoard(board.getName());
         boards.set(
                 boards.indexOf(
-                        getBoard(board.getBoardName())),
+                        getBoard(board.getName())),
                 board);
         return this;
     }
 
+    /**
+     * Removes the inut board from te user's list of boards.
+     *
+     * @param boardname a string of the board's name
+     * @return the user
+     * @see User#checkUserContainsBoard(String)
+     */
     public User removeBoard(String boardname) throws IllegalArgumentException {
         checkUserContainsBoard(boardname);
         boards.remove(getBoard(boardname));
         return this;
     }
 
-    public User renameBoard(String oldBoardname, String newBoardname) throws IllegalArgumentException {
-        checkUserContainsBoard(oldBoardname);
-        getBoard(oldBoardname).setBoardName(newBoardname);
+    /**
+     * Rename a board in user's list of boards by it's oldname and newname.
+     *
+     * @param oldBoardName a string of the board's old/current name
+     * @param newBoardName a string of the board's new/future name
+     * @return the user
+     * @see User#checkUserContainsBoard(String)
+     */
+    public User renameBoard(String oldBoardName, String newBoardName) throws IllegalArgumentException {
+        checkUserContainsBoard(oldBoardName);
+        getBoard(oldBoardName).setName(newBoardName);
         return this;
     }
 
-    private Board getBoard(String boardname) throws IllegalArgumentException {
-        return boards.stream().filter(b -> b.getBoardName().equals(boardname)).findAny()
-                .orElseThrow(IllegalArgumentException::new);
+    /**
+     * Finds and returns the board, from user's list of board, specified by the
+     * input.
+     *
+     * @param boardName a string of the board's name
+     * @return board specified by the input boardname
+     * @see User#checkUserContainsBoard(String)
+     */
+    private Board getBoard(String boardname) {
+        checkUserContainsBoard(boardname);
+        return boards.stream().filter(b -> b.getName().equals(boardname)).findAny()
+                .get();
     }
 
-    private void checkAddBoard(Board board) {
-        if (boards.size() >= MAX_BOARD_COUNT) {
-            throw new IllegalStateException("Amount of boards cannot exceed 100");
-        } else if (board == null) {
-            throw new IllegalArgumentException("Board cannot be null");
-        }
-    }
-
+    /**
+     * Checks if the specified board exists in the user's list of board.
+     *
+     * @param boardName a string of the board's name
+     * @throws IllegalArgumentException if <code>boardname</code> is not in
+     *                                  <code>boards</code>
+     */
     private void checkUserContainsBoard(String boardName) {
-        if (!boards.stream().anyMatch(b -> b.getBoardName().equals(boardName))) {
-            throw new IllegalArgumentException("Board not found");
+        if (!boards.stream().anyMatch(b -> b.getName().equals(boardName))) {
+            throw new IllegalArgumentException("Board not found.");
         }
     }
-
 }

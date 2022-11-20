@@ -150,7 +150,7 @@ public class RemoteModelAccess implements ModelAccess {
     @Override
     public void putBoard(Board board, String username, String password) throws RuntimeException {
         System.out.println(
-                String.format("[RemoteModelAccess] Updating board %s for user %s", board.getBoardName(), username));
+                String.format("[RemoteModelAccess] Updating board %s for user %s", board.getName(), username));
         HttpClient client = HttpClient.newHttpClient();
         String boardJson;
         try {
@@ -160,7 +160,7 @@ public class RemoteModelAccess implements ModelAccess {
         }
         HttpRequest request;
         request = HttpRequest.newBuilder()
-                .uri(endpointBaseUri.resolve(String.format("/board/%s/", board.getBoardName())))
+                .uri(endpointBaseUri.resolve(String.format("/board/%s/", board.getName())))
                 .header(ACCEPT_HEADER, APPLICATION_JSON)
                 .header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
                 .header("Authorization", "Basic " + Base64.getEncoder()

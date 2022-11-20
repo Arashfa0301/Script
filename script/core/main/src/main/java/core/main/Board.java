@@ -9,21 +9,20 @@ import java.util.List;
 public class Board {
     public static final int MAX_ELEMENTS = 100;
     public static final int MAX_TITLE_LENGHT = 20;
-    private String boardName, description;
+    private String name, description;
     private List<Note> notes = new ArrayList<>();
     private List<Checklist> checklists = new ArrayList<>();
 
     /**
      * Creates a Board object.
      *
-     * @param boardName   A String that becomes the name of the board
+     * @param name        A String that becomes the name of the board
      * @param description A short description of the contents of the board
      */
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public Board(@JsonProperty("boardName") String boardName, @JsonProperty("description") String description,
+    public Board(@JsonProperty("boardName") String name, @JsonProperty("description") String description,
             @JsonProperty("notes") List<Note> notes, @JsonProperty("checklists") List<Checklist> checklists) {
-        checkValidInputString(boardName);
-        this.boardName = boardName;
+        this.name = name;
         this.description = description;
         this.notes = notes;
         this.checklists = checklists;
@@ -34,8 +33,8 @@ public class Board {
      *
      * @return the name of the board
      */
-    public String getBoardName() {
-        return boardName;
+    public String getName() {
+        return name;
     }
 
     /**
@@ -69,12 +68,10 @@ public class Board {
      * Sets the name of the board. Validates the String input with
      * <code>checkValidInputString</code>.
      *
-     * @param boardName a String that will become the new name of the board.
-     * @see Board#checkValidInputString()
+     * @param name a String that will become the new name of the board.
      */
-    public void setBoardName(String boardName) {
-        checkValidInputString(boardName);
-        this.boardName = boardName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -91,9 +88,7 @@ public class Board {
      * Adds a note to the board.
      *
      * @param note a Note object to add to the board
-     * @throws IllegalArgumentException if <code>note == null</code> if the board
-     *                                  already contains the maximum amount of
-     *                                  elements
+     * @see Board#checkAddBoardElement(BoardElement)
      */
     public void addNote(Note note) {
         checkAddBoardElement(note);
@@ -104,9 +99,7 @@ public class Board {
      * Adds a checklist to the board.
      *
      * @param checklist a Checklist object to add to the board
-     * @throws IllegalArgumentException if <code>checklist == null</code> or the
-     *                                  board already contains the maximum amount of
-     *                                  elements
+     * @see Board#checkAddBoardElement(BoardElement)
      */
     public void addChecklist(Checklist checklist) {
         checkAddBoardElement(checklist);
@@ -128,19 +121,6 @@ public class Board {
     }
 
     /**
-     * Checks if a String is valid.
-     *
-     * @param input a String to be checked
-     * @throws IllegalArgumentException if <code>isEmpty()</code> returns
-     *                                  <code>true</code> for <code>input</code>
-     */
-    private void checkValidInputString(String input) {
-        if (input.isEmpty() || input.length() > MAX_TITLE_LENGHT) {
-            throw new IllegalArgumentException("Invalid argument");
-        }
-    }
-
-    /**
      * Checks if the boardElement is empty and if there exists free space for it in
      * either of the lists.
      *
@@ -153,9 +133,9 @@ public class Board {
      */
     private void checkAddBoardElement(BoardElement boardElement) {
         if (getChecklists().size() + getNotes().size() >= MAX_ELEMENTS) {
-            throw new IllegalStateException("The number of checklits exceed the maximum amount");
+            throw new IllegalStateException("The number of checklits exceed the maximum amount.");
         } else if (boardElement == null) {
-            throw new IllegalArgumentException("BoardElement cannot be null");
+            throw new IllegalArgumentException("BoardElement input argument is null.");
         }
     }
 
