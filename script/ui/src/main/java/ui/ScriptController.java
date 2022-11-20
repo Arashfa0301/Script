@@ -13,18 +13,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -105,17 +99,17 @@ public class ScriptController {
         if (currentBoard != null) {
             saveBoard(currentBoard);
         }
-        Board selectedBoard = user.getBoards().stream()
-                .filter(board -> board.getName().equals(((Button) ae.getSource()).getText()))
-                .findFirst()
-                .get();
-        Button selectedButton = (Button) ae.getSource();
         List<Button> boardButtons = boardGrid.getChildren().stream()
                 .filter(node -> node instanceof Button)
                 .map(node -> (Button) node)
                 .collect(Collectors.toList());
         boardButtons.forEach(button -> button.setStyle(
                 "-fx-background-color: transparent; -fx-alignment: center-left; -fx-font-size: 13px; -fx-font-family: \"Poppins Medium\"; -fx-text-fill: black;"));
+        Board selectedBoard = user.getBoards().stream()
+                .filter(board -> board.getName().equals(((Button) ae.getSource()).getText()))
+                .findFirst()
+                .get();
+        Button selectedButton = (Button) ae.getSource();
         selectedButton.setStyle(
                 "-fx-background-color: black; -fx-alignment: center-left; -fx-font-size: 13px; -fx-font-family: \"Poppins SemiBold\"; -fx-text-fill: white;");
         noteScreen.setVisible(true);

@@ -1,8 +1,8 @@
 package ui;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
-import javafx.geometry.Insets;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 

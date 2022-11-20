@@ -6,11 +6,10 @@ import core.main.Note;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
@@ -224,7 +223,6 @@ public class BoardElementController {
             }
             notePane.getChildren().add(hbox);
         });
-        MFXButton addLineButton = new MFXButton("");
         Pane plus = new Pane();
         plus.setPadding(new Insets(0, 0, 0, 8));
         Line line3 = new Line(0, 6, 8, 6);
@@ -232,6 +230,7 @@ public class BoardElementController {
         line3.setStrokeWidth(1.5f);
         line4.setStrokeWidth(1.5f);
         plus.getChildren().addAll(line3, line4);
+        MFXButton addLineButton = new MFXButton("");
         addLineButton.setGraphic(plus);
         addLineButton.setOnAction(event -> {
             addChecklistLine(checklist);

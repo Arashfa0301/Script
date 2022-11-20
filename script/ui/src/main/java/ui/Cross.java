@@ -2,7 +2,6 @@ package ui;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.geometry.Insets;
 import javafx.scene.shape.Line;
 
 public class Cross extends HBox {
