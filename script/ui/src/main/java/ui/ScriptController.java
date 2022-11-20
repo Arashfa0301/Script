@@ -117,8 +117,8 @@ public class ScriptController {
 
     @FXML
     private void handleBoardNameEnter(KeyEvent ke) {
-        if (ke.getCode().equals(KeyCode.ENTER) && checkBoardName(boardName)) {
-            createBoard();
+        if (ke.getCode().equals(KeyCode.ENTER)) {
+            newBoardButton.fire();
         }
     }
 
@@ -153,12 +153,8 @@ public class ScriptController {
 
     @FXML
     private void createBoard() {
-        try {
-            remoteModelAccess.createBoard(boardName.getText(), user.getUsername(), user.getPassword());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(e);
-        }
-
+        System.out.println(user.getBoards().size());
+        remoteModelAccess.createBoard(boardName.getText(), user.getUsername(), user.getPassword());
         user.addBoard(boardName.getText());
         createBoardButton(boardName.getText(), user.getBoards().size() - 1);
         boardName.clear();
@@ -197,7 +193,7 @@ public class ScriptController {
     }
 
     private void newBoardButtonEnable() {
-        newBoardButton.setDisable(!checkBoardName(boardName));
+        newBoardButton.setDisable(!checkBoardName(boardName) || user.getBoards().size() >= User.MAX_BOARD_COUNT);
     }
 
     private void createWindowSizeListener() {
@@ -256,7 +252,7 @@ public class ScriptController {
         }
         user.removeBoard(boardName);
         loadBoardButtons(user.getBoards());
-        updateScreen();
+        newBoardButtonEnable();
     }
 
     private void updateScreen() {
@@ -306,6 +302,7 @@ public class ScriptController {
             }
         });
         drawBoardElementControllers();
+        updateScreen();
     }
 
     protected Button getNewBoardButton() {

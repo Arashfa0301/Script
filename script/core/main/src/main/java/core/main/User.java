@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 @JsonPropertyOrder({ "username", "firstName", "lastName", "boards" })
 public class User {
 
+    public static final int MAX_BOARD_COUNT = 100;
     private String username;
     private String password;
     private String firstName;
@@ -123,7 +124,9 @@ public class User {
     }
 
     public User addBoard(String boardname) throws IllegalArgumentException {
-        boards.add(new Board(boardname, "", new ArrayList<Note>(), new ArrayList<Checklist>()));
+        Board board = new Board(boardname, "", new ArrayList<Note>(), new ArrayList<Checklist>());
+        checkAddBoard(board);
+        boards.add(board);
         return this;
     }
 
@@ -151,6 +154,14 @@ public class User {
     private Board getBoard(String boardname) throws IllegalArgumentException {
         return boards.stream().filter(b -> b.getBoardName().equals(boardname)).findAny()
                 .orElseThrow(IllegalArgumentException::new);
+    }
+
+    private void checkAddBoard(Board board) {
+        if (boards.size() >= MAX_BOARD_COUNT) {
+            throw new IllegalStateException("Amount of boards cannot exceed 100");
+        } else if (board == null) {
+            throw new IllegalArgumentException("Board cannot be null");
+        }
     }
 
     private void checkUserContainsBoard(String boardName) {
