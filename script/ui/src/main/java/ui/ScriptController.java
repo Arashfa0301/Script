@@ -23,6 +23,7 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -127,7 +128,7 @@ public class ScriptController {
     private void editBoardTitle(KeyEvent event) throws IOException {
         Button button = (Button) boardGrid.getChildren().get(user.getBoards().indexOf(currentBoard) * 2);
         TextField field = (TextField) event.getSource();
-        if (checkBoardName(field)) {
+        if (checkBoardName(field.getText())) {
             button.setText(field.getText());
             currentBoard.setName(field.getText());
         }
@@ -195,7 +196,8 @@ public class ScriptController {
     }
 
     private void newBoardButtonEnable() {
-        newBoardButton.setDisable(!checkBoardName(boardName) || user.getBoards().size() >= User.MAX_BOARD_COUNT);
+        newBoardButton
+                .setDisable(!checkBoardName(boardName.getText()) || user.getBoards().size() >= User.MAX_BOARD_COUNT);
     }
 
     private void createWindowSizeListener() {
@@ -265,9 +267,9 @@ public class ScriptController {
         }
     }
 
-    private Boolean checkBoardName(TextField textField) {
-        return !(textField.getText().isBlank() || user.getBoards().stream().map(board -> (board.getName()))
-                .collect(Collectors.toList()).contains(textField.getText()));
+    private Boolean checkBoardName(String text) {
+        return !(text.isBlank() || user.getBoards().stream().map(board -> (board.getName()))
+                .collect(Collectors.toList()).contains(text) || !Pattern.matches("^[A-Za-z0-9_.]+$", text));
     }
 
     public void drawBoardElementControllers() {
