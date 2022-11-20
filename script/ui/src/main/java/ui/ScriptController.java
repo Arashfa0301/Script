@@ -13,11 +13,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -58,7 +65,7 @@ public class ScriptController {
     private ScrollPane noteScrollPane;
 
     @FXML
-    private Text username, exampleMail;
+    private Text username, fullname;
 
     private User user = Globals.user;
 
@@ -71,8 +78,8 @@ public class ScriptController {
         Globals.scriptController = this;
         scriptSplitPane.setPrefSize(Globals.windowWidth, Globals.windowHeight);
         remoteModelAccess = new RemoteModelAccess();
-        username.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
-        exampleMail.setText(user.getUsername().toLowerCase() + "@example.com");
+        fullname.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
+        username.setText(user.getUsername().toLowerCase());
         noteScrollPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             int oldColumnsCount = columnsCount;
             columnsCount = (int) ((newVal.doubleValue() - 60) / (NOTE_SIZE + H_GAP));
@@ -102,6 +109,15 @@ public class ScriptController {
                 .filter(board -> board.getName().equals(((Button) ae.getSource()).getText()))
                 .findFirst()
                 .get();
+        Button selectedButton = (Button) ae.getSource();
+        List<Button> boardButtons = boardGrid.getChildren().stream()
+                .filter(node -> node instanceof Button)
+                .map(node -> (Button) node)
+                .collect(Collectors.toList());
+        boardButtons.forEach(button -> button.setStyle(
+                "-fx-background-color: transparent; -fx-alignment: center-left; -fx-font-size: 13px; -fx-font-family: \"Poppins Medium\"; -fx-text-fill: black;"));
+        selectedButton.setStyle(
+                "-fx-background-color: black; -fx-alignment: center-left; -fx-font-size: 13px; -fx-font-family: \"Poppins SemiBold\"; -fx-text-fill: white;");
         noteScreen.setVisible(true);
         boardTitle.setText(selectedBoard.getName());
         oldBoardName = selectedBoard.getName();
@@ -218,8 +234,9 @@ public class ScriptController {
     private void createBoardButton(String boardName, int index) {
         Button button = new Button(boardName);
         button.wrapTextProperty().setValue(true);
-        button.setStyle("-fx-background-color: transparent; -fx-alignment: center-left;");
-        button.setPadding(new Insets(0, 0, 0, 0));
+        button.setStyle(
+                "-fx-background-color: transparent; -fx-alignment: center-left; -fx-font-size: 13px; -fx-font-family: \"Poppins Medium\"; -fx-text-fill: black;");
+        button.setPadding(new Insets(0, 6, 0, 6));
         button.setCursor(Cursor.HAND);
         button.setOnAction((event) -> {
             try {
@@ -230,9 +247,13 @@ public class ScriptController {
         });
         button.setId(boardName);
         button.setMaxWidth(BUTTON_WIDTH);
-        MFXButton deleteButton = new MFXButton("X");
+        MFXButton deleteButton = new MFXButton("");
         deleteButton.setCursor(Cursor.HAND);
-        deleteButton.setStyle("-fx-background-color: transparent; -fx-border-color: black;");
+        Cross cross = new Cross(Color.BLACK, 1.0);
+        cross.setTranslateY(4);
+        deleteButton.setGraphic(cross);
+        deleteButton.setStyle(
+                "-fx-background-color: transparent; -fx-alignment: center-left;");
         deleteButton.setOnAction((event) -> {
             try {
                 deleteBoard(event);
