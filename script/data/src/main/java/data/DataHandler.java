@@ -7,7 +7,6 @@ import core.main.Board;
 import core.main.User;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,8 +16,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -50,28 +47,16 @@ public class DataHandler {
             }
             return users;
         } catch (FileNotFoundException e) {
-            if (new File(FILE_PATH).mkdir()) {
-                return new ArrayList<>();
-            } else {
-                return new ArrayList<>();
-            }
+            return new ArrayList<>();
         } catch (IOException e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
     }
 
-    public void clearSavedData() throws IOException {
-        Files.delete(Paths.get(getFilePath()));
-    }
-
-    public void makeFile() throws IOException {
-        Files.createFile(Paths.get(getFilePath()));
-    }
-
     public void write(User user) {
         checkIfUserIsNull(user);
-        checkNullPointException(user.getUsername());
+        checkInvalidInput(user.getUsername());
         List<User> users = read();
         users.removeIf(u -> u.getUsername().equals(user.getUsername()));
         users.add(user);
@@ -85,30 +70,33 @@ public class DataHandler {
     }
 
     public void createBoard(String boardname, String username) {
-        checkNullPointException(boardname, username);
-        checkIfUserIsNull(getUser(username));
+        checkAvailableUser(username);
+        checkInvalidInput(boardname);
         write(getUser(username).addBoard(boardname));
     }
 
     public void removeBoard(String boardname, String username) {
-        checkNullPointException(boardname, username);
-        checkIfUserIsNull(getUser(username));
+        checkAvailableUser(username);
+        checkInvalidInput(boardname);
+        checkAvailableBoard(username, boardname);
         write(getUser(username).removeBoard(boardname));
     }
 
     public void renameBoard(String oldBoardname, String newBoardname, String username) {
-        checkNullPointException(oldBoardname, newBoardname, username);
+        checkAvailableUser(username);
+        checkInvalidInput(oldBoardname, newBoardname);
+        checkAvailableBoard(username, oldBoardname);
         checkIfUserIsNull(getUser(username));
         write(getUser(username).renameBoard(oldBoardname, newBoardname));
     }
 
     public void updateBoard(String boardname, Board board, String username) {
+        checkAvailableUser(username);
         if (board == null) {
             throw new NullPointerException("The input argument is not valid");
         }
-        User user = getUser(username);
-        user.putBoard(board);
-        write(user);
+        checkInvalidInput(boardname);
+        write(getUser(username).putBoard(board));
     }
 
     private String getFilePath() {
@@ -119,7 +107,7 @@ public class DataHandler {
         return read().stream().filter(u -> u.getUsername().equals(username)).findAny().orElse(null);
     }
 
-    public Boolean userExists(String username) {
+    public Boolean hasUser(String username) {
         return getUser(username) != null;
     }
 
@@ -134,7 +122,7 @@ public class DataHandler {
         }
     }
 
-    private void checkNullPointException(String... strings) {
+    private void checkInvalidInput(String... strings) {
         if (new ArrayList<String>(Arrays.asList(strings)).stream().anyMatch(s -> s == null || s.isBlank())) {
             throw new IllegalArgumentException("The give input is invalid. Either null or empty");
         }
@@ -143,6 +131,18 @@ public class DataHandler {
     private void checkIfUserIsNull(User user) {
         if (user == null) {
             throw new NullPointerException("The input user is null");
+        }
+    }
+
+    private void checkAvailableUser(String username) {
+        if (getUser(username) == null) {
+            throw new IllegalStateException("The input user argument does not exists.");
+        }
+    }
+
+    private void checkAvailableBoard(String username, String boardname) {
+        if (!getUser(username).getBoards().stream().anyMatch(name -> name.getName().equals(boardname))) {
+            throw new IllegalStateException("The input board argument does not exist of the given user.");
         }
     }
 }
