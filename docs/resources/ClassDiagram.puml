@@ -18,12 +18,14 @@ class Board [[java:core.main.Board]] {
 
 abstract class BoardElement [[java:core.main.BoardElement]] {
 	-String title
+    -Boolean isPinned
 }
 
 class Note [[java:core.main.Note]] {
 	-String content
     ... inherited from BoardElement ...
     -String title
+    -Boolean isPinned
 }
 
 class Checklist [[java:core.main.Checklist]] {
@@ -31,12 +33,15 @@ class Checklist [[java:core.main.Checklist]] {
 	-List<ChecklistLine> checklistLines
     ... inherited from BoardElement ...
     -String title
+    -Boolean isPinned
 }
 
 class ChecklistLine [[java:core.main.ChecklistLine]] {
     -String line
     -Boolean checked    
 }
+
+
 
 User "1" --> "*" Board : boards
 Board "1"--> "*" Checklist : checklists

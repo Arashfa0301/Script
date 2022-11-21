@@ -18,6 +18,7 @@ public class ChecklistTest {
         // Tests constructor
         Checklist checklist = new Checklist();
         assertEquals("", checklist.getTitle());
+        assertEquals(false, checklist.isPinned());
 
         // Tests getChecklistLines() and order of checklists
         checklist.addChecklistLine();

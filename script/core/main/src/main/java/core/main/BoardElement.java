@@ -7,9 +7,11 @@ public abstract class BoardElement {
 
     private static final int TITLE_LIMIT = 23;
     private String title = "";
+    private boolean isPinned = false;
 
     /**
-     * Creates a new board element. <code>title = ""</code>
+     * Creates a new board element. <code>title = ""</code> and
+     * <code>isPinned = false</code> by default.
      */
     public BoardElement() {
     }
@@ -40,4 +42,22 @@ public abstract class BoardElement {
         return title;
     }
 
+    /**
+     * Pins the board element, which prioritizes it over other board elements.
+     */
+    @JsonSetter("isPinned")
+    public void setIsPinned(Boolean pinned) {
+        isPinned = pinned;
+    }
+
+    /**
+     * Checks if a board element is pinned.
+     *
+     * @return <code>true</code> if board element is pinned, otherwise
+     *         <code>false</code>
+     */
+    @JsonGetter("isPinned")
+    public boolean isPinned() {
+        return isPinned;
+    }
 }
