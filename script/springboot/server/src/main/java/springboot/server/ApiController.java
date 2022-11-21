@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -87,6 +88,19 @@ public class ApiController {
                         .password(user.getPassword())
                         .roles("USER")
                         .build());
+    }
+
+    @DeleteMapping("/user/{username}/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable("username") String username) {
+        // get authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getName().equals(username)) {
+            datahandler.removeUser(username);
+            inMemoryUserDetailsManager.deleteUser(username);
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to delete this user");
+        }
     }
 
 }
