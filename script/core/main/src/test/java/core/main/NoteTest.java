@@ -1,9 +1,7 @@
 package core.main;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,20 +53,4 @@ public class NoteTest {
         });
     }
 
-    @Test
-    @DisplayName("Test pin")
-    public void testPin() {
-        Note note = new Note();
-
-        // Test that note is not pinned by default
-        assertFalse(note.isPinned());
-
-        // Tests that pin() works as intended
-        note.setIsPinned(true);
-        assertTrue(note.isPinned());
-
-        // Tests that unPin() works as intended
-        note.setIsPinned(false);
-        assertFalse(note.isPinned());
-    }
 }
