@@ -15,13 +15,13 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import java.io.IOException;
 
-public class LoginControllerTest extends ApplicationTest {
+public class RegisterControllerTest extends ApplicationTest {
 
-    LoginController controller;
+    RegisterController controller;
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("Login.fxml"));
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("Register.fxml"));
         Parent root = loader.load();
         controller = loader.getController();
         stage.setScene(new Scene(root));
@@ -35,23 +35,30 @@ public class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
-    @DisplayName("Tests login fields and login button visibility")
-    public void testLogin() {
+    @DisplayName("Tests register fields and register button visibility")
+    public void testRegisterFields() {
         clickOn("#usernameField");
         write("a");
-        assertTrue(controller.getLoginButton().isDisabled(),
+        assertTrue(controller.getRegisterButton().isDisabled(),
                 "Button should be disabled when some fields are missing inputs");
         clickOn("#passwordField");
-        write("i");
-        assertFalse(controller.getLoginButton().isDisabled(),
-                "User is supposed to be invalid to check that the invalid field works as intended");
-        clickOn("#loginButton");
-        assertTrue(controller.getInvalidField().isVisible(),
+        write("b");
+        assertTrue(controller.getRegisterButton().isDisabled(),
+                "Button should be disabled when some fields are missing inputs");
+        clickOn("#firstNameField");
+        write("c");
+        assertTrue(controller.getRegisterButton().isDisabled(),
                 "Button should be disabled when some fields are missing inputs");
         clickOn("#usernameField");
         press(KeyCode.BACK_SPACE);
         release(KeyCode.BACK_SPACE);
-        assertTrue(controller.getLoginButton().isDisabled(),
+        clickOn("#lastNameField");
+        write("d");
+        assertTrue(controller.getRegisterButton().isDisabled(),
                 "Button should be disabled when some fields are missing inputs");
+        clickOn("#usernameField");
+        write("a");
+        assertFalse(controller.getRegisterButton().isDisabled(),
+                "Button should be enabled if all fields contain inputs");
     }
 }

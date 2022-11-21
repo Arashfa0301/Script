@@ -75,4 +75,16 @@ public class RegisterController {
             Globals.windowHeight = (double) newVal;
         });
     }
+
+    protected Button getRegisterButton() {
+        return registerButton;
+    }
+
+    protected TextField getUsernameField() {
+        return usernameField;
+    }
+
+    protected TextField getInvalidField() {
+        return invalidField;
+    }
 }
