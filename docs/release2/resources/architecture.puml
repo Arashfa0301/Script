@@ -1,0 +1,65 @@
+@startuml architecture
+allowmixing
+
+package core {
+    class User [[java:core.main.user]] {
+        -String name
+        -List<Board> boards
+    }
+
+    class Board [[java:core.main.Board]] {
+        +{static} int MAX_NOTES
+        -String boardName
+        -String description
+        -List<Note> notes
+    }
+
+    class Note [[java:core.main.Note]] {
+        -String title
+        -String text
+        -Boolean isPinned
+        -String color
+        -Map<String,List<int>> selectableColors
+    }
+
+}
+
+package ui {
+    class ScriptController [[java:ui.ScriptController]] {
+        -Board currentBoard
+        -{static} int BUTTON_WIDTH
+        -{static} int BUTTON_HEIGHT
+        -{static} int H_GAP
+        -int columnsCount
+        -List<Board> boards
+        -ScriptModule scriptModule
+        -User user
+    }
+
+    class ScriptApp [[java:ui.ScriptApp]]
+
+    class LoginController [[java:ui.LoginController]] {
+        -ScriptModule scriptModule
+    }
+
+    abstract class Globals [[java:ui.Globals]] {
+        #User user
+        #int windowHeight
+        #int windowWidth
+    }
+}
+
+package data {
+    class ScriptModule [[java:data.ScriptModule]] {
+        -{static} String FILE_NAME
+        -{static} String FILE_PATH
+        -Gson gson
+    }
+}
+
+core -> ui
+core -> data
+
+ui -down-> data
+
+@enduml
