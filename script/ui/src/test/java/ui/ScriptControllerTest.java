@@ -5,18 +5,25 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import core.main.Board;
+import core.main.Checklist;
+import core.main.ChecklistLine;
+import core.main.Note;
 import core.main.User;
 import data.DataHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
+import org.testfx.matcher.control.LabeledMatchers;
+import org.testfx.robot.Motion;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ScriptControllerTest extends ApplicationTest {
 
@@ -31,8 +38,6 @@ public class ScriptControllerTest extends ApplicationTest {
         dataHandler.removeUser("username");
         dataHandler.write(user);
         Globals.user = user;
-        Globals.windowHeight = 720;
-        Globals.windowWidth = 1280;
         FXMLLoader loader = new FXMLLoader(this.getClass().getResource("Script.fxml"));
         Parent root = loader.load();
         this.controller = loader.getController();
@@ -42,30 +47,105 @@ public class ScriptControllerTest extends ApplicationTest {
 
     @Test
     @DisplayName("Test controller")
-    void testController() {
+    public void testController() {
         assertNotNull(controller);
     }
 
     @Test
-    @Disabled
-    @DisplayName("Test create boards")
-    void testCreateBoards() {
+    @DisplayName("Test boards")
+    public void testBoards() throws InterruptedException {
         assertTrue(user.getBoards().size() == 0, "No boards should exist yet");
         assertTrue(controller.getNewBoardButton().isDisabled(),
                 "New board button should be disabled when field is empty");
         clickOn("#boardName");
-        write("test_board");
+        write("testBoard");
         assertFalse(controller.getNewBoardButton().isDisabled(),
                 "New board button should be enabled when field has content");
         clickOn("#newBoardButton");
+        moveTo("testBoard");
+        clickOn();
         assertTrue(user.getBoards().size() == 1, "One board should exist");
-        clickOn("#test_board");
         clickOn("#boardDescription");
         write("test_description");
-        assertEquals(user.getBoards().get(0).getBoardDescription(),
+        assertEquals(getSpecificBoard(0).getBoardDescription(),
                 "test_description",
                 "Description field should be the same as board description");
-        assertTrue(user.getBoards().get(0).getNotes().size() == 0,
-                "One note should exist in board");
+        assertTrue(getNotesFromUser(0).size() == 0,
+                "No notes should exist in board");
+        clickOn("#newNoteButton");
+        assertTrue(getNotesFromUser(0).size() == 1);
+        clickOn("#boardName");
+        write("enterBoard");
+        press(KeyCode.ENTER);
+        assertTrue(user.getBoards().size() == 2);
+        clickOn(LabeledMatchers.hasText("X"));
+        // TODO uncomment when the bug with removing boards is fixed
+        // assertTrue(user.getBoards().size() == 0);
+    }
+
+    @Test
+    @DisplayName("Test notes")
+    public void testNotes() throws InterruptedException {
+        clickOn("#boardName");
+        write("noteTest");
+        clickOn("#newBoardButton");
+        clickOn("#noteTest");
+        clickOn("#newNoteButton");
+        assertTrue(getSpecificNote(0, 0).getTitle().equals("") && getSpecificNote(0, 0).getContent().equals(""));
+        moveTo("Title");
+        clickOn();
+        write("helo");
+        moveTo("Notes");
+        clickOn();
+        write("test");
+        clickOn("#newNoteButton");
+        assertEquals("helo", getSpecificNote(0, 0).getTitle());
+        assertEquals("test", getSpecificNote(0, 0).getContent());
+    }
+
+    @Test
+    @DisplayName("Test checklists")
+    public void testChecklists() throws InterruptedException {
+        clickOn("#boardName");
+        write("checklistTest");
+        clickOn("#newBoardButton");
+        clickOn("#checklistTest");
+        clickOn("#newChecklistButton");
+        assertTrue(getSpecificChecklistLine(0, 0, 0).getLine().equals("")
+                && !getSpecificChecklistLine(0, 0, 0).isChecked()
+                && getSpecificChecklist(0, 0).getTitle().equals(""));
+        moveTo("Title");
+        clickOn();
+        write("helo");
+        moveTo("Add a list element");
+        clickOn();
+        write("line");
+        moveBy(-80, 0, Motion.DIRECT);
+        clickOn();
+        clickOn("#newChecklistButton");
+        assertTrue(getSpecificChecklistLine(0, 0, 0).getLine().equals("line")
+                && getSpecificChecklistLine(0, 0, 0).isChecked()
+                && getSpecificChecklist(0, 0).getTitle().equals("helo"));
+    }
+
+    private List<Note> getNotesFromUser(int boardIndex) {
+        return user.getBoards().get(boardIndex).getNotes();
+    }
+
+    private Note getSpecificNote(int boardIndex, int noteIndex) {
+        return user.getBoards().get(boardIndex).getNotes().get(noteIndex);
+    }
+
+    private Board getSpecificBoard(int boardIndex) {
+        return user.getBoards().get(boardIndex);
+    }
+
+    private ChecklistLine getSpecificChecklistLine(int boardIndex, int checklistIndex, int checklistLine) {
+        return user.getBoards().get(boardIndex).getChecklists().get(checklistIndex).getChecklistLines()
+                .get(checklistLine);
+    }
+
+    private Checklist getSpecificChecklist(int boardIndex, int checklistIndex) {
+        return user.getBoards().get(boardIndex).getChecklists().get(checklistIndex);
     }
 }

@@ -72,4 +72,19 @@ public class LoginController {
         });
     }
 
+    protected Button getLoginButton() {
+        return this.loginButton;
+    }
+
+    protected Button getCreateNewUserButton() {
+        return this.swapRegisterButton;
+    }
+
+    protected TextField getInvalidField() {
+        return this.invalidField;
+    }
+
+    protected MFXPasswordField getPasswordField() {
+        return this.passwordField;
+    }
 }

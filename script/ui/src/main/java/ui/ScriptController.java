@@ -317,4 +317,8 @@ public class ScriptController {
         return currentBoard;
     }
 
+    protected List<BoardElementController> getBoardElementControllers() {
+        return boardElementControllers;
+    }
+
 }
