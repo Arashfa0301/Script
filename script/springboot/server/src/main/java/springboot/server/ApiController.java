@@ -77,7 +77,7 @@ public class ApiController {
     @ResponseStatus(HttpStatus.CREATED)
     public void postBody(@RequestBody User user) {
         // TODO: change userExists name
-        if (datahandler.userExists(user.getUsername())) {
+        if (datahandler.hasUser(user.getUsername())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
         }
         datahandler.write(user);
