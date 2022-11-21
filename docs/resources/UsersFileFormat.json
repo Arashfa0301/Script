@@ -18,8 +18,7 @@
 				"notes": [
 					{
 						"content": "content",
-						"title": "title",
-						"isPinned": false
+						"title": "title"
 					}
 				],
 				"checklists": [
@@ -34,8 +33,7 @@
 								"checked": true
 							}
 						],
-						"title": "title",
-						"isPinned": false
+						"title": "title"
 					}
 				]
 			},
