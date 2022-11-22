@@ -5,6 +5,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 public class Cross extends HBox {
+
+    /**
+     * Constucts a Cross which is used in BoardElementController and
+     * ScriptController.
+     *
+     * @param color the color of the cross
+     * @param size  the size of the cross
+     *
+     */
     public Cross(Color color, double size) {
         super();
         this.setSpacing(-11.5f * size);
