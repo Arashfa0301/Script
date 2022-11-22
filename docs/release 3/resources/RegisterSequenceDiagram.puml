@@ -1,0 +1,14 @@
+@startuml requestsWhenSaving
+skinparam backgroundColor #EEEBDC
+
+actor Bruker
+Bruker -> UI : Trykk registrer-knapp
+UI -> RemoteModelAccess : Lager ny bruker klasse med oppgitt data
+database API
+RemoteModelAccess -> API : Bruker er opprettet
+API -> RemoteModelAccess : 200 OK
+RemoteModelAccess -> API : Hent bruker
+API -> RemoteModelAccess : Bruker
+RemoteModelAccess -> UI: Ny bruker klasse
+
+@enduml
