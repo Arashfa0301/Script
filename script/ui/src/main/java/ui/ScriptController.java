@@ -263,10 +263,12 @@ public class ScriptController {
     private void deleteBoard(ActionEvent ae) throws IOException {
         String boardName = ((Button) boardGrid.getChildren().get(GridPane.getRowIndex((Button) ae.getSource()) * 2))
                 .getText();
-        if (currentBoard.getName().equals(boardName)) {
-            saveBoard(currentBoard);
-            currentBoard = null;
-            updateScreen();
+        if (currentBoard != null) {
+            if (currentBoard.getName().equals(boardName)) {
+                saveBoard(currentBoard);
+                currentBoard = null;
+                updateScreen();
+            }
         }
         try {
             remoteModelAccess.removeBoard(boardName, user.getUsername(), user.getPassword());
