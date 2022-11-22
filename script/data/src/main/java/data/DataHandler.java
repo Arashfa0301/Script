@@ -43,7 +43,7 @@ public class DataHandler {
      * it's java object using gson and returning the saved
      * users that exist as that file's content.
      *
-     * @return a list of saved users if the file exists, an ampty list if not
+     * @return a list of saved users if the file exists, else an empty list
      * @exception FileNotFoundException returns empty list
      * @exception IOException           returns empty list
      */
@@ -96,7 +96,7 @@ public class DataHandler {
      *
      * @param boardname a string, specifying the name of the board
      * @param username  a string, specifying which saved user the board will be
-     *                  given to
+     *                  assigned to
      *
      * @see DataHandler#checkAvailableUser(String)
      * @see DataHandler#checkInvalidInput(String...)
@@ -217,7 +217,7 @@ public class DataHandler {
     }
 
     /**
-     * Checks whether the input spirngs are inalid or not.
+     * Checks whether the input strings are invalid.
      *
      * @param strings an array of strings to be be checked
      * @throws IllegalArgumentException if <code>str</code> is either
@@ -248,7 +248,7 @@ public class DataHandler {
      * Checks if a user exists in the list of saved users.
      *
      * @param username a string, specifying the user's username
-     * @throws IllegalStateException if the userobject found with
+     * @throws IllegalStateException if the user object found with
      *                               <code>username</code> is <code>null</code>
      */
     private void checkAvailableUser(String username) {
