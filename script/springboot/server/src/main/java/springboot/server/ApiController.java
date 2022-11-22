@@ -31,6 +31,15 @@ public class ApiController {
         this.inMemoryUserDetailsManager = inMemoryUserDetailsManager;
     }
 
+    /**
+     * Gets the specified user.
+     *
+     * @param username a string, the username of the user
+     * @return User a user object
+     * @throws ResponseStatusException if the user does not exist
+     *
+     * @see User
+     */
     @GetMapping(path = "/user/{username}")
     public User getUser(@PathVariable("username") String username) {
         // get authenticated user
@@ -44,6 +53,14 @@ public class ApiController {
         }
     }
 
+    /**
+     * Creates the specified board.
+     *
+     * @param boardName a string, the id of the board
+     *
+     * @see Board
+     * @see DataHandler#createBoard(String, String)
+     */
     @GetMapping("/boards/create/{boardName}")
     @ResponseStatus(HttpStatus.CREATED)
     public void createBoard(@PathVariable("boardName") String boardName) {
@@ -51,6 +68,13 @@ public class ApiController {
         datahandler.createBoard(boardName, authentication.getName());
     }
 
+    /**
+     * Deletes the specified board.
+     *
+     * @param boardName a string, the id of the board
+     * 
+     * @see DataHandler#deleteBoard(String, String)
+     */
     @GetMapping("/boards/remove/{boardName}")
     @ResponseStatus(HttpStatus.OK)
     public void removeBoard(@PathVariable("boardName") String boardName) {
@@ -58,6 +82,14 @@ public class ApiController {
         datahandler.removeBoard(boardName, authentication.getName());
     }
 
+    /**
+     * Renames the specified board.
+     *
+     * @param boardName    a string, the id of the board
+     * @param newBoardName a string, the new id of the board
+     *
+     * @see DataHandler#renameBoard(String, String, String)
+     */
     @PostMapping("/boards/rename/{boardName}/{newBoardName}")
     @ResponseStatus(HttpStatus.OK)
     public void renameBoard(@PathVariable("boardName") String boardName,
@@ -66,6 +98,14 @@ public class ApiController {
         datahandler.renameBoard(boardName, newBoardName, authentication.getName());
     }
 
+    /**
+     * Replace the specified board with the new board.
+     *
+     * @param boardName a string, the id of the board
+     * @param board     a board object, the new board
+     *
+     * @see DataHandler#updateBoard(String, Board, String)
+     */
     @PutMapping("/board/{boardName}")
     @ResponseStatus(HttpStatus.CREATED)
     public void putBoardNotes(@PathVariable("boardName") String boardName,
@@ -74,6 +114,15 @@ public class ApiController {
         datahandler.updateBoard(boardName, board, authentication.getName());
     }
 
+    /**
+     * Registers a new user.
+     *
+     * @param user a user object
+     * @throws ResponseStatusException if the user already exists
+     * 
+     * @see User
+     * @see DataHandler#registerUser(User)
+     */
     @PostMapping("/auth/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void postBody(@RequestBody User user) {
@@ -90,6 +139,15 @@ public class ApiController {
                         .build());
     }
 
+    /**
+     * Deletes the specified user.
+     *
+     * @param username a string, the username of the user
+     * @throws ResponseStatusException if the user does not exist
+     * 
+     * @see DataHandler#removeUser(String)
+     * @see InMemoryUserDetailsManager#deleteUser(String)
+     */
     @DeleteMapping("/user/{username}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@PathVariable("username") String username) {

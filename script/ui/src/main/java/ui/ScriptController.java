@@ -411,7 +411,8 @@ public class ScriptController {
      */
     private Boolean checkBoardName(String text) {
         return !(text.isBlank() || user.getBoards().stream().map(board -> (board.getName()))
-                .collect(Collectors.toList()).contains(text) || !Pattern.matches("^[A-Za-z0-9_.]+$", text));
+                .collect(Collectors.toList()).contains(text) || !Pattern.matches("^[A-Za-z0-9_.]+$", text)
+                || text.length() > Board.MAX_TITLE_LENGHT);
     }
 
     /**
