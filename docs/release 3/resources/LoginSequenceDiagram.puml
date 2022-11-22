@@ -1,0 +1,21 @@
+@startuml logInRequests
+skinparam backgroundColor #EEEBDC
+
+actor Bruker
+Bruker -> UI : Klikk Login-knapp
+UI -> RemoteModelAccess : Login
+database API
+RemoteModelAccess -> API : Login
+
+alt#Gold #LightGreen Brukernavn og passord stemmer
+    API -> RemoteModelAccess : 200 Ok, her er brukerdata
+    RemoteModelAccess -> RemoteModelAccess : ObjectMappe data til bruker klasse
+    RemoteModelAccess -> UI : Bruker klasse
+    UI -> Bruker : ScriptController m/ data
+else #Salmon Feil
+    API -> RemoteModelAccess : Feil statuskode
+    RemoteModelAccess -> UI : Feil (exception)
+    UI -> Bruker : Viser feilmelding
+end
+
+@enduml

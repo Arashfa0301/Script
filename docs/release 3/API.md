@@ -1,6 +1,6 @@
 # Dokumentasjon på API
 
-Script APIet gjør det mulig å kommunisere med applikasjonen gjennom REST endepunkter. Dette tillater smidig utvikling ved at funksjonalitet og frontend separeres, og på denne måten kan forskjellige implementasjoner av grensesnitt implementeres.
+Script APIet gjør det mulig å kommunisere med applikasjonen gjennom REST endepunkter. Dette tillater smidig utvikling ved at funksjonalitet og frontend separeres, og på denne måten kan grensesnitt implementeres akkurat slik man ønsker.
 
 Vi kunne for eksempel laget en React app som hadde koblet opp på en tjener med dette APIet, men vi har valgt å fokusere utelukkende på frontend i JavaFX.
 <br/><br/>
@@ -109,7 +109,7 @@ Bytter navn på et brett med `boardname` til `newBoardName`. Dette endepunktet t
 _Returnerer 200 OK dersom dette var vellykket._
 <br/><br/>
 
-### Slett board `DELETE` `/boards/remove/{boardname}
+### Slett board `DELETE` `/boards/remove/{boardname}`
 
 _Merk: Bruker må være autentisert_
 
@@ -118,7 +118,7 @@ Sletter board med navn `boardname`.
 _Returnerer 200 OK dersom dette var vellykket._
 <br/><br/>
 
-### Slett bruker `DELETE` `/user/{username}/delete
+### Slett bruker `DELETE` `/user/{username}/delete`
 
 _Merk: Bruker må være autentisert_
 
