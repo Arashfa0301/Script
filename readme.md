@@ -2,12 +2,15 @@
 
 # IT1901 Prosjekt - Script
 
-_Script lar deg organisere notater og påminnelser for å hjelpe deg med ulike aktiviteter_
+_Script lar deg organisere notater og sjekklister for å hjelpe deg med ulike aktiviteter_
 
 Alt av dokumentasjon ligger under [docs](/docs) og er sortert etter utgivelser av prosjektet.
 
 ## Struktur
-Mappen `script` utgjør kodingsprosjektet. Prosjektet er bygd med maven og består av tre delmoduler: `core`, `data` og `ui`. Core-modulen inneholder hovedklassene og data-modulen inneholder både data og klasser for filbehandling. Ui-modulen inneholder kontroller samt fxml-filer og alt annet av ressurser som trengs til brukergrensesnittet.
+Mappen `script` utgjør kodingsprosjektet. Prosjektet er bygd med maven og består av fire delmoduler: `core`, `data`, `ui` og `springboot`. Core-modulen inneholder hovedklassene og data-modulen inneholder klassen DataHandler for filbehandling. Ui-modulen inneholder kontroller samt fxml-filer og alt annet av ressurser som trengs til brukergrensesnittet. Springboot-modulen inneholder alt som brukes til å lage api-et.
+
+## Script-applikasjonen
+Java-applikasjonen vår lar brukere opprette ulike brett hvor de kan lagre notater og sjekklister. Alt lagres automatisk, noe som leder til en god brukeropplevelse. 
 
 ## Roadmap
 - [x] Modular structure
@@ -16,13 +19,5 @@ Mappen `script` utgjør kodingsprosjektet. Prosjektet er bygd med maven og best�
     - [x] Controller
 - [x] Unit tests and CD/CI pipeline
 - [ ] Search functionality
-- [ ] List functionality with checkboxes in notes
+- [x] List functionality with checkboxes in notes
 - [x] Custom JSON serializer
-
-## Kjøring av FXUI-klienten
-
-Den lokale javafx-klienten er bare konfigurert til å starte opp med maven fra mappen `script/ui`, så for å kjøre FXUI, kjør
-
-```sh
-cd script && mvn clean install && cd ui && mvn javafx:run
-```
