@@ -25,18 +25,18 @@ import java.util.List;
 
 public class BoardElementController {
 
-    protected static final int BOARD_ELEMENT_WIDTH = 220, BOARD_ELEMENT_HEIGHT = 430, TITLE_LIMIT = 23;
+    protected static final int BOARD_ELEMENT_WIDTH = 220, BOARD_ELEMENT_HEIGHT = 430, MAX_BOARD_ELEMENT_HEIGHT = 1000,
+            TITLE_LIMIT = 23;
 
     private BoardElement boardElement;
 
     private ScriptController listener;
 
-    private Cross cross;
+    private Cross cross = new Cross(Color.WHITE, 1.0);
 
     public BoardElementController(BoardElement boardElement, ScriptController listener) {
         this.boardElement = boardElement;
         this.listener = listener;
-        this.cross = new Cross(Color.WHITE, 1.0);
         this.cross.setPadding(new Insets(3, 0, 0, 0));
 
     }
@@ -69,21 +69,10 @@ public class BoardElementController {
         notePane.setStyle("-fx-background-color: white; -fx-background-radius: 5px;");
         notePane.getChildren().add(topPane);
         notePane.setPrefSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_HEIGHT);
-        notePane.setMaxSize(BOARD_ELEMENT_WIDTH, 1000);
+        notePane.setMaxSize(BOARD_ELEMENT_WIDTH, MAX_BOARD_ELEMENT_HEIGHT);
         notePane.getChildren().add(textArea);
         topPane.getChildren().add(titleField);
-
-        Button deleteButton = new Button("");
-        deleteButton.setGraphic(cross);
-        deleteButton.setShape(new Circle(1));
-        deleteButton.setMinSize(24, 23.5);
-        deleteButton.setMaxSize(24, 23.5);
-        deleteButton.setStyle("-fx-background-color: black;");
-        deleteButton.setTranslateX(10);
-        deleteButton.setTranslateY(-10);
-        deleteButton.setCursor(Cursor.HAND);
-        deleteButton.setVisible(false);
-
+        Button deleteButton = createDeleteButton();
         deleteButton.setOnAction((event) -> {
             listener.removeBoardElement(this);
         });
@@ -163,16 +152,7 @@ public class BoardElementController {
         notePane.setMaxSize(BOARD_ELEMENT_WIDTH, 1000);
         topPane.getChildren().add(titleField);
 
-        Button deleteButton = new Button("");
-        deleteButton.setGraphic(cross);
-        deleteButton.setShape(new Circle(1));
-        deleteButton.setMinSize(24, 23.5);
-        deleteButton.setMaxSize(24, 23.5);
-        deleteButton.setStyle("-fx-background-color: black;");
-        deleteButton.setTranslateX(10);
-        deleteButton.setTranslateY(-10);
-        deleteButton.setCursor(Cursor.HAND);
-        deleteButton.setVisible(false);
+        Button deleteButton = createDeleteButton();
         deleteButton.setOnAction((event) -> {
             listener.removeBoardElement(this);
         });
@@ -248,6 +228,20 @@ public class BoardElementController {
         hbox.getChildren().add(addLineButton);
         notePane.getChildren().add(hbox);
         return notePane;
+    }
+
+    private Button createDeleteButton() {
+        Button deleteButton = new Button("");
+        deleteButton.setGraphic(cross);
+        deleteButton.setShape(new Circle(1));
+        deleteButton.setMinSize(24, 23.5);
+        deleteButton.setMaxSize(24, 23.5);
+        deleteButton.setStyle("-fx-background-color: black;");
+        deleteButton.setTranslateX(10);
+        deleteButton.setTranslateY(-10);
+        deleteButton.setCursor(Cursor.HAND);
+        deleteButton.setVisible(false);
+        return deleteButton;
     }
 
     private void addChecklistLine(Checklist checklist) {

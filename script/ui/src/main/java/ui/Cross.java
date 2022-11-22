@@ -7,7 +7,7 @@ import javafx.scene.shape.Line;
 public class Cross extends HBox {
     public Cross(Color color, double size) {
         super();
-        this.setSpacing(-10.5f * size);
+        this.setSpacing(-11.5f * size);
         Line line1 = new Line(0, 0, 8 * size, 8 * size);
         Line line2 = new Line(0, 8 * size, 8 * size, 0);
         line1.setStrokeWidth(1.5f);
