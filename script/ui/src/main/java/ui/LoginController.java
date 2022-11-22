@@ -30,7 +30,7 @@ public class LoginController {
     private MFXPasswordField passwordField;
 
     /**
-     * Initializes the controller every time The sceen is changed to Login.fxml.
+     * Initializes the controller every time the sceen is changed to Login.fxml.
      *
      * @see LoginController#createWindowSizeListener()
      */
@@ -76,7 +76,7 @@ public class LoginController {
     }
 
     /**
-     * Changes the sceen to Register.fxml when the user presses on register a new
+     * Changes the scene to Register.fxml when the user presses on register a new
      * user button.
      *
      * @param event an action event that is passed to
@@ -105,7 +105,7 @@ public class LoginController {
      * @return a Button fxml component
      */
     protected Button getLoginButton() {
-        return this.loginButton;
+        return loginButton;
     }
 
     /**
@@ -119,7 +119,7 @@ public class LoginController {
     }
 
     /**
-     * Returns the invalid messege field component. This function is a helper
+     * Returns the invalid message field component. This function is a helper
      * function for test classes.
      *
      * @return a TextField fxml component

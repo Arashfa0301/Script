@@ -11,7 +11,7 @@ import javafx.stage.WindowEvent;
 import java.io.IOException;
 
 /**
- * Switches creen to and from available screens.
+ * Switches screen to and from available screens.
  *
  */
 public class WindowManager {

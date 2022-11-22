@@ -35,12 +35,12 @@ public class BoardElementController {
     private Cross cross = new Cross(Color.WHITE, 1.0);
 
     /**
-     * Cunstructs an instance of BoardElementController which is a custom fxml
+     * Constructs an instance of BoardElementController which is a custom fxml
      * component for BoardElements.
      *
      * @param boardElement a BoardElement object that is connected to this
      *                     controller
-     * @param listener     a ScriptController oject that acts as a listener and
+     * @param listener     a ScriptController object that acts as a listener and
      *                     updates itself each time any state of this
      *                     BoardElementController it edited
      */
@@ -52,7 +52,7 @@ public class BoardElementController {
     }
 
     /**
-     * Generates the custom componets for a Note.
+     * Generates the custom components for a Note.
      *
      * @return a VBox fxml component
      * @see ScriptController#removeBoardElement(BoardElementController)
@@ -106,7 +106,7 @@ public class BoardElementController {
     }
 
     /**
-     * Generates the custom componets for a CheckList.
+     * Generates the custom components for a CheckList.
      *
      * @return a VBox fxml component
      * @see ScriptController#removeBoardElement(BoardElementController)

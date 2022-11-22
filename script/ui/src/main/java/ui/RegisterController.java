@@ -50,7 +50,7 @@ public class RegisterController {
     }
 
     /**
-     * Changes the sceen to Register.fxml when the user presses on register new user
+     * Changes the scene to Register.fxml when the user presses on register new user
      * button.
      *
      * @param event an action event that is passed to

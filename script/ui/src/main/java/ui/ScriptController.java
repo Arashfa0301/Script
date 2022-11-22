@@ -69,7 +69,7 @@ public class ScriptController {
     private WindowManager windowManager = new WindowManager();
 
     /**
-     * Initializes the controller every time The sceen is changed to Script.fxml.
+     * Initializes the controller every time The scene is changed to Script.fxml.
      *
      * @see ScriptController#loadBoardButtons(List)
      * @see ScriptController#drawBoardElementControllers()
@@ -106,10 +106,11 @@ public class ScriptController {
     }
 
     /**
-     * Aplies visual and implementational changes to the app, when the current board
+     * Applies visual and implementational changes to the app, when the current
+     * board
      * is changed to a new board.
      *
-     * @param ae an action event intance for catching the clicked on board button
+     * @param event an action event intance for catching the clicked on board button
      * @see ScriptController#saveBoard(Board)
      * @see ScriptController#drawBoardElementControllers()
      * @see ScriptController#updateScreen()
@@ -149,7 +150,7 @@ public class ScriptController {
      * Executes the "newBoardButton" button's onAction function when user presses
      * Enter. More details at @see
      *
-     * @param a key event instance that catches pressing Enter
+     * @param event key event instance that catches pressing Enter
      * @see ScriptController#createBoard()
      */
     @FXML
@@ -251,7 +252,7 @@ public class ScriptController {
 
     /**
      * Saves The current board, logs the user out and sends them back to the login
-     * creen.
+     * screen.
      *
      * @param event an action event that is passed to
      *              {@link WindowManager#switchScreen(ActionEvent, String) } method
@@ -282,12 +283,15 @@ public class ScriptController {
      * @see ScriptController#newBoardButtonEnable()
      */
     @FXML
-    private void deleteBoard(ActionEvent event) throws IOException {
-        String boardName = ((Button) boardGrid.getChildren().get(GridPane.getRowIndex((Button) event.getSource()) * 2))
+    private void deleteBoard(ActionEvent ae) throws IOException {
+        String boardName = ((Button) boardGrid.getChildren().get(GridPane.getRowIndex((Button) ae.getSource()) * 2))
                 .getText();
-        if (currentBoard.getName().equals(boardName)) {
-            currentBoard = null;
-            updateScreen();
+        if (currentBoard != null) {
+            if (currentBoard.getName().equals(boardName)) {
+                saveBoard(currentBoard);
+                currentBoard = null;
+                updateScreen();
+            }
         }
         try {
             remoteModelAccess.removeBoard(boardName, user.getUsername(), user.getPassword());
@@ -323,7 +327,7 @@ public class ScriptController {
 
     /**
      * Make the newBoardButton visible when predicates are satisfied. These
-     * predicates check whether if the name of the new board is valid
+     * predicates check if the name of the new board is valid
      *
      */
     private void newBoardButtonEnable() {
@@ -333,7 +337,7 @@ public class ScriptController {
     }
 
     /**
-     * Loads the buttons for each of user's buttons on the screen.
+     * Loads the buttons of the user's buttons on the screen.
      *
      * @see ScriptController#createBoardButton(String, int)
      */
@@ -400,7 +404,7 @@ public class ScriptController {
     }
 
     /**
-     * Checks whether if the input string is valid.
+     * Checks if the input string is valid.
      *
      * @param text a string to be checked
      * @return a boolean implying whether the ckecks were passed or not
@@ -412,7 +416,8 @@ public class ScriptController {
 
     /**
      * Draws all the BoardElement objects of the current board on the boardScreen.
-     * This function is also used as listener fire function for updating the app
+     * This function is also used as listener. Fires the function for updating the
+     * app
      * when each BoardElementController is updated.
      */
     public void drawBoardElementControllers() {
