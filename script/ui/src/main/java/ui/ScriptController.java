@@ -201,8 +201,8 @@ public class ScriptController {
         if (currentBoard != null) {
             saveBoard(currentBoard);
         }
-        Globals.scriptController = null;
         windowManager.switchScreen(ae, "Login.fxml");
+        Globals.scriptController = null;
     }
 
     private void newBoardButtonEnable() {
@@ -264,6 +264,10 @@ public class ScriptController {
     private void deleteBoard(ActionEvent ae) throws IOException {
         String boardName = ((Button) boardGrid.getChildren().get(GridPane.getRowIndex((Button) ae.getSource()) * 2))
                 .getText();
+        if (currentBoard.getName().equals(boardName)) {
+            currentBoard = null;
+            updateScreen();
+        }
         try {
             remoteModelAccess.removeBoard(boardName, user.getUsername(), user.getPassword());
         } catch (IllegalArgumentException e) {
@@ -279,6 +283,8 @@ public class ScriptController {
             newNoteButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS);
             newChecklistButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS);
             noteScreen.setVisible(user.getBoards().contains(currentBoard));
+        } else {
+            noteScreen.setVisible(false);
         }
     }
 

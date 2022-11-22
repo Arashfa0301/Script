@@ -18,8 +18,10 @@ public class WindowManager {
             stage.setOnHidden(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
-                    if (Globals.scriptController.getCurrentBoard() != null) {
-                        Globals.scriptController.saveBoard(Globals.scriptController.getCurrentBoard());
+                    if (Globals.scriptController != null) {
+                        if (Globals.scriptController.getCurrentBoard() != null) {
+                            Globals.scriptController.saveBoard(Globals.scriptController.getCurrentBoard());
+                        }
                     }
                 }
             });
