@@ -10,7 +10,7 @@ class User [[java:core.main.user]] {
 
 class Board [[java:core.main.Board]] {
 	+{static} int MAX_ELEMENTS = 100
-    -String boardName
+    -String name
     -String description
     -List<Note> notes
     -List<Checklist> checklists
