@@ -2,9 +2,9 @@
 
 Script er en enkel app som lar en bruker opprette, redigere, sortere og slette notater og sjekklister. Videre dokumentasjon til de forskjellige utgivelsene finnes i [/docs](/docs).
 
-Under er det et skjermbilde av appen som er befolket med noen enkle notater. 
+Under er det et skjermbilde av appen som er befolket med noen enkle notater og sjekklister. 
 
-![](/docs/release1/img/JavaFXinterface.png)
+![](/docs/release3/img/MainScreen.png)
 
 ## Struktur
 
