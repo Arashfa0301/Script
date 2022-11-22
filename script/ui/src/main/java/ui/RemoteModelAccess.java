@@ -106,7 +106,7 @@ public class RemoteModelAccess implements ModelAccess {
     }
 
     /**
-     * Creates a board for the spesified user (by username and password) in the
+     * Creates a board for the specified user (by username and password) in the
      * system using the REST Api.
      *
      * @param boardname the name of the board
@@ -142,7 +142,7 @@ public class RemoteModelAccess implements ModelAccess {
     }
 
     /**
-     * Removes a board for the spesified user (by username and password) in the
+     * Removes a board for the specified user (by username and password) in the
      * system using the REST Api.
      *
      * @param boardname the name of the board
@@ -177,7 +177,7 @@ public class RemoteModelAccess implements ModelAccess {
     }
 
     /**
-     * Renames a board for the spesified user (by username and password) in the
+     * Renames a board for the specified user (by username and password) in the
      * system using the REST Api.
      *
      * @param oldBoardName the name of the board
@@ -215,7 +215,7 @@ public class RemoteModelAccess implements ModelAccess {
     }
 
     /**
-     * Puts (updates) a board object for the spesified user (by username and
+     * Puts (updates) a board object for the specified user (by username and
      * password) in the
      * system using the REST Api.
      *
