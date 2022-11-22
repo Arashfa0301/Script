@@ -128,23 +128,61 @@ public class ScriptControllerTest extends ApplicationTest {
                 && getSpecificChecklist(0, 0).getTitle().equals("helo"));
     }
 
+    /**
+     * Gets the notes of a given Board. Helper method for ScriptControllerTest.
+     *
+     * @param boardIndex an integer representing a Board's index
+     * @return a List of Notes found within the given Board
+     */
     private List<Note> getNotesFromUser(int boardIndex) {
         return user.getBoards().get(boardIndex).getNotes();
     }
 
+    /**
+     * Gets a specific Note from a given Board. Helper method for
+     * ScriptControllerTest.
+     *
+     * @param boardIndex an integer representing a Board's index
+     * @param noteIndex  an integer representing the desired Note's idex
+     * @return the Note specified by the inputs given
+     */
     private Note getSpecificNote(int boardIndex, int noteIndex) {
         return user.getBoards().get(boardIndex).getNotes().get(noteIndex);
     }
 
+    /**
+     * Gets a specific Board. Helper method for ScriptControllerTest.
+     *
+     * @param boardIndex an integer representing the desired Board's index
+     * @return the Board specified by the inputs given
+     */
     private Board getSpecificBoard(int boardIndex) {
         return user.getBoards().get(boardIndex);
     }
 
+    /**
+     * Gets a specific ChecklistLine from a given Checklist within a given Board.
+     * Helper method for ScriptControllerTest.
+     *
+     * @param boardIndex     an integer representing a Board's index
+     * @param checklistIndex an integer representing a Checklist's index
+     * @param checklistLine  an integer representing the desired ChecklistLine's
+     *                       index
+     * @return a ChecklistLine specified by the inputs given
+     */
     private ChecklistLine getSpecificChecklistLine(int boardIndex, int checklistIndex, int checklistLine) {
         return user.getBoards().get(boardIndex).getChecklists().get(checklistIndex).getChecklistLines()
                 .get(checklistLine);
     }
 
+    /**
+     * Gets a specific Checklist from a given Board. Helper method for
+     * ScriptControllerTest.
+     *
+     * @param boardIndex     an integer representing a Board's index
+     * @param checklistIndex an integer representing the desired Checklist's index
+     * @return a Checklist specified by the inputs given
+     */
     private Checklist getSpecificChecklist(int boardIndex, int checklistIndex) {
         return user.getBoards().get(boardIndex).getChecklists().get(checklistIndex);
     }
