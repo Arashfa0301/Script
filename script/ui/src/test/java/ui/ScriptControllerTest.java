@@ -19,7 +19,6 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
-import org.testfx.matcher.control.LabeledMatchers;
 import org.testfx.robot.Motion;
 
 import java.io.IOException;
@@ -78,9 +77,10 @@ public class ScriptControllerTest extends ApplicationTest {
         write("enterBoard");
         press(KeyCode.ENTER);
         assertTrue(user.getBoards().size() == 2);
-        clickOn(LabeledMatchers.hasText("X"));
-        // TODO uncomment when the bug with removing boards is fixed
-        // assertTrue(user.getBoards().size() == 0);
+        moveBy(25, -400, Motion.DIRECT);
+        clickOn();
+        clickOn("#newNoteButton");
+        assertTrue(user.getBoards().size() == 1);
     }
 
     @Test
