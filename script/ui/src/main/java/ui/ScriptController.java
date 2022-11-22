@@ -165,7 +165,6 @@ public class ScriptController {
 
     @FXML
     private void createBoard() {
-        System.out.println(user.getBoards().size());
         remoteModelAccess.createBoard(boardName.getText(), user.getUsername(), user.getPassword());
         user.addBoard(boardName.getText());
         createBoardButton(boardName.getText(), user.getBoards().size() - 1);
