@@ -31,7 +31,7 @@ public class RegisterControllerTest extends ApplicationTest {
     @Test
     @DisplayName("Tests controller")
     public void testController() {
-        assertNotNull(controller);
+        assertNotNull(controller, "Controller should not be null.");
     }
 
     @Test
