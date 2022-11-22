@@ -35,6 +35,16 @@ public class BoardElementController {
 
     private Cross cross = new Cross(Color.WHITE, 1.0);
 
+    /**
+     * Constructs an instance of BoardElementController which is a custom fxml
+     * component for BoardElements.
+     *
+     * @param boardElement a BoardElement object that is connected to this
+     *                     controller
+     * @param listener     a ScriptController object that acts as a listener and
+     *                     updates itself each time any state of this
+     *                     BoardElementController it edited
+     */
     public BoardElementController(BoardElement boardElement, ScriptController listener) {
         this.boardElement = boardElement;
         this.listener = listener;
@@ -42,6 +52,12 @@ public class BoardElementController {
 
     }
 
+    /**
+     * Generates the custom components for a Note.
+     *
+     * @return a VBox fxml component
+     * @see ScriptController#removeBoardElement(BoardElementController)
+     */
     private VBox generateNote() {
         TextField titleField = new TextField(boardElement.getTitle());
         titleField.setStyle("-fx-font-family: 'Poppins SemiBold'; -fx-font-size: 14;");
@@ -92,6 +108,13 @@ public class BoardElementController {
         return notePane;
     }
 
+    /**
+     * Generates the custom components for a CheckList.
+     *
+     * @return a VBox fxml component
+     * @see ScriptController#removeBoardElement(BoardElementController)
+     * @see ScriptController#drawBoardElementControllers()
+     */
     private VBox generateChecklist() {
         Checklist checklist = (Checklist) boardElement;
         TextField titleField = new TextField(checklist.getTitle());
@@ -233,6 +256,13 @@ public class BoardElementController {
         return notePane;
     }
 
+    /**
+     * Creats a delete button component
+     * {@link BoardElementController#generateNote()} and
+     * {@link BoardElementController#generateNote()} methods.
+     *
+     * @return a button element
+     */
     private Button createDeleteButton() {
         Button deleteButton = new Button("");
         deleteButton.setGraphic(cross);
@@ -247,6 +277,12 @@ public class BoardElementController {
         return deleteButton;
     }
 
+    /**
+     * Adds a checklist line for a specific checklist BoardElementController.
+     *
+     * @param checklist a CheckList component, specifying which one to create the
+     *                  line for
+     */
     private void addChecklistLine(Checklist checklist) {
         try {
             checklist.addChecklistLine();
@@ -257,14 +293,25 @@ public class BoardElementController {
         }
     }
 
+    /**
+     * Generates the custom controller depending on the instance type of this
+     * object's BoardElement.
+     *
+     * @return a VBox component
+     */
     protected VBox generateControl() {
-
         return (boardElement instanceof Note) ? generateNote()
                 : (boardElement instanceof Checklist) ? generateChecklist() : null;
 
     }
 
+    /**
+     * Gets the BoardElement assigned to this BoardElementController object.
+     *
+     * @return a BoardElement object
+     */
     protected BoardElement getBoardElement() {
         return boardElement;
     }
+
 }

@@ -10,9 +10,13 @@ import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
+/**
+ * Switches screen to and from available screens.
+ *
+ */
 public class WindowManager {
-    public void switchScreen(ActionEvent ae, String file) throws IOException {
-        Stage stage = (Stage) ((Node) ae.getSource()).getScene().getWindow();
+    public void switchScreen(ActionEvent event, String file) throws IOException {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(FXMLLoader.load(getClass().getResource(file))));
         if (Globals.scriptController != null) {
             stage.setOnHidden(new EventHandler<WindowEvent>() {

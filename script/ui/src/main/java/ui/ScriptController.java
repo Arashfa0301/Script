@@ -54,7 +54,7 @@ public class ScriptController {
     private TextField boardTitle, boardDescription, boardName;
 
     @FXML
-    private VBox noteScreen;
+    private VBox boardScreen;
 
     @FXML
     private ScrollPane noteScrollPane;
@@ -68,6 +68,12 @@ public class ScriptController {
 
     private WindowManager windowManager = new WindowManager();
 
+    /**
+     * Initializes the controller every time The scene is changed to Script.fxml.
+     *
+     * @see ScriptController#loadBoardButtons(List)
+     * @see ScriptController#drawBoardElementControllers()
+     */
     @FXML
     private void initialize() {
         Globals.scriptController = this;
@@ -87,16 +93,30 @@ public class ScriptController {
                 }
             }
         });
-        try {
-            loadBoardButtons(user.getBoards());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        createWindowSizeListener();
+
+        loadBoardButtons();
+
+        // Creates window size listeners
+        scriptSplitPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            Globals.windowWidth = (double) newVal;
+        });
+        scriptSplitPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            Globals.windowHeight = (double) newVal;
+        });
     }
 
+    /**
+     * Applies visual and implementational changes to the app, when the current
+     * board
+     * is changed to a new board.
+     *
+     * @param event an action event intance for catching the clicked on board button
+     * @see ScriptController#saveBoard(Board)
+     * @see ScriptController#drawBoardElementControllers()
+     * @see ScriptController#updateScreen()
+     */
     @FXML
-    private void onBoardButtonClick(ActionEvent ae) throws IOException {
+    private void onBoardButtonClick(ActionEvent event) throws IOException {
         if (currentBoard != null) {
             saveBoard(currentBoard);
         }
@@ -107,13 +127,12 @@ public class ScriptController {
         boardButtons.forEach(button -> button.setStyle(
                 "-fx-background-color: transparent; -fx-alignment: center-left; -fx-font-size: 13px; -fx-font-family: \"Poppins Medium\"; -fx-text-fill: black;"));
         Board selectedBoard = user.getBoards().stream()
-                .filter(board -> board.getName().equals(((Button) ae.getSource()).getText()))
+                .filter(board -> board.getName().equals(((Button) event.getSource()).getText()))
                 .findFirst()
                 .get();
-        Button selectedButton = (Button) ae.getSource();
-        selectedButton.setStyle(
+        ((Button) event.getSource()).setStyle(
                 "-fx-background-color: black; -fx-alignment: center-left; -fx-font-size: 13px; -fx-font-family: \"Poppins SemiBold\"; -fx-text-fill: white;");
-        noteScreen.setVisible(true);
+        boardScreen.setVisible(true);
         boardTitle.setText(selectedBoard.getName());
         oldBoardName = selectedBoard.getName();
         boardDescription.setText(selectedBoard.getBoardDescription());
@@ -127,28 +146,171 @@ public class ScriptController {
         updateScreen();
     }
 
+    /**
+     * Executes the "newBoardButton" button's onAction function when user presses
+     * Enter. More details at @see
+     *
+     * @param event key event instance that catches pressing Enter
+     * @see ScriptController#createBoard()
+     */
     @FXML
-    private void handleBoardNameEnter(KeyEvent ke) {
-        if (ke.getCode().equals(KeyCode.ENTER)) {
+    private void handleBoardNameEnter(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
             newBoardButton.fire();
         }
     }
 
+    /**
+     * Changes the title of the current board and also updates the title on the
+     * board's button, when the title text field is editet.
+     *
+     * @param event a key event instance that catches the board TextField
+     * @see ScriptController#checkBoardName(String)
+     */
     @FXML
     private void editBoardTitle(KeyEvent event) throws IOException {
-        Button button = (Button) boardGrid.getChildren().get(user.getBoards().indexOf(currentBoard) * 2);
-        TextField field = (TextField) event.getSource();
-        if (checkBoardName(field.getText())) {
-            button.setText(field.getText());
-            currentBoard.setName(field.getText());
+        TextField boardTextField = (TextField) event.getSource();
+        if (checkBoardName(boardTextField.getText())) {
+            ((Button) boardGrid.getChildren().get(user.getBoards().indexOf(currentBoard) * 2))
+                    .setText(boardTextField.getText());
+            currentBoard.setName(boardTextField.getText());
         }
     }
 
+    /**
+     * Changes the description of the current board when the description text field
+     * is editet.
+     *
+     * @param event a key event instance that catches the description TextField
+     */
     @FXML
     private void editBoardDescription(KeyEvent event) throws IOException {
         currentBoard.setBoardDescription(((TextField) event.getSource()).getText());
     }
 
+    /**
+     * Creates a board when {@link ScriptController#newBoardButton} is clicked on,
+     * and gives it to the current user.
+     * The name of this board is retrieved from boardNameField.
+     *
+     *
+     * @see ScriptController#createBoardButton(String, int)
+     * @see ScriptController#newBoardButtonEnable()
+     *
+     */
+    @FXML
+    private void createBoard() {
+        remoteModelAccess.createBoard(boardName.getText(), user.getUsername(), user.getPassword());
+        user.addBoard(boardName.getText());
+        createBoardButton(boardName.getText(), user.getBoards().size() - 1);
+        boardName.clear();
+        newBoardButtonEnable();
+    }
+
+    /**
+     * Creates a new Note for the current board of the current user, and updates the
+     * screen.
+     *
+     * @see ScriptController#drawBoardElementControllers()
+     * @see ScriptController#updateScreen()
+     */
+    @FXML
+    private void createNote() {
+        Note note = new Note();
+        currentBoard.addNote(note);
+        boardElementControllers.add(new BoardElementController(note, this));
+        drawBoardElementControllers();
+        updateScreen();
+    }
+
+    /**
+     * Creates a new CheckList for the current board of the current user, and
+     * updates the screen.
+     *
+     * @see ScriptController#drawBoardElementControllers()
+     * @see ScriptController#updateScreen()
+     */
+    @FXML
+    private void createChecklist() {
+        Checklist checklist = new Checklist();
+        currentBoard.addChecklist(checklist);
+        boardElementControllers.add(new BoardElementController(checklist, this));
+        drawBoardElementControllers();
+        updateScreen();
+    }
+
+    /**
+     * Executes {@link ScriptController#newBoardButtonEnable} every time
+     * boardTitleField is edited and sets a new title for the current board.
+     *
+     * @see ScriptController#newBoardButtonEnable()
+     */
+    @FXML
+    private void newBoardNameEdit() {
+        newBoardButtonEnable();
+    }
+
+    /**
+     * Saves The current board, logs the user out and sends them back to the login
+     * screen.
+     *
+     * @param event an action event that is passed to
+     *              {@link WindowManager#switchScreen(ActionEvent, String) } method
+     *              that tells the WindowManager class which screen to change to
+     * @throws IOException when attempting to access a file that does not exist at
+     *                     the specified location
+     * @see ScriptController#saveBoard(Board)
+     * @see WindowManager#switchScreen(ActionEvent, String)
+     */
+    @FXML
+    private void handleLogoutButton(ActionEvent event) throws IOException {
+        if (currentBoard != null) {
+            saveBoard(currentBoard);
+        }
+        windowManager.switchScreen(event, "Login.fxml");
+        Globals.scriptController = null;
+    }
+
+    /**
+     * Deletes a board when this board's delete button is clicked on and updates the
+     * user accordingly.
+     *
+     * @param event an action event that catches which delete buttom has been
+     *              pressed
+     * @throws IOException when attempting to access a file that does not exist at
+     *                     the specified location
+     * @see ScriptController#loadBoardButtons(List)
+     * @see ScriptController#newBoardButtonEnable()
+     */
+    @FXML
+    private void deleteBoard(ActionEvent ae) throws IOException {
+        String boardName = ((Button) boardGrid.getChildren().get(GridPane.getRowIndex((Button) ae.getSource()) * 2))
+                .getText();
+        if (currentBoard != null) {
+            if (currentBoard.getName().equals(boardName)) {
+                saveBoard(currentBoard);
+                currentBoard = null;
+                updateScreen();
+            }
+        }
+        try {
+            remoteModelAccess.removeBoard(boardName, user.getUsername(), user.getPassword());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e);
+        }
+        user.removeBoard(boardName);
+        loadBoardButtons();
+        newBoardButtonEnable();
+    }
+
+    /**
+     * Saves the input board via RemoteModelAccess class.
+     *
+     * @param board a board object to save
+     * @exception IllegalArgumentException if the input argument boards object is
+     *                                     invalid
+     * @see RemoteModelAccess#putBoard(Board, String, String)
+     */
     protected void saveBoard(Board board) {
         try {
             if (!board.getName().equals(oldBoardName)) {
@@ -163,69 +325,38 @@ public class ScriptController {
         }
     }
 
-    @FXML
-    private void createBoard() {
-        remoteModelAccess.createBoard(boardName.getText(), user.getUsername(), user.getPassword());
-        user.addBoard(boardName.getText());
-        createBoardButton(boardName.getText(), user.getBoards().size() - 1);
-        boardName.clear();
-        newBoardButtonEnable();
-    }
-
-    @FXML
-    private void createNote() {
-        Note note = new Note();
-        currentBoard.addNote(note);
-        boardElementControllers.add(new BoardElementController(note, this));
-        drawBoardElementControllers();
-        updateScreen();
-    }
-
-    @FXML
-    private void createChecklist() {
-        Checklist checklist = new Checklist();
-        currentBoard.addChecklist(checklist);
-        boardElementControllers.add(new BoardElementController(checklist, this));
-        drawBoardElementControllers();
-        updateScreen();
-    }
-
-    @FXML
-    private void newBoardNameEdit() {
-        newBoardButtonEnable();
-    }
-
-    @FXML
-    private void handleLogoutButton(ActionEvent ae) throws IOException {
-        if (currentBoard != null) {
-            saveBoard(currentBoard);
-        }
-        windowManager.switchScreen(ae, "Login.fxml");
-        Globals.scriptController = null;
-    }
-
+    /**
+     * Make the newBoardButton visible when predicates are satisfied. These
+     * predicates check if the name of the new board is valid
+     *
+     */
     private void newBoardButtonEnable() {
         newBoardButton
-                .setDisable(!checkBoardName(boardName.getText()) || user.getBoards().size() >= User.MAX_BOARD_COUNT);
+                .setDisable(
+                        !checkBoardName(boardName.getText()) || user.getBoards().size() >= User.MAX_BOARD_COUNT);
     }
 
-    private void createWindowSizeListener() {
-        scriptSplitPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            Globals.windowWidth = (double) newVal;
-        });
-        scriptSplitPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-            Globals.windowHeight = (double) newVal;
-        });
-    }
-
-    private void loadBoardButtons(List<Board> boards) throws IOException {
+    /**
+     * Loads the buttons of the user's buttons on the screen.
+     *
+     * @see ScriptController#createBoardButton(String, int)
+     */
+    private void loadBoardButtons() {
         boardGrid.getChildren().clear();
-        IntStream.range(0, boards.size()).forEach(i -> {
-            createBoardButton(boards.get(i).getName(), i);
+        IntStream.range(0, user.getBoards().size()).forEach(i -> {
+            createBoardButton(user.getBoards().get(i).getName(), i);
         });
         boardGrid.setStyle("-fx-background-color: transparent");
     }
 
+    /**
+     * Creates a board button that shows on the screen.
+     *
+     * @param boardName a string, specifying the name of the newly created board
+     * @param index     an integer, specifying the index at which the button will be
+     *                  created
+     *
+     */
     private void createBoardButton(String boardName, int index) {
         Button button = new Button(boardName);
         button.wrapTextProperty().setValue(true);
@@ -259,43 +390,37 @@ public class ScriptController {
         boardGrid.addRow(index, button, deleteButton);
     }
 
-    @FXML
-    private void deleteBoard(ActionEvent ae) throws IOException {
-        String boardName = ((Button) boardGrid.getChildren().get(GridPane.getRowIndex((Button) ae.getSource()) * 2))
-                .getText();
-        if (currentBoard != null) {
-            if (currentBoard.getName().equals(boardName)) {
-                saveBoard(currentBoard);
-                currentBoard = null;
-                updateScreen();
-            }
-        }
-        try {
-            remoteModelAccess.removeBoard(boardName, user.getUsername(), user.getPassword());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(e);
-        }
-        user.removeBoard(boardName);
-        loadBoardButtons(user.getBoards());
-        newBoardButtonEnable();
-    }
-
+    /**
+     * Updates the BoardScreen on board change.
+     */
     private void updateScreen() {
         if (!(currentBoard == null)) {
             newNoteButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS);
             newChecklistButton.setDisable(boardElementControllers.size() == Board.MAX_ELEMENTS);
-            noteScreen.setVisible(user.getBoards().contains(currentBoard));
+            boardScreen.setVisible(user.getBoards().contains(currentBoard));
         } else {
-            noteScreen.setVisible(false);
+            boardScreen.setVisible(false);
         }
     }
 
+    /**
+     * Checks if the input string is valid.
+     *
+     * @param text a string to be checked
+     * @return a boolean implying whether the ckecks were passed or not
+     */
     private Boolean checkBoardName(String text) {
         return !(text.isBlank() || user.getBoards().stream().map(board -> (board.getName()))
                 .collect(Collectors.toList()).contains(text) || !Pattern.matches("^[A-Za-z0-9_.]+$", text)
                 || text.length() > Board.MAX_TITLE_LENGHT);
     }
 
+    /**
+     * Draws all the BoardElement objects of the current board on the boardScreen.
+     * This function is also used as listener. Fires the function for updating the
+     * app
+     * when each BoardElementController is updated.
+     */
     public void drawBoardElementControllers() {
         noteGrid.getChildren().clear();
         noteGrid.getColumnConstraints().clear();
@@ -318,6 +443,16 @@ public class ScriptController {
         });
     }
 
+    /**
+     * Removes a boardElementController object from the list of
+     * boardElementControllers when the delete button is pressed and updates the
+     * boardScreen.
+     *
+     * @param boardElementController a boardElementController to be removed.
+     *
+     * @see ScriptController#drawBoardElementControllers()
+     * @see ScriptController#updateScreen()
+     */
     public void removeBoardElement(BoardElementController boardElementController) {
         boardElementControllers.remove(boardElementController);
         currentBoard.clearCheckLists();
@@ -333,14 +468,30 @@ public class ScriptController {
         updateScreen();
     }
 
+    /**
+     * Returns newBoardButton. This function is a helper function for test classes.
+     *
+     * @return a Button fxml object
+     */
     protected Button getNewBoardButton() {
         return newBoardButton;
     }
 
+    /**
+     * Returns currentBoard. This function is a helper function for test classes.
+     *
+     * @return a Board object
+     */
     protected Board getCurrentBoard() {
         return currentBoard;
     }
 
+    /**
+     * Returns boardElementControllers. This function is a helper function for test
+     * classes.
+     *
+     * @return an arraylist of BoardElementControllers
+     */
     protected List<BoardElementController> getBoardElementControllers() {
         return boardElementControllers;
     }
