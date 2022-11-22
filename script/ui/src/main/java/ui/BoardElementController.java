@@ -10,6 +10,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class BoardElementController {
 
-    protected static final int BOARD_ELEMENT_WIDTH = 220, BOARD_ELEMENT_HEIGHT = 430, MAX_BOARD_ELEMENT_HEIGHT = 1000,
+    protected static final int BOARD_ELEMENT_WIDTH = 220, BOARD_ELEMENT_HEIGHT = 280, MAX_BOARD_ELEMENT_HEIGHT = 1000,
             TITLE_LIMIT = 23;
 
     private BoardElement boardElement;
@@ -56,10 +57,12 @@ public class BoardElementController {
             }
         });
         Note note = (Note) boardElement;
-        ExpandableTextArea textArea = new ExpandableTextArea(note.getContent());
+        TextArea textArea = new TextArea(note.getContent());
         textArea.setPromptText("Notes");
         textArea.setWrapText(true);
-        textArea.setPrefSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_WIDTH);
+        textArea.setPrefSize(BOARD_ELEMENT_WIDTH, 240);
+        textArea.setPrefSize(BOARD_ELEMENT_WIDTH, 240);
+        textArea.setMaxSize(BOARD_ELEMENT_WIDTH, 240);
         textArea.setOnKeyReleased(event -> {
             note.setContent(textArea.getText());
         });
@@ -69,7 +72,7 @@ public class BoardElementController {
         notePane.setStyle("-fx-background-color: white; -fx-background-radius: 5px;");
         notePane.getChildren().add(topPane);
         notePane.setPrefSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_HEIGHT);
-        notePane.setMaxSize(BOARD_ELEMENT_WIDTH, MAX_BOARD_ELEMENT_HEIGHT);
+        notePane.setMaxSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_HEIGHT);
         notePane.getChildren().add(textArea);
         topPane.getChildren().add(titleField);
         Button deleteButton = createDeleteButton();
@@ -149,7 +152,7 @@ public class BoardElementController {
         notePane.setStyle("-fx-background-color: white; -fx-background-radius: 5px;");
         notePane.getChildren().add(topPane);
         notePane.setPrefSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_HEIGHT);
-        notePane.setMaxSize(BOARD_ELEMENT_WIDTH, 1000);
+        notePane.setMaxSize(BOARD_ELEMENT_WIDTH, BOARD_ELEMENT_HEIGHT);
         topPane.getChildren().add(titleField);
 
         Button deleteButton = createDeleteButton();
