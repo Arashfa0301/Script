@@ -43,6 +43,7 @@ public class LoginController {
             Globals.user = remoteModelAccess.getUser(usernameField.getText(), passwordField.getText());
             windowManager.switchScreen(ae, "Script.fxml");
         } catch (Exception e) {
+            System.out.println(e);
             TranslateTransition transition = new TranslateTransition();
             transition.setDuration(Duration.seconds(2));
             transition.setNode(invalidField);
