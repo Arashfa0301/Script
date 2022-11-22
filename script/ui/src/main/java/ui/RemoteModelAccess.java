@@ -38,7 +38,6 @@ public class RemoteModelAccess implements ModelAccess {
      * @param password  the password of the user
      * @param firstName the first name of the user
      * @param lastName  the last name of the user
-     * @return the newly created user
      * @throws RuntimeException if the method recieves wrong status code and the
      *                          user could not be created
      * 
