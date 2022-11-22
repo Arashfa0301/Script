@@ -30,6 +30,21 @@ public class RemoteModelAccess implements ModelAccess {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Registers a new user with given username, password, first name and last name
+     * using the REST Api.
+     *
+     * @param username  the username of the user
+     * @param password  the password of the user
+     * @param firstName the first name of the user
+     * @param lastName  the last name of the user
+     * @return the newly created user
+     * @throws RuntimeException if the method recieves wrong status code and the
+     *                          user could not be created
+     * 
+     * @see HttpRequest
+     * @see HttpResponse
+     */
     @Override
     public void register(String firstName, String lastName, String username, String password) throws RuntimeException {
         System.out.println(String.format("[RemoteModelAccess] Creating new user with username %s", username));
@@ -52,6 +67,19 @@ public class RemoteModelAccess implements ModelAccess {
         }
     }
 
+    /**
+     * Gets the user with given username and password using the REST Api.
+     *
+     * @param username the username of the user
+     * @param password the password of the user
+     * @return User a user object
+     * @throws IllegalArgumentException if the method recieves wrong status code and
+     *                                  the user could not be recieved
+     * 
+     * @see HttpRequest
+     * @see HttpResponse
+     * @see User
+     */
     @Override
     public User getUser(String username, String password) {
         System.out.println(String.format("[RemoteModelAccess] Getting user class for %s", username));
@@ -78,6 +106,19 @@ public class RemoteModelAccess implements ModelAccess {
         }
     }
 
+    /**
+     * Creates a board for the spesified user (by username and password) in the
+     * system using the REST Api.
+     *
+     * @param boardname the name of the board
+     * @param username  the username of the user
+     * @param password  the password of the user
+     * @throws IllegalArgumentException if the method recieves wrong status code and
+     *                                  the board could not be created
+     * 
+     * @see HttpRequest
+     * @see HttpResponse
+     */
     @Override
     public void createBoard(String boardname, String username, String password) throws IllegalArgumentException {
         System.out.println(String.format("[RemoteModelAccess] Creating board %s for user %s", boardname, username));
@@ -101,6 +142,19 @@ public class RemoteModelAccess implements ModelAccess {
         }
     }
 
+    /**
+     * Removes a board for the spesified user (by username and password) in the
+     * system using the REST Api.
+     *
+     * @param boardname the name of the board
+     * @param username  the username of the user
+     * @param password  the password of the user
+     * @throws IllegalArgumentException if the method recieves wrong status code and
+     *                                  the board could not be removed
+     * 
+     * @see HttpRequest
+     * @see HttpResponse
+     */
     @Override
     public void removeBoard(String boardname, String username, String password) throws IllegalArgumentException {
         System.out.println(String.format("[RemoteModelAccess] Removing board %s for user %s", boardname, username));
@@ -123,6 +177,20 @@ public class RemoteModelAccess implements ModelAccess {
         }
     }
 
+    /**
+     * Renames a board for the spesified user (by username and password) in the
+     * system using the REST Api.
+     *
+     * @param oldBoardName the name of the board
+     * @param newBoardName the name of the board
+     * @param username     the username of the user
+     * @param password     the password of the user
+     * @throws RuntimeException if the method recieves wrong status code and
+     *                          the board could not be renamed
+     * 
+     * @see HttpRequest
+     * @see HttpResponse
+     */
     @Override
     public void renameBoard(String oldBoardName, String newBoardName, String username, String password)
             throws IllegalArgumentException {
@@ -147,6 +215,20 @@ public class RemoteModelAccess implements ModelAccess {
         }
     }
 
+    /**
+     * Puts (updates) a board object for the spesified user (by username and
+     * password) in the
+     * system using the REST Api.
+     *
+     * @param board    the board object
+     * @param username the username of the user
+     * @param password the password of the user
+     * @throws RuntimeException if the method recieves wrong status code and
+     *                          the board could not be updated
+     * 
+     * @see HttpRequest
+     * @see HttpResponse
+     */
     @Override
     public void putBoard(Board board, String username, String password) throws RuntimeException {
         System.out.println(
