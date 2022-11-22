@@ -262,6 +262,7 @@ public class ScriptController {
 
     @FXML
     private void deleteBoard(ActionEvent ae) throws IOException {
+        saveBoard(currentBoard);
         String boardName = ((Button) boardGrid.getChildren().get(GridPane.getRowIndex((Button) ae.getSource()) * 2))
                 .getText();
         try {
@@ -272,6 +273,7 @@ public class ScriptController {
         user.removeBoard(boardName);
         loadBoardButtons(user.getBoards());
         newBoardButtonEnable();
+        currentBoard = null;
     }
 
     private void updateScreen() {
