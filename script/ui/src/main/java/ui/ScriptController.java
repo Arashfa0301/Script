@@ -264,6 +264,7 @@ public class ScriptController {
         String boardName = ((Button) boardGrid.getChildren().get(GridPane.getRowIndex((Button) ae.getSource()) * 2))
                 .getText();
         if (currentBoard.getName().equals(boardName)) {
+            saveBoard(currentBoard);
             currentBoard = null;
             updateScreen();
         }
